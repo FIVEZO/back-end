@@ -13,15 +13,7 @@ import lombok.*;
 public class Kakao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
-
-    @OneToOne(mappedBy = "user")
-    private User user;
-
-    public void userIdUpdate(Long id) {
-        this.userId = id;
-    }
 }

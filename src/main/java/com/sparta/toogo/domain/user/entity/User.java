@@ -32,12 +32,7 @@ public class User extends Timestamped {
 
     private Long kakaoId;
 
-    @OneToOne
-    @JoinColumn(name = "kakao_id")
-    private Kakao kakao;
-
-    public User kakaoIdUpdate(Long kakaoId) {
+    public void kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
-        return this;
     }
 }

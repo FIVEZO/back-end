@@ -62,7 +62,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "564f00b46533ce881c7fe7c870c83458");
-        body.add("redirect_uri", "http://localhost:8080/api/auth/kakao");
+        body.add("redirect_uri", "http://localhost:3000/api/auth/kakao");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -119,17 +119,19 @@ public class KakaoService {
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
-        Kakao kakaoUser = kakaoRepository.findById(kakaoId).orElse(null);
+        User kakaoUser = userRepository.findBykakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
             // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
             String kakaoEmail = kakaoUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
             if (sameEmailUser != null) {
-                kakaoUser = sameEmailUser.getKakao();
                 // 기존 회원정보에 카카오 Id 추가
                 sameEmailUser.kakaoIdUpdate(kakaoId);
-                kakaoUser.userIdUpdate(sameEmailUser.getId());
+                Kakao kakao = Kakao.builder()
+                        .userId(sameEmailUser.getId())
+                        .build();
+                kakaoRepository.save(kakao);
             } else {
                 // 신규 회원가입
                 String encodedPassword = passwordEncoder.encode(UUID.randomUUID().toString());
@@ -144,14 +146,14 @@ public class KakaoService {
                         .kakaoId(kakaoId)
                         .build();
 
-                kakaoUser = Kakao.builder()
+                Kakao kakao = Kakao.builder()
                         .userId(sameEmailUser.getId())
                         .build();
+                kakaoRepository.save(kakao);
             }
             userRepository.save(sameEmailUser);
-            kakaoRepository.save(kakaoUser);
         }
-        return kakaoUser.getUser();
+        return kakaoUser;
     }
 
     public String kakaoAccessToken(User user) {
