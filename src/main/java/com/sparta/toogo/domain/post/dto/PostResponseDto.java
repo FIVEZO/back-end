@@ -25,7 +25,7 @@ public class PostResponseDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.nickname = post.getNickname();
+        this.nickname = post.getUser().getNickname();
         this.scrap = post.getScrap();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
