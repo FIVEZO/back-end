@@ -32,7 +32,8 @@ public class Post extends Timestamped {
     @Column
     private String contents;
 
-    private int scrap;
+    @Column
+    private Long scrapPostSum;
 
     @Enumerated(EnumType.STRING)
     private Category.PostCategory category;
@@ -51,12 +52,20 @@ public class Post extends Timestamped {
         this.contents = requestDto.getContents();
         this.user = user;
 //        this.nickname = requestDto.getNickname();
-//        this.scrap = requestDto.getScrap();
+        this.scrapPostSum = 0L;
         this.category = Category.findByNumber(category);
     }
 
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+    }
+
+    // 포스트 스크랩 수
+    public void plusScrapPostSum(){
+        this.scrapPostSum += 1;
+    }
+    public void minusScrapPostSum(){
+        this.scrapPostSum -= 1;
     }
 }

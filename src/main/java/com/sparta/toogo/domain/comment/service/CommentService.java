@@ -12,6 +12,7 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -50,9 +51,9 @@ public class CommentService {
 
     private Comment checkComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."));
         if(!(comment.getUser().getId().equals(user.getId()))) {
-            throw new UnauthorizedException("작성자만 수정,삭제가 가능합니다");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성자만 수정, 삭제가 가능합니다.");
         }
         return comment;
     }

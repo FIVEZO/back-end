@@ -16,7 +16,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String nickname;
-    private int scrap;
+    private Long scrapPostSum;    //  스크랩 기능
     private List<CommentResponseDto> commentList;
 
     public PostResponseDto(Post post) {
@@ -26,7 +26,7 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
-        this.scrap = post.getScrap();
+        this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)

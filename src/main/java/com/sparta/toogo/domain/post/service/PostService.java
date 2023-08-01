@@ -5,7 +5,6 @@ import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
-import com.sparta.toogo.domain.post.entity.QPost;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.enums.ErrorCode;
