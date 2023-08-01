@@ -1,20 +1,22 @@
 package com.sparta.toogo.global.responsedto;
 
-import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class ApiResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ApiResponse<T> {
+    private final boolean success;
+    private final int statusCode;
+    private final String msg;
+    private final T data;
+    private final T errors;
 
-    private int status;
-    private String message;
-    private PostResponseDto data;
-
-    public ApiResponse(int status, String message, PostResponseDto data) {
-        this.status = status;
-        this.message = message;
+    public ApiResponse(boolean success, int statusCode, String msg, T data, T errors) {
+        this.success = success;
+        this.statusCode = statusCode;
+        this.msg = msg;
         this.data = data;
+        this.errors = errors;
     }
 }
