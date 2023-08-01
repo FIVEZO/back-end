@@ -149,8 +149,8 @@ public class JwtUtil {
         return true;
     }
 
-    // AccessToken 재발급 메서드
-    public String regenerateAccessToken(String refreshToken, HttpServletResponse res) {
+    // AccessToken, RefreshToken 재발급 메서드
+    public void regenerateToken(String refreshToken, HttpServletResponse res) {
         Long userId = Long.parseLong(getUserInfo(substringToken(refreshToken)).getSubject());
 
         User user = userRepository.findById(userId)
@@ -161,10 +161,12 @@ public class JwtUtil {
         UserRoleEnum userRole = user.getRole();
 
         String newAccessToken = createAccessToken(userId, nickname, email, userRole);
+        String newRefreshToken = createRefreshToken(userId);
 
-        res.addHeader(HEADER_ACCESS_TOKEN, newAccessToken);
+        saveTokenToRedis(newRefreshToken, newAccessToken);
+        redisService.deleteToken(refreshToken);
+        addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
-        return newAccessToken;
     }
 
     // Redis에 저장된 AccessToken 반환 (key : refresh / value : access)
