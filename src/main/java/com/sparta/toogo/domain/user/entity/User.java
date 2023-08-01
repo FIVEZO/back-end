@@ -1,17 +1,16 @@
 package com.sparta.toogo.domain.user.entity;
 
+import com.sparta.toogo.domain.kakao.entity.Kakao;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user")
 public class User extends Timestamped {
 
     @Id
@@ -30,4 +29,15 @@ public class User extends Timestamped {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    private Long kakaoId;
+
+    @OneToOne
+    @JoinColumn(name = "kakao_id")
+    private Kakao kakao;
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
 }
