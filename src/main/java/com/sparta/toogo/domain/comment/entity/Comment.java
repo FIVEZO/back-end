@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.comment.entity;
 
 import com.sparta.toogo.domain.comment.dto.CommentRequestDto;
 import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.utill.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,13 +26,13 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "post_id")
     private Post post;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Comment(Post post, CommentRequestDto requestDto) {
+    public Comment(Post post, CommentRequestDto requestDto, User user) {
         this.comment = requestDto.getComment();
-//        this.user = user;
+        this.user = user;
         this.post = post;
     }
 
