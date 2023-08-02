@@ -40,4 +40,3 @@ public class MessageRoom {
         this.user = user;
     }
 }
-
