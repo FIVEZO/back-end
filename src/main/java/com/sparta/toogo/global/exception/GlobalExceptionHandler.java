@@ -60,6 +60,11 @@ public class GlobalExceptionHandler {
         return ResponseUtil.error(e.getErrorCode());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ApiResponse<?> handleUserException(UnauthorizedException e) {
+        return ResponseUtil.error(e.getErrorCode());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<?> validationExceptionHandler(MethodArgumentNotValidException e) {
         Map<String, String> errors = new LinkedHashMap<>();

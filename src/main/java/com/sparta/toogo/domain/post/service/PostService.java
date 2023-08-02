@@ -44,6 +44,9 @@ public class PostService {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
         List<Post> posts = postRepository.findAllByCategory(categoryEnum); // ASIA : Long 1L
+        if(posts.isEmpty()) {
+            throw new PostException(ErrorCode.NOT_FOUND_DATA);
+        }
         log.info("get 동작중중!");
         return posts.stream()
                 .map(PostResponseDto::new)
