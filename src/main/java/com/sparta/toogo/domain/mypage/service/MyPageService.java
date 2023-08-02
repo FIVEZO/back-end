@@ -5,7 +5,7 @@ import com.sparta.toogo.domain.mypage.dto.MyPageDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
-import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.sparta.toogo.domain.post.dto.MyPagePostDto;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
@@ -52,6 +52,22 @@ public class MyPageService {
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
+    public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
+        Long myScrapCount = scrapRepository.countByUser(user);
+
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC,"createdAt"));
+        Page<Scrap> scraps = scrapRepository.findAllByUser(pageable, user);
+        List<MyPagePostDto> scrapList = new ArrayList<>();
+
+        for (Scrap scrap : scraps) {
+            Post post = scrap.getPost();
+//            long scrapPostSum = post.getScrapList().size();
+
+            scrapList.add(new MyPagePostDto(post, myScrapCount));
+        }
+        return scrapList;
+    }
+
     @Transactional
     public MyPageResponseDto updateUser(Long loginId, MyPageRequestDto requestDto, User user) {
         if (!user.getId().equals(loginId)) {
@@ -77,19 +93,5 @@ public class MyPageService {
         user.modifyUser(user, requestDto, newPassword, nickname);
         userRepository.save(user);
         return new MyPageResponseDto(user);
-    }
-
-    public List<PostResponseDto> getMyScrap(User user) {
-        Pageable pageable = PageRequest.of(0, 9, Sort.by("createdAt"));
-        Page<Scrap> scraps = scrapRepository.findAllByUser(pageable, user);
-        List<PostResponseDto> scrapList = new ArrayList<>();
-
-        for (Scrap scrap : scraps) {
-            Post post = scrap.getPost();
-            long scrapPostSum = post.getScrapList().size();
-
-            scrapList.add(new PostResponseDto(post, scrapPostSum));
-        }
-        return scrapList;
     }
 }

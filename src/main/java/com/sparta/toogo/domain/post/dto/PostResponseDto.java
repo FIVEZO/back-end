@@ -18,16 +18,18 @@ public class PostResponseDto {
     private String nickname;
     private Long scrapPostSum;    //  스크랩 기능
     private List<CommentResponseDto> commentList;
+    private boolean isScrap;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
+//        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
+        this.isScrap = false;
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
     }
@@ -41,5 +43,17 @@ public class PostResponseDto {
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = scrapPostSum;
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
+    }
+
+    public PostResponseDto(Post post, boolean isScrap) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.createdAt = post.getCreatedAt();
+//        this.modifiedAt = post.getModifiedAt();
+        this.nickname = post.getUser().getNickname();
+        this.scrapPostSum = post.getScrapPostSum();
+        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
+        this.isScrap = isScrap;
     }
 }
