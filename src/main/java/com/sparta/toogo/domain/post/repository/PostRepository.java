@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.post.repository;
 
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByCategoryAndId(Category.PostCategory category, Long postId);
 
     List<Post> findAllByCategory(Category.PostCategory categoryEnum, Pageable pageable);
+
+
 }

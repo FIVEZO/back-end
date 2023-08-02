@@ -61,7 +61,6 @@ public class MyPageService {
 
         for (Scrap scrap : scraps) {
             Post post = scrap.getPost();
-//            long scrapPostSum = post.getScrapList().size();
 
             scrapList.add(new MyPagePostDto(post, myScrapCount));
         }

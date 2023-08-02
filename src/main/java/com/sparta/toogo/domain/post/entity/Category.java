@@ -3,19 +3,19 @@ package com.sparta.toogo.domain.post.entity;
 public class Category {
 
     public enum PostCategory {
-        ASIA(1),
+            ASIA(1),
 
-        AFRICA(2),
+            AFRICA(2),
 
-        EUROPE(3),
+            EUROPE(3),
 
-        OCEANIA(4),
+            OCEANIA(4),
 
-        NORTH_AMERICA(5),
+            NORTH_AMERICA(5),
 
-        SOUTH_AMERICA(6);
+            SOUTH_AMERICA(6);
 
-        private int value;
+            private int value;
 
         PostCategory(int value) {
             this.value = value;
