@@ -1,10 +1,12 @@
 package com.sparta.toogo.domain.user.entity;
 
-import com.sparta.toogo.domain.kakao.entity.Kakao;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -31,6 +33,8 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private Long kakaoId;
+
     @Column(nullable = false)
     private boolean userStatus = true;
 
@@ -40,9 +44,6 @@ public class User extends Timestamped {
     public void Delete() {
         this.userStatus = false;
     }
-}
-
-    private Long kakaoId;
 
     public void kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
