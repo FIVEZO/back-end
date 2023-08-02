@@ -1,13 +1,11 @@
 package com.sparta.toogo.domain.user.entity;
 
-import com.sparta.toogo.domain.kakao.entity.Kakao;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
 @Entity
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
@@ -32,7 +30,23 @@ public class User extends Timestamped {
 
     private Long kakaoId;
 
-    public void kakaoIdUpdate(Long kakaoId) {
+    public User(String nickname, String password, String email, UserRoleEnum role) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+    public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
         this.kakaoId = kakaoId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 }

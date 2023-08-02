@@ -1,7 +1,6 @@
 package com.sparta.toogo.global.exception;
 
 import com.sparta.toogo.domain.comment.exception.CommentException;
-import com.sparta.toogo.domain.kakao.exception.KakaoException;
 import com.sparta.toogo.domain.map.exception.MapException;
 import com.sparta.toogo.domain.message.exception.MessageException;
 import com.sparta.toogo.domain.messageroom.exception.MessageRoomException;
@@ -59,11 +58,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ApiResponse<?> handleUserException(UserException e) {
-        return ResponseUtil.error(e.getErrorCode());
-    }
-
-    @ExceptionHandler(KakaoException.class)
-    public ApiResponse<?> handleUserException(KakaoException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 

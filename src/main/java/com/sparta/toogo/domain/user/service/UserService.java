@@ -49,12 +49,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .role(role)
-                .build();
+        User user = new User(nickname, password, email, role);
 
         userRepository.save(user);
         return new UserResponseDto("가입 완료", HttpStatus.OK.value());
