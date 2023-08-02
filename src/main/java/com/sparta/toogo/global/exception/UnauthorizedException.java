@@ -1,15 +1,17 @@
 package com.sparta.toogo.global.exception;
 
-public class UnauthorizedException extends RuntimeException{
-    public UnauthorizedException() {
-        super();
+import com.sparta.toogo.global.enums.ErrorCode;
+
+public class UnauthorizedException extends GlobalException{
+    public UnauthorizedException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
-    public UnauthorizedException(String message) {
-        super(message);
-    }
-
-    public UnauthorizedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+//    public UnauthorizedException(String message) {
+//        super(message);
+//    }
+//
+//    public UnauthorizedException(String message, Throwable cause) {
+//        super(message, cause);
+//    }
 }

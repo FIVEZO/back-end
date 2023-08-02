@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -37,7 +38,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
+    public final ListPath<com.sparta.toogo.domain.post.entity.Post, com.sparta.toogo.domain.post.entity.QPost> posts = this.<com.sparta.toogo.domain.post.entity.Post, com.sparta.toogo.domain.post.entity.QPost>createList("posts", com.sparta.toogo.domain.post.entity.Post.class, com.sparta.toogo.domain.post.entity.QPost.class, PathInits.DIRECT2);
+
     public final EnumPath<UserRoleEnum> role = createEnum("role", UserRoleEnum.class);
+
+    public final BooleanPath userStatus = createBoolean("userStatus");
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));
