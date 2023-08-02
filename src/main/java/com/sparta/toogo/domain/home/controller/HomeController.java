@@ -2,7 +2,6 @@ package com.sparta.toogo.domain.home.controller;
 
 import com.sparta.toogo.domain.home.dto.HomeResponseDto;
 import com.sparta.toogo.domain.home.service.HomeService;
-import com.sparta.toogo.global.responsedto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

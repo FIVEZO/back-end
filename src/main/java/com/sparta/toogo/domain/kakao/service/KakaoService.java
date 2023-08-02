@@ -4,13 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.toogo.domain.kakao.dto.KakaoUserInfoDto;
-import com.sparta.toogo.domain.kakao.entity.Kakao;
-import com.sparta.toogo.domain.kakao.repository.KakaoRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import com.sparta.toogo.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
+@Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
 
     private final PasswordEncoder passwordEncoder;
-    private final KakaoRepository kakaoRepository;
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
@@ -107,51 +106,39 @@ public class KakaoService {
         );
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
-        Long kakaoId = jsonNode.get("id").asLong();
+        Long id = jsonNode.get("id").asLong();
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
-        return new KakaoUserInfoDto(kakaoId, email, nickname);
+        log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
+        return new KakaoUserInfoDto(id, nickname, email);
     }
 
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findBykakaoId(kakaoId).orElse(null);
+        User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
             // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
             String kakaoEmail = kakaoUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
             if (sameEmailUser != null) {
+                kakaoUser = sameEmailUser;
                 // 기존 회원정보에 카카오 Id 추가
-                sameEmailUser.kakaoIdUpdate(kakaoId);
-                Kakao kakao = Kakao.builder()
-                        .userId(sameEmailUser.getId())
-                        .build();
-                kakaoRepository.save(kakao);
+                kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
             } else {
                 // 신규 회원가입
-                String encodedPassword = passwordEncoder.encode(UUID.randomUUID().toString());
-
-                UserRoleEnum role = UserRoleEnum.USER;
-
-                sameEmailUser = User.builder()
-                        .email(kakaoUserInfo.getEmail())
-                        .password(encodedPassword)
-                        .nickname(kakaoUserInfo.getNickname())
-                        .role(role)
-                        .kakaoId(kakaoId)
-                        .build();
-
-                Kakao kakao = Kakao.builder()
-                        .userId(sameEmailUser.getId())
-                        .build();
-                kakaoRepository.save(kakao);
+                // password: random UUID
+                String password = UUID.randomUUID().toString();
+                String encodedPassword = passwordEncoder.encode(password);
+                // email: kakao email
+                String email = kakaoUserInfo.getEmail();
+                kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId);
             }
-            userRepository.save(sameEmailUser);
+            userRepository.save(kakaoUser);
         }
         return kakaoUser;
     }
