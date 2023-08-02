@@ -7,6 +7,7 @@ import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.post.repository.PostRepository;
+import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
@@ -29,6 +30,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final JPAQueryFactory queryFactory;
+    private final ScrapRepository scrapRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
         Post post = new Post(category, requestDto, user);
@@ -52,10 +54,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public PostResponseDto getDetailPost(Long category, Long postId) {
+    public PostResponseDto getDetailPost(Long category, Long postId, Long userId) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
-        return new PostResponseDto(post);
+        boolean isScrap = scrapRepository.findByPostIdAndUserId(postId, userId).isPresent();
+        return new PostResponseDto(post, isScrap);
     }
 
     public PostResponseDto updatePost(Long category, Long postId, User user, PostRequestDto requestDto) {
@@ -87,6 +90,7 @@ public class PostService {
         return postRepository.findByCategoryAndId(category, postId)
                 .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
     }
+
 }
 // 대륙(6), 국가(18)
 

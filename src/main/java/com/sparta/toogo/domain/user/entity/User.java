@@ -38,20 +38,18 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    private Long kakaoId;
-
     @Column(nullable = false)
     private boolean userStatus = true;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
+    @Column
+    private Long kakaoId;
+
     public void Delete() {
         this.userStatus = false;
     }
-
-    @Column
-    private Long kakaoId;
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email = email;

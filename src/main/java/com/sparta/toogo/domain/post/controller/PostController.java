@@ -42,8 +42,13 @@ public class PostController {
 
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
-                                                         @PathVariable Long postId) {
-        PostResponseDto response = postService.getDetailPost(category, postId);
+                                                         @PathVariable Long postId,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = 0L;
+        if(userDetails != null) {
+            userId = userDetails.getUser().getId();
+        }
+        PostResponseDto response = postService.getDetailPost(category, postId, userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -61,4 +66,6 @@ public class PostController {
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtil.ok(postService.deletePost(category, postId, userDetails.getUser()));
     }
+
+
 }
