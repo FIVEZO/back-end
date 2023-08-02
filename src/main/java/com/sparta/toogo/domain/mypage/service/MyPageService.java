@@ -55,7 +55,7 @@ public class MyPageService {
     public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
         Long myScrapCount = scrapRepository.countByUser(user);
 
-        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC,"createdAt"));
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Scrap> scraps = scrapRepository.findAllByUser(pageable, user);
         List<MyPagePostDto> scrapList = new ArrayList<>();
 
