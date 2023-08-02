@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +26,9 @@ public class PostController {
 
     @PostMapping("/{category}")
     public ApiResponse<?> createPost(@PathVariable Long category,
-                                                                   @RequestBody PostRequestDto requestDto,
-                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                     @RequestBody PostRequestDto requestDto,
+                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtil.ok(postService.createPost(category, requestDto, userDetails.getUser()));
-//        public ResponseEntity<Map<String, Object>> createPost(@PathVariable Long category, @RequestBody PostRequestDto requestDto) {
-//            ResponseEntity<Map<String, Object>> responseEntity = postService.createPost(category, requestDto);
-//            return responseEntity;
     }
 
     @GetMapping("/{category}")
@@ -68,5 +66,11 @@ public class PostController {
         return ResponseUtil.ok(postService.deletePost(category, postId, userDetails.getUser()));
     }
 
+    @GetMapping("/{category}/search/{pageNum}")
+    public List<PostResponseDto> searchPost(@PathVariable Long category,
+                                            @RequestParam String keyword,
+                                            @PathVariable int pageNum) {
+        return postService.searchPost(keyword, category, pageNum - 1);
+    }
 
 }
