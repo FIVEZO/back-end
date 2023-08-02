@@ -1,5 +1,7 @@
 package com.sparta.toogo.domain.user.entity;
 
+import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
@@ -7,9 +9,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +40,14 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private boolean userStatus = true;
 
-    @OneToMany(mappedBy = "user")
-    private List<Post> posts = new ArrayList<>();
-
     @Column
     private Long kakaoId;
+
+    @OneToOne(mappedBy = "user")
+    private MyPage myPage;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
     public void Delete() {
         this.userStatus = false;
@@ -69,5 +71,12 @@ public class User extends Timestamped {
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
+    }
+
+    public void modifyUser(User user, MyPageRequestDto requestDto, String newPassword, String nickname) {
+        this.email = user.getEmail();
+        this.password = newPassword;
+        this.nickname = nickname;
+        this.role = user.getRole();
     }
 }

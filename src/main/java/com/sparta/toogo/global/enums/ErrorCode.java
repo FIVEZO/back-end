@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
     UNAUTHORIZED_USER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
+    INCORRECT_PASSWORD(UNAUTHORIZED, "잘못된 비밀번호입니다."),
 
     /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
     NO_AUTHORITY_TO_DATA(FORBIDDEN, "작성자만 수정, 삭제할 수 있습니다."),
@@ -29,6 +30,7 @@ public enum ErrorCode {
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
+    DUPLICATE_NICKNAME(CONFLICT, "중복된 닉네임입니다"),
 
     ;
 
