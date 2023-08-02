@@ -31,4 +31,15 @@ public class PostResponseDto {
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
     }
+
+    public PostResponseDto(Post post, long scrapPostSum) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
+        this.nickname = post.getUser().getNickname();
+        this.scrapPostSum = scrapPostSum;
+        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
+    }
 }

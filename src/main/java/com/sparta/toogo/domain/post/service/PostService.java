@@ -5,6 +5,7 @@ import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.enums.ErrorCode;
@@ -75,17 +76,15 @@ public class PostService {
     private Post confirmPost(Category.PostCategory categoryEnum, Long postId, User user) {
         Post post = findPost(categoryEnum, postId);
         if(!post.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(NO_AUTHORITY_TO_DATA.getHttpStatus(), NO_AUTHORITY_TO_DATA.getDetail());
+            throw new PostException(NO_AUTHORITY_TO_DATA);
         }
         return post;
     }
 
     private Post findPost(Category.PostCategory category, Long postId) {
         return postRepository.findByCategoryAndId(category, postId)
-                .orElseThrow(() -> new ResponseStatusException(ErrorCode.NOT_FOUND_DATA.getHttpStatus(), ErrorCode.NOT_FOUND_DATA.getDetail()));
+                .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
     }
-
-
 }
 // 대륙(6), 국가(18)
 

@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.post.entity;
 
 import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
+import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.utill.Timestamped;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -46,6 +48,9 @@ public class Post extends Timestamped {
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Scrap> scrapList;
+
 
     public Post(Long category, PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
@@ -68,4 +73,5 @@ public class Post extends Timestamped {
     public void minusScrapPostSum(){
         this.scrapPostSum -= 1;
     }
+
 }

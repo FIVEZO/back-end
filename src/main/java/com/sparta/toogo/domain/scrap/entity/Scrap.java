@@ -3,6 +3,7 @@ package com.sparta.toogo.domain.scrap.entity;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.global.utill.Timestamped;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Scrap {
+public class Scrap extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
