@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Slf4j(topic = "JWT 검증 및 인가")
@@ -43,8 +44,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                     // 유효한 refreshToken인지 검증
                     if (jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
-                        String newAccessToken = jwtUtil.regenerateAccessToken(refreshTokenValue, res);
-                        log.info("새로운 AccessToken 발급 완료");
+                        jwtUtil.regenerateToken(refreshTokenValue, res);
+                        log.info("새로운 AccessToken, RefreshToken 발급 완료");
                     } else {
                         log.error("RefreshToken 검증 오류");
                     }

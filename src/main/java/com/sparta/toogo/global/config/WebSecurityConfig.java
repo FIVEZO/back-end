@@ -61,15 +61,15 @@ public class WebSecurityConfig {
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
+                        authorizeHttpRequests
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                                .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
-                        .anyRequest().authenticated() // 그 외 요청은 인증 필요
+                                .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
 
         // 필터 관리
