@@ -16,31 +16,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MessageRoomService {
     private final MessageRoomRepository messageRoomRepository;
-
     private Map<String, MessageRoomDto> messageRoomDtoList;
 
     @PostConstruct
     private void init() {
         messageRoomDtoList = new LinkedHashMap<>();
-    }
-
-    // 쪽지방 조회
-    public List<MessageRoomDto> findAllRoom() {
-        List<MessageRoom> messageRooms = messageRoomRepository.findAll();
-        List<MessageRoomDto> messageRoomDtos = new ArrayList<>();
-
-        for (MessageRoom messageRoom : messageRooms) {
-            MessageRoomDto messageRoomDto = new MessageRoomDto(messageRoom.getRoomId(), messageRoom.getName());
-            messageRoomDtos.add(messageRoomDto);
-        }
-
-        Collections.reverse(messageRoomDtos);
-
-        return messageRoomDtos;
-    }
-
-    public MessageRoomDto findRoomById(String roomId) {
-        return messageRoomDtoList.get(roomId);
     }
 
     // 쪽지방 생성
@@ -58,11 +38,33 @@ public class MessageRoomService {
         return messageRoomDto;
     }
 
+
+    // 쪽지방 전체 조회
+    public List<MessageRoomDto> findAllRoom() {
+        List<MessageRoom> messageRooms = messageRoomRepository.findAll();
+
+        List<MessageRoomDto> messageRoomDtos = new ArrayList<>();
+        for (MessageRoom messageRoom : messageRooms) {
+            MessageRoomDto messageRoomDto = new MessageRoomDto(messageRoom.getRoomId(), messageRoom.getName());
+            messageRoomDtos.add(messageRoomDto);
+        }
+        Collections.reverse(messageRoomDtos);
+        return messageRoomDtos;
+    }
+
+    // 쪽지방 선택 조회
+    public MessageRoomDto findRoom(Long id) {
+        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
+        );
+
+        return new MessageRoomDto(messageRoom);
+    }
+
     // 쪽지방 삭제
     public MsgResponseDto deleteRoom(Long id, User user) {
         MessageRoom messageRoom = messageRoomRepository.findByIdAndUser(id, user);
-
         messageRoomRepository.delete(messageRoom);
-        return new MsgResponseDto("채팅방을 삭제했습니다.", HttpStatus.OK.value());
+        return new MsgResponseDto("쪽지방을 삭제했습니다.", HttpStatus.OK.value());
     }
 }

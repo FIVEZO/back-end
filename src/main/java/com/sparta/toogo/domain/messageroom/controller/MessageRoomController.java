@@ -13,24 +13,30 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/messageRoom")
+@RequestMapping("/message")
 public class MessageRoomController {
     private final MessageRoomService messageRoomService;
 
     // 쪽지방 생성
-    @PostMapping
+    @PostMapping("/room")
     public MessageRoomDto createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.createRoom(userDetails.getUser());
     }
 
-    // 쪽지방 조회
-    @GetMapping
+    // 쪽지방 전체 조회
+    @GetMapping("/rooms")
     public List<MessageRoomDto> findAllRoom() {
         return messageRoomService.findAllRoom();
     }
 
+    // 쪽지방 선택 조회
+    @GetMapping("room/{id}")
+    public MessageRoomDto findRoom(@PathVariable Long id) {
+        return messageRoomService.findRoom(id);
+    }
+
     // 쪽지방 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("room/{id}")
     public MsgResponseDto deleteRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.deleteRoom(id, userDetails.getUser());
     }
