@@ -32,8 +32,8 @@ public class UserService {
     @Transactional
     public UserResponseDto signUp(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
-        String nickname = userRequestDto.getNickname();
         String password = passwordEncoder.encode(userRequestDto.getPassword());
+        String nickname = userRequestDto.getNickname();
 
         if (checkEmail(email) || checkNickname(nickname)) {
             throw new IllegalArgumentException("데이터가 이미 존재합니다.");
@@ -49,7 +49,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(nickname, password, email, role);
+        User user = new User(email, password, nickname, role);
 
         userRepository.save(user);
         return new UserResponseDto("가입 완료", HttpStatus.OK.value());
