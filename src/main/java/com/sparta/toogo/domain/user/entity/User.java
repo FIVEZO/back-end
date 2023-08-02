@@ -1,5 +1,7 @@
 package com.sparta.toogo.domain.user.entity;
 
+import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
@@ -38,15 +40,18 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private boolean userStatus = true;
 
+    @Column
+    private Long kakaoId;
+
+    @OneToOne(mappedBy = "user")
+    private MyPage myPage;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
     public void Delete() {
         this.userStatus = false;
     }
-
-    @Column
-    private Long kakaoId;
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email = email;
@@ -66,5 +71,12 @@ public class User extends Timestamped {
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
+    }
+
+    public void modifyUser(User user, MyPageRequestDto requestDto, String newPassword, String nickname) {
+        this.email = user.getEmail();
+        this.password = newPassword;
+        this.nickname = nickname;
+        this.role = user.getRole();
     }
 }

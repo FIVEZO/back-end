@@ -1,20 +1,25 @@
 package com.sparta.toogo.domain.user.service;
 
+import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
+import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
+import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import com.sparta.toogo.global.jwt.JwtUtil;
 import com.sparta.toogo.global.redis.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.sparta.toogo.global.enums.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j(topic = "UserService")
 @Service
@@ -55,17 +60,17 @@ public class UserService {
         return new UserResponseDto("가입 완료", HttpStatus.OK.value());
     }
 
+    public UserResponseDto logOut(HttpServletRequest req) {
+        String refreshToken = req.getHeader(jwtUtil.HEADER_REFRESH_TOKEN);
+        redisService.deleteToken(refreshToken);
+        return new UserResponseDto("로그아웃 성공", HttpStatus.NO_CONTENT.value());
+    }
+
     public Boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
     public Boolean checkNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
-    }
-
-    public UserResponseDto logOut(HttpServletRequest req) {
-        String refreshToken = req.getHeader(jwtUtil.HEADER_REFRESH_TOKEN);
-        redisService.deleteToken(refreshToken);
-        return new UserResponseDto("로그아웃 성공", HttpStatus.NO_CONTENT.value());
     }
 }

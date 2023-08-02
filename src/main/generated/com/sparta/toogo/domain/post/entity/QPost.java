@@ -38,7 +38,6 @@ public class QPost extends EntityPathBase<Post> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
-    public final NumberPath<Integer> scrap = createNumber("scrap", Integer.class);
     public final ListPath<com.sparta.toogo.domain.scrap.entity.Scrap, com.sparta.toogo.domain.scrap.entity.QScrap> scrapList = this.<com.sparta.toogo.domain.scrap.entity.Scrap, com.sparta.toogo.domain.scrap.entity.QScrap>createList("scrapList", com.sparta.toogo.domain.scrap.entity.Scrap.class, com.sparta.toogo.domain.scrap.entity.QScrap.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> scrapPostSum = createNumber("scrapPostSum", Long.class);
@@ -65,7 +64,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }
