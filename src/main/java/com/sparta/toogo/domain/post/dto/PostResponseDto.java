@@ -25,7 +25,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
+//        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
@@ -50,9 +50,10 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
+//        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
+        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = isScrap;
     }
 }

@@ -13,6 +13,9 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +43,13 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> getPostsByCategory(Long category) {
+    public List<PostResponseDto> getPostsByCategory(Long category, int pageNum) {
         log.info("get 동작중!");
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
-        List<Post> posts = postRepository.findAllByCategory(categoryEnum); // ASIA : Long 1L
+
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
         if(posts.isEmpty()) {
             throw new PostException(ErrorCode.NOT_FOUND_DATA);
         }

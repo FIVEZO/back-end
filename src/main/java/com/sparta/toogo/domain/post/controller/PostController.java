@@ -34,9 +34,10 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByCategory(@PathVariable Long category) {
+    public ResponseEntity<List<PostResponseDto>> getPostsByCategory(@PathVariable Long category,
+                                                                    @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
-        List<PostResponseDto> response = postService.getPostsByCategory(category);
+        List<PostResponseDto> response = postService.getPostsByCategory(category, pageNum -1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
