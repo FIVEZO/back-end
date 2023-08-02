@@ -3,7 +3,7 @@ package com.sparta.toogo.domain.mypage.service;
 import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageDto;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
-import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.sparta.toogo.domain.post.dto.MyPagePostDto;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
@@ -48,16 +48,18 @@ public class MyPageService {
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
-    public List<PostResponseDto> getMyScrap(User user) {
-        Pageable pageable = PageRequest.of(0, 9, Sort.by("createdAt"));
+    public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
+        Long myScrapCount = scrapRepository.countByUser(user);
+
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC,"createdAt"));
         Page<Scrap> scraps = scrapRepository.findAllByUser(pageable, user);
-        List<PostResponseDto> scrapList = new ArrayList<>();
+        List<MyPagePostDto> scrapList = new ArrayList<>();
 
         for (Scrap scrap : scraps) {
             Post post = scrap.getPost();
-            long scrapPostSum = post.getScrapList().size();
+//            long scrapPostSum = post.getScrapList().size();
 
-            scrapList.add(new PostResponseDto(post, scrapPostSum));
+            scrapList.add(new MyPagePostDto(post, myScrapCount));
         }
         return scrapList;
     }

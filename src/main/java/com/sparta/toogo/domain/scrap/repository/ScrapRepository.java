@@ -17,5 +17,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     Page<Scrap> findAllByUser(Pageable pageable, User user);
 
 
-    Optional<Object> findByPostIdAndUserId(Long postId, Long userId);
+    Optional<Scrap> findByPostIdAndUserId(Long postId, Long userId);
+
+    Long countByUser(User user);
 }
