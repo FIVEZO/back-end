@@ -41,7 +41,7 @@ public class ScrapService {
         } else {
             scrapRepository.delete(scrap);
             post.minusScrapPostSum();
-            return new ScrapResponseDto(false, post.getScrapPostSum(), "스크랩에 실패했습니다.");
+            return new ScrapResponseDto(false, post.getScrapPostSum(), "스크랩을 취소했습니다.");
         }
     }
 }

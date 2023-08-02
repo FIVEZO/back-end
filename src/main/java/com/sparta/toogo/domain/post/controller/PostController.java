@@ -34,16 +34,22 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByCategory(@PathVariable Long category) {
+    public ResponseEntity<List<PostResponseDto>> getPostsByCategory(@PathVariable Long category,
+                                                                    @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
-        List<PostResponseDto> response = postService.getPostsByCategory(category);
+        List<PostResponseDto> response = postService.getPostsByCategory(category, pageNum -1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
-                                                         @PathVariable Long postId) {
-        PostResponseDto response = postService.getDetailPost(category, postId);
+                                                         @PathVariable Long postId,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = 0L;
+        if(userDetails != null) {
+            userId = userDetails.getUser().getId();
+        }
+        PostResponseDto response = postService.getDetailPost(category, postId, userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -61,4 +67,6 @@ public class PostController {
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtil.ok(postService.deletePost(category, postId, userDetails.getUser()));
     }
+
+
 }

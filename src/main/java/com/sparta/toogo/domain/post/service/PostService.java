@@ -7,14 +7,17 @@ import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.post.repository.PostRepository;
+import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final JPAQueryFactory queryFactory;
+    private final ScrapRepository scrapRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
         Post post = new Post(category, requestDto, user);
@@ -39,11 +43,13 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> getPostsByCategory(Long category) {
+    public List<PostResponseDto> getPostsByCategory(Long category, int pageNum) {
         log.info("get 동작중!");
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
-        List<Post> posts = postRepository.findAllByCategory(categoryEnum); // ASIA : Long 1L
+
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
         if(posts.isEmpty()) {
             throw new PostException(ErrorCode.NOT_FOUND_DATA);
         }
@@ -53,10 +59,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public PostResponseDto getDetailPost(Long category, Long postId) {
+    public PostResponseDto getDetailPost(Long category, Long postId, Long userId) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
-        return new PostResponseDto(post);
+        boolean isScrap = scrapRepository.findByPostIdAndUserId(postId, userId).isPresent();
+        return new PostResponseDto(post, isScrap);
     }
 
     public PostResponseDto updatePost(Long category, Long postId, User user, PostRequestDto requestDto) {
@@ -88,6 +95,7 @@ public class PostService {
         return postRepository.findByCategoryAndId(category, postId)
                 .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
     }
+
 }
 // 대륙(6), 국가(18)
 

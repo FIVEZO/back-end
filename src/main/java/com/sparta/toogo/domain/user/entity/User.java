@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,12 +44,12 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
+    @Column
+    private Long kakaoId;
+
     public void Delete() {
         this.userStatus = false;
     }
-
-    @Column
-    private Long kakaoId;
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email = email;

@@ -2,8 +2,8 @@ package com.sparta.toogo.domain.mypage.controller;
 
 import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
 import com.sparta.toogo.domain.mypage.service.MyPageService;
+import com.sparta.toogo.domain.post.dto.MyPagePostDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
-import com.sparta.toogo.domain.scrap.dto.ScrapResponseDto;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,9 @@ public class MyPageController {
         return myPageService.deleteUser(loginId, userDetails.getUser());
     }
 
-    @GetMapping("/scrap")
-    public List<PostResponseDto> getMyScrap(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.getMyScrap(userDetails.getUser());
+    @GetMapping("/scrap/{pageNum}")
+    public List<MyPagePostDto> getMyScrap(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                          @PathVariable int pageNum) {
+        return myPageService.getMyScrap(userDetails.getUser(), pageNum - 1);
     }
 }
