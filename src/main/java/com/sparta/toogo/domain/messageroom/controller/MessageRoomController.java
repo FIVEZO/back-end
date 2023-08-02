@@ -16,21 +16,20 @@ import java.util.List;
 @RequestMapping("/messageRoom")
 public class MessageRoomController {
     private final MessageRoomService messageRoomService;
-    private final MessageService messageService;
 
-    // 채팅방 생성
+    // 쪽지방 생성
     @PostMapping
     public MessageRoomDto createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return messageService.createRoom(userDetails.getUser());
+        return messageRoomService.createRoom(userDetails.getUser());
     }
 
-    // 채팅방 조회
+    // 쪽지방 조회
     @GetMapping
     public List<MessageRoomDto> findAllRoom() {
-        return messageService.findAllRoom();
+        return messageRoomService.findAllRoom();
     }
 
-    // 채팅방 삭제
+    // 쪽지방 삭제
     @DeleteMapping("/{id}")
     public MsgResponseDto deleteRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.deleteRoom(id, userDetails.getUser());
