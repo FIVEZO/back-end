@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface MessageRoomRepository extends JpaRepository<MessageRoom, Long> {
     MessageRoom findByIdAndUser(Long id, User user);
-
-    List<MessageRoom> findByUser(User user);
+    List<MessageRoom> findByUserOrReceiver(User user, String receiver);
 }

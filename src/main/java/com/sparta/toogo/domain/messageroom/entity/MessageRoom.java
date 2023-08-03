@@ -19,9 +19,11 @@ public class MessageRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+//    private String name;
+    private String sender;
     @Column(unique = true)
     private String roomId;
+    private String receiver;        // 메시지 수신자
 
     @OneToMany(mappedBy = "messageRoom", cascade = CascadeType.REMOVE)
     private List<Message> messageList = new ArrayList<>();
@@ -34,9 +36,12 @@ public class MessageRoom {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    public MessageRoom(String name, String roomId, User user) {
-        this.name = name;
+    // 쪽지방 생성
+    public MessageRoom(Long id, String sender, String roomId, String receiver, User user) {
+        this.id = id;
+        this.sender = sender;
         this.roomId = roomId;
+        this.receiver = receiver;
         this.user = user;
     }
 }

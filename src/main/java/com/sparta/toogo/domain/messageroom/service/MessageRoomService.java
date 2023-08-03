@@ -1,7 +1,8 @@
 package com.sparta.toogo.domain.messageroom.service;
 
+import com.sparta.toogo.domain.message.dto.MessageRequestDto;
+import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
-import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
@@ -17,7 +18,10 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -46,26 +50,25 @@ public class MessageRoomService {
     }
 
     // 쪽지방 생성
-    public MessageRoomDto createRoom(User user) {
-        MessageRoomDto messageRoomDto = MessageRoomDto.create(user);
+    public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
+        MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
         opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-        messageRoomRepository.save(new MessageRoom(messageRoomDto.getName(), messageRoomDto.getRoomId(), user));
+        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
 
-        return messageRoomDto;
+        return new MessageResponseDto(messageRoom);
     }
 
     // 사용자 관련 쪽지방 전체 조회
-    public List<MessageRoomDto> findAllRoomByUser(User user) {
-        List<MessageRoom> messageRooms = messageRoomRepository.findByUser(user);
-        List<MessageRoomDto> messageRoomDtos = new ArrayList<>();
+    public List<MessageResponseDto> findAllRoomByUser(User user) {
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUserOrReceiver(user, user.getNickname());      // sender & receiver 모두 해당 쪽지방 조회 가능 (1:1 대화)
+        List<MessageResponseDto> messageRoomDtos = new ArrayList<>();
         for (MessageRoom messageRoom : messageRooms) {
-            MessageRoomDto messageRoomDto = new MessageRoomDto(messageRoom.getRoomId(), messageRoom.getName());
+            MessageResponseDto messageRoomDto = new MessageResponseDto(messageRoom.getId(), messageRoom.getRoomId(), messageRoom.getSender(), messageRoom.getReceiver());
             messageRoomDtos.add(messageRoomDto);
         }
 
         return messageRoomDtos;
     }
-
 
 //    // 쪽지방 선택 조회
 //    public MessageRoomDto findRoom(Long id) {

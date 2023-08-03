@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.messageroom.controller;
 
-import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
+import com.sparta.toogo.domain.message.dto.MessageRequestDto;
+import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
@@ -16,15 +17,15 @@ import java.util.List;
 public class MessageRoomController {
     private final MessageRoomService messageRoomService;
 
-    // 쪽지방 생성
+    // 쪽지방 생성 (receiver 에게 '쪽지 보내기'를 누를 시)
     @PostMapping("/room")
-    public MessageRoomDto createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return messageRoomService.createRoom(userDetails.getUser());
+    public MessageResponseDto createRoom(@RequestBody MessageRequestDto messageRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return messageRoomService.createRoom(messageRequestDto, userDetails.getUser());
     }
 
     // 사용자 관련 쪽지방 전체 조회
     @GetMapping("/rooms")
-    public List<MessageRoomDto> findAllRoomByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<MessageResponseDto> findAllRoomByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.findAllRoomByUser(userDetails.getUser());
     }
 
