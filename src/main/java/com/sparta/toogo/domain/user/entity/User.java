@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.user.entity;
 
+import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
@@ -43,11 +44,14 @@ public class User extends Timestamped {
     @Column
     private Long kakaoId;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private MyPage myPage;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
     public void Delete() {
         this.userStatus = false;

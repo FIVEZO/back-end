@@ -68,7 +68,6 @@ public class MyPageService {
         return scrapList;
     }
 
-    @Transactional
     public MyPageResponseDto updateUser(Long loginId, MyPageRequestDto requestDto, User user) {
         if (!user.getId().equals(loginId)) {
             throw new MyPageException(NO_AUTHORITY_TO_DATA);

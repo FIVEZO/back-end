@@ -24,6 +24,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.sparta.toogo.global.util.QTimestamped _super = new com.sparta.toogo.global.util.QTimestamped(this);
 
+    public final ListPath<com.sparta.toogo.domain.comment.entity.Comment, com.sparta.toogo.domain.comment.entity.QComment> comments = this.<com.sparta.toogo.domain.comment.entity.Comment, com.sparta.toogo.domain.comment.entity.QComment>createList("comments", com.sparta.toogo.domain.comment.entity.Comment.class, com.sparta.toogo.domain.comment.entity.QComment.class, PathInits.DIRECT2);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
