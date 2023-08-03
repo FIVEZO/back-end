@@ -1,5 +1,7 @@
 package com.sparta.toogo.domain.post.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
@@ -13,12 +15,14 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +54,7 @@ public class PostService {
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
-        if(posts.isEmpty()) {
+        if (posts.isEmpty()) {
             throw new PostException(ErrorCode.NOT_FOUND_DATA);
         }
         log.info("get 동작중중!");
@@ -85,7 +89,7 @@ public class PostService {
 
     private Post confirmPost(Category.PostCategory categoryEnum, Long postId, User user) {
         Post post = findPost(categoryEnum, postId);
-        if(!post.getUser().getId().equals(user.getId())) {
+        if (!post.getUser().getId().equals(user.getId())) {
             throw new PostException(NO_AUTHORITY_TO_DATA);
         }
         return post;
@@ -96,6 +100,66 @@ public class PostService {
                 .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
     }
 
+    public List<PostResponseDto> searchPost(String keyword, Long category, int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum, 20);
+        Category.PostCategory categoryEnum = Category.findByNumber(category);
+
+        BooleanExpression titleOrContentsContain = post.title.containsIgnoreCase(keyword)
+                .or(post.contents.containsIgnoreCase(keyword));
+
+        JPAQuery<Post> query = queryFactory.selectFrom(post)
+                .where(titleOrContentsContain);
+
+        if (category != null) {
+            query.where(post.category.eq(categoryEnum)); // 카테고리 필터링
+        }
+
+        List<PostResponseDto> postList = query
+                .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch()
+                .stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+//        Page<Post> postPage;
+//
+//        if (categoryEnum != null) {
+//            postPage = postRepository.findByTitleContainingOrContentsContaining(keyword, keyword, pageable);
+//        } else {
+//            postPage = postRepository.findByCategoryAndTitleContainingOrCategoryAndContentsContaining(categoryEnum, keyword, categoryEnum, keyword, pageable);
+//        }
+//
+//        List<PostResponseDto> postResponseDtoList = postPage.getContent().stream()
+//                .map(PostResponseDto::new)
+//                .collect(Collectors.toList());
+
+//        List<Post> postList = postRepository.findByTitleContainingOrContentsContaining(keyword,keyword);
+//
+//        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+//
+//        for(Post posts : postList) {
+//            postResponseDtoList.add(new PostResponseDto(posts));
+//        }
+        return postList;
+
+
+
+
+//        List<PostResponseDto> postList = queryFactory.selectFrom(post)
+//                .where(titleOrContentsContain)
+//                .orderBy(categoryEnum == Category.PostCategory.RECENT ? post.createdAt.desc() :
+//                         categoryEnum == Category.PostCategory.SCRAP ? post.scrapPostSum.desc() :
+//                                 post.createdAt.desc()) // 기본은 최신순으로 정렬
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch()
+//                .stream()
+//                .map(PostResponseDto::new)
+//                .collect(Collectors.toList());
+
+
+    }
 }
 // 대륙(6), 국가(18)
 
