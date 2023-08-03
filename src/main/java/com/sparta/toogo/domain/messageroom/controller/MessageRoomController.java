@@ -1,6 +1,5 @@
 package com.sparta.toogo.domain.messageroom.controller;
 
-import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;

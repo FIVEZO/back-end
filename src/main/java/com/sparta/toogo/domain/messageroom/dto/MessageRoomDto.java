@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageRoomDto implements Serializable {       // Redis 에 저장되는 객체들이 Serialize 가 가능하도록
+public class MessageRoomDto implements Serializable {       // Redis 에 저장되는 객체들이 직렬화가 가능하도록
 
     private static final long serialVersionUID = 6494678977089006639L;      // 역직렬화 위한 serialVersionUID 세팅
     private Long id;
@@ -33,6 +33,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         this.name = messageRoom.getName();
     }
 
+    // 쪽지방 생성
     public static MessageRoomDto create(User user) {
         MessageRoomDto messageRoomDto = new MessageRoomDto();
         messageRoomDto.id = messageRoomDto.getId();

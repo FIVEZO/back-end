@@ -22,8 +22,8 @@ public class RedisSubscriber implements MessageListener {       // Redis 에 메
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());        // redis 에서 발행된 데이터를 받아 deserialize
-            MessageDto roomMessage = objectMapper.readValue(publishMessage, MessageDto.class);                          // MessageDto 객체로 맵핑
+            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());        // redis 에서 발행된 데이터를 받아 역직렬화
+            MessageDto roomMessage = objectMapper.readValue(publishMessage, MessageDto.class);                          // 해당 객체를 MessageDto 객체로 맵핑
             messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), roomMessage);        // Websocket 구독자에게 채팅 메시지 전송
         } catch (Exception e) {
             log.error(e.getMessage());

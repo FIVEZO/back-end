@@ -12,15 +12,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     // stomp websocket 연결
     @Override
-    public void  registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp")
-                .setAllowedOrigins("*")
-                .withSockJS();
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws-stomp");
+//                .setAllowedOrigins("*")       // 해당 설정이 있으면 postman 으로 웹소켓 연결 불가능
+//                .withSockJS();
     }
 
+    // Stomp 사용을 위한 Message Broker 설정.
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub");        // 메시지 구독 요청
-        registry.setApplicationDestinationPrefixes("/pub");        // 메시지 발행 요청
+        registry.enableSimpleBroker("/sub");        // 메시지 구독 요청 : 메시지 수신. Broker 가 해당 경로를 가로챈다
+        registry.setApplicationDestinationPrefixes("/pub");        // 메시지 발행 요청 : 메시지 전송. Broker 에게로 전달된다
     }
 }
