@@ -26,12 +26,12 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         this.name = name;
     }
 
-    // 쪽지방 선택 조회
-    public MessageRoomDto(MessageRoom messageRoom) {
-        this.id = messageRoom.getId();
-        this.roomId = messageRoom.getRoomId();
-        this.name = messageRoom.getName();
-    }
+//    // 쪽지방 선택 조회
+//    public MessageRoomDto(MessageRoom messageRoom) {
+//        this.id = messageRoom.getId();
+//        this.roomId = messageRoom.getRoomId();
+//        this.name = messageRoom.getName();
+//    }
 
     // 쪽지방 생성
     public static MessageRoomDto create(User user) {

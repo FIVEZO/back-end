@@ -22,17 +22,17 @@ public class MessageRoomController {
         return messageRoomService.createRoom(userDetails.getUser());
     }
 
-    // 쪽지방 전체 조회
+    // 사용자 관련 쪽지방 전체 조회
     @GetMapping("/rooms")
-    public List<MessageRoomDto> findAllRoom() {
-        return messageRoomService.findAllRoom();
+    public List<MessageRoomDto> findAllRoomByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return messageRoomService.findAllRoomByUser(userDetails.getUser());
     }
 
-    // 쪽지방 선택 조회
-    @GetMapping("room/{id}")
-    public MessageRoomDto findRoom(@PathVariable Long id) {
-        return messageRoomService.findRoom(id);
-    }
+//    // 쪽지방 선택 조회
+//    @GetMapping("room/{id}")
+//    public MessageRoomDto findRoom(@PathVariable Long id) {
+//        return messageRoomService.findRoom(id);
+//    }
 
     // 쪽지방 삭제
     @DeleteMapping("room/{id}")

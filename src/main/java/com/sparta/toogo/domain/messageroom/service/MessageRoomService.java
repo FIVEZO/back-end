@@ -54,9 +54,9 @@ public class MessageRoomService {
         return messageRoomDto;
     }
 
-    // 쪽지방 전체 조회
-    public List<MessageRoomDto> findAllRoom() {
-        List<MessageRoom> messageRooms = messageRoomRepository.findAll();
+    // 사용자 관련 쪽지방 전체 조회
+    public List<MessageRoomDto> findAllRoomByUser(User user) {
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUser(user);
         List<MessageRoomDto> messageRoomDtos = new ArrayList<>();
         for (MessageRoom messageRoom : messageRooms) {
             MessageRoomDto messageRoomDto = new MessageRoomDto(messageRoom.getRoomId(), messageRoom.getName());
@@ -66,14 +66,15 @@ public class MessageRoomService {
         return messageRoomDtos;
     }
 
-    // 쪽지방 선택 조회
-    public MessageRoomDto findRoom(Long id) {
-        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
-        );
 
-        return new MessageRoomDto(messageRoom);
-    }
+//    // 쪽지방 선택 조회
+//    public MessageRoomDto findRoom(Long id) {
+//        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
+//                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
+//        );
+//
+//        return new MessageRoomDto(messageRoom);
+//    }
 
     // 쪽지방 삭제
     public MsgResponseDto deleteRoom(Long id, User user) {
