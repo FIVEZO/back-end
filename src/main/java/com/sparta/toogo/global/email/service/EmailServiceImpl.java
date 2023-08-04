@@ -4,6 +4,7 @@ import com.sparta.toogo.global.email.exception.EmailException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     JavaMailSender emailSender;
 
+    @Value("${AdminMail.id}")
+    private String ADMIN_EMAIL;
+    private final String ADMIN_NAME = "OE";
+
     public static final String ePw = createKey();
 
     private MimeMessage createMessage(String to) throws Exception {
@@ -26,11 +31,11 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(MimeMessage.RecipientType.TO, to);//보내는 대상
-        message.setSubject("OE 이메일 인증");//제목
+        message.setSubject(ADMIN_NAME + " 이메일 인증");//제목
 
         String msgg = "";
         msgg += "<div style='margin:20px;'>";
-        msgg += "<h1> 안녕하세요 OE입니다. </h1>";
+        msgg += "<h1> 안녕하세요 " + ADMIN_NAME + "입니다. </h1>";
         msgg += "<br>";
         msgg += "<p>아래 코드를 복사해 입력해주세요<p>";
         msgg += "<br>";
@@ -43,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
         msgg += ePw + "</strong><div><br/> ";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("jangsy1207@gmail.com", "OE")); // 보내는 사람
+        message.setFrom(new InternetAddress(ADMIN_EMAIL, ADMIN_NAME)); // 보내는 사람
 
         return message;
     }
@@ -73,8 +78,8 @@ public class EmailServiceImpl implements EmailService {
         try {
             //예외처리
             emailSender.send(message);
-        } catch (MailException es) {
-            es.printStackTrace();
+        } catch (MailException exception) {
+            exception.printStackTrace();
             throw new EmailException(INCORRECT_CODE);
         }
         return ePw;
