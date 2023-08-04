@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -42,6 +43,17 @@ public class RedisService {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
+    }
+
+    public String findKeyByValue(String value) {
+        Set<String> keys = redisTemplate.keys("*");
+        for (String key : keys) {
+            String val = redisTemplate.opsForValue().get(key);
+            if (value.equals(val)) {
+                return key;
+            }
+        }
+        return null;
     }
 
     public void deleteCode(String key) {

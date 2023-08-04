@@ -31,10 +31,9 @@ public class EmailService {
     private final String ADMIN_NAME = "OE";
     private final RedisService redisService;
     private final UserService userService;
+    public final String code = createKey();
 
-    public static final String code = createKey();
-
-    // 메세지 만듬
+    // 메세지 만듦
     private MimeMessage createMessage(String email) throws Exception {
         System.out.println("보내는 대상 : " + email);
         System.out.println("인증 번호 : " + code);
@@ -63,8 +62,8 @@ public class EmailService {
         return message;
     }
 
-    // 코드 만듬
-    public static String createKey() {
+    // 코드 만듦
+    public String createKey() {
         StringBuilder key = new StringBuilder();
         Random rnd = new Random();
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -80,7 +79,10 @@ public class EmailService {
     // 메세지 전송
     public EmailResponseDto sendSimpleMessage(String email) throws Exception {
         if (userService.checkEmail(email)) {
-            throw new UserException(DUPLICATE_RESOURCE);
+            throw new EmailException(DUPLICATE_EMAIL);
+        }
+        if (redisService.findKeyByValue(email) != null) {
+            redisService.deleteCode(redisService.findKeyByValue(email));
         }
         MimeMessage message = createMessage(email);
         try {
@@ -95,8 +97,7 @@ public class EmailService {
 
     // 코드 확인
     public Boolean checkCode(String key) {
-        String email = redisService.getCode(key);
-        if (email == null) {
+        if (redisService.getCode(key) == null) {
             throw new EmailException(NOT_FOUND_EMAIL);
         }
         return true;

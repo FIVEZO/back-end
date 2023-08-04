@@ -42,7 +42,7 @@ public class UserService {
         String nickname = userRequestDto.getNickname();
         String code = userRequestDto.getCode();
 
-        if (code == null || !Objects.equals(redisService.getCode(code), email)) {
+        if (!Objects.equals(redisService.getCode(code), email)) {
             throw new UserException(CODE_VERIFICATION_COMPLETED);
         }
 
