@@ -20,6 +20,8 @@ public class PostResponseDto {
     private List<CommentResponseDto> commentList;
     private boolean isScrap;
     private String country;
+    private double latitude;
+    private double longitude;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -32,6 +34,8 @@ public class PostResponseDto {
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = false;
         this.country = post.getCountry();
+        this.latitude = post.getLatitude();
+        this.longitude = post.getLongitude();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
     }
@@ -65,5 +69,7 @@ public class PostResponseDto {
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = isScrap;
         this.country = post.getCountry();
+        this.latitude = post.getLatitude();
+        this.longitude = post.getLongitude();
     }
 }

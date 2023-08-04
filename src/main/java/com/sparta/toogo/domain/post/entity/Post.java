@@ -40,6 +40,12 @@ public class Post extends Timestamped {
     @Column
     private Long scrapPostSum;
 
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
+
     @Enumerated(EnumType.STRING)
     private Category.PostCategory category;
 
@@ -63,6 +69,8 @@ public class Post extends Timestamped {
         this.scrapPostSum = 0L;
         this.category = Category.findByNumber(category);
         this.country = requestDto.getCountry();
+        this.latitude = requestDto.getLatitude();
+        this.longitude = requestDto.getLongitude();
     }
 
     public void update(PostRequestDto requestDto) {
