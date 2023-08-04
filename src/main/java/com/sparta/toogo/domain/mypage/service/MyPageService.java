@@ -43,14 +43,9 @@ public class MyPageService {
         return ResponseUtil.ok(myPageDto);
     }
 
-    public MsgResponseDto deleteUser(Long loginId, User user) {
-
-        if (user.getId().equals(loginId)) {
+    public MsgResponseDto deleteUser(User user) {
             user.Delete();
             userRepository.delete(user);
-        } else {
-            throw new MyPageException(ErrorCode.ID_NOT_FOUND);
-        }
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
@@ -69,19 +64,17 @@ public class MyPageService {
         return scrapList;
     }
 
-    public MyPageResponseDto updateUser(Long loginId, MyPageRequestDto requestDto, User user) {
-        if (!user.getId().equals(loginId)) {
-            throw new MyPageException(NO_AUTHORITY_TO_DATA);
-        }
-
+    public MyPageResponseDto updateUser(MyPageRequestDto requestDto, User user) {
         // 닉네임 수정
-        String nickname = user.getNickname();
         if (requestDto.getNickname() != null) {
-            if (requestDto.getNickname().equals(String.valueOf(userRepository.findByNickname(requestDto.getNickname())))) {
+            User existUser = userRepository.findByNickname(requestDto.getNickname());
+            if (existUser != null && requestDto.getNickname().equals(existUser.getNickname())) {
                 throw new MyPageException(DUPLICATE_NICKNAME);
             }
+            String newNickname = requestDto.getNickname();
+            user.updateNickname(newNickname);
+            userRepository.save(user);
         }
-
         // 비밀번호 수정
         String newPassword = user.getPassword();
         if (requestDto.getPassword() != null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우
@@ -90,7 +83,7 @@ public class MyPageService {
             }
             newPassword = passwordEncoder.encode(requestDto.getNewPassword());
         }
-        user.modifyUser(user, requestDto, newPassword, nickname);
+        user.updatePassword(user, newPassword);
         userRepository.save(user);
         return new MyPageResponseDto(user);
     }
