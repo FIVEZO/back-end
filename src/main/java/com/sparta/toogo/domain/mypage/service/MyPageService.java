@@ -64,9 +64,9 @@ public class MyPageService {
 
     public MyPageResponseDto updateUser(MyPageRequestDto requestDto, User user) {
         // 닉네임 수정
-        String nickname = user.getNickname();
         if (requestDto.getNickname() != null) {
-            if (requestDto.getNickname().equals(String.valueOf(userRepository.findByNickname(requestDto.getNickname())))) {
+            User existUser = userRepository.findByNickname(requestDto.getNickname());
+            if (existUser != null && requestDto.getNickname().equals(existUser.getNickname())) {
                 throw new MyPageException(DUPLICATE_NICKNAME);
             }
             String newNickname = requestDto.getNickname();
