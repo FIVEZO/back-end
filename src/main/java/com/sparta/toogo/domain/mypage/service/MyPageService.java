@@ -81,7 +81,7 @@ public class MyPageService {
             }
             newPassword = passwordEncoder.encode(requestDto.getNewPassword());
         }
-        user.modifyUser(user, requestDto, newPassword, nickname);
+        user.updatePassword(user, newPassword);
         userRepository.save(user);
         return new MyPageResponseDto(user);
     }

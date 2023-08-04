@@ -77,11 +77,11 @@ public class User extends Timestamped {
         return this;
     }
 
-    public void modifyUser(User user, MyPageRequestDto requestDto, String newPassword, String nickname) {
+    public void updatePassword(User user, String newPassword) {
         this.email = user.getEmail();
         this.password = newPassword;
-        this.nickname = nickname;
         this.role = user.getRole();
+        this.kakaoId = user.getKakaoId();
     }
 
     public void updateNickname(String newNickname) {
