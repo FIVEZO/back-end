@@ -69,6 +69,9 @@ public class MyPageService {
             if (requestDto.getNickname().equals(String.valueOf(userRepository.findByNickname(requestDto.getNickname())))) {
                 throw new MyPageException(DUPLICATE_NICKNAME);
             }
+            String newNickname = requestDto.getNickname();
+            user.updateNickname(newNickname);
+            userRepository.save(user);
         }
         // 비밀번호 수정
         String newPassword = user.getPassword();

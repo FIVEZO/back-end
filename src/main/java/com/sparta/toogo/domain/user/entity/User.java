@@ -83,4 +83,8 @@ public class User extends Timestamped {
         this.nickname = nickname;
         this.role = user.getRole();
     }
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 }
