@@ -3,11 +3,13 @@ package com.sparta.toogo.domain.messageroom.service;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
+import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,20 +72,29 @@ public class MessageRoomService {
         return messageRoomDtos;
     }
 
-//    // 쪽지방 선택 조회
-//    public MessageRoomDto findRoom(Long id) {
-//        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
-//        );
-//
-//        return new MessageRoomDto(messageRoom);
-//    }
+    // 사용자 관련 쪽지방 선택 조회
+    public MessageRoomDto findRoom(Long id, User user) {
+        MessageRoom messageRoom = messageRoomRepository.findByIdAndUserOrIdAndReceiver(id, user, id, user.getNickname());
+        if (messageRoom == null) {
+            throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
+        }
+
+        return new MessageRoomDto(messageRoom);
+    }
 
     // 쪽지방 삭제
     public MsgResponseDto deleteRoom(Long id, User user) {
-        MessageRoom messageRoom = messageRoomRepository.findByIdAndUser(id, user);
-        messageRoomRepository.delete(messageRoom);
-        opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
+        MessageRoom messageRoom = messageRoomRepository.findByIdAndUserOrIdAndReceiver(id, user, id, user.getNickname());
+
+        // sender 가 삭제할 경우
+        if (user.getNickname().equals(messageRoom.getSender())) {
+            messageRoomRepository.delete(messageRoom);
+            opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
+        // receiver 가 삭제할 경우
+        } else if (user.getNickname().equals(messageRoom.getReceiver())) {
+            messageRoom.setReceiver("Not_Exist_Receiver");
+            messageRoomRepository.save(messageRoom);
+        }
 
         return new MsgResponseDto("쪽지방을 삭제했습니다.", HttpStatus.OK.value());
     }

@@ -13,8 +13,8 @@ public class MessageController {
     private final RedisPublisher redisPublisher;
     private final MessageRoomService messageRoomService;
 
-    // websocket "/pub/chat/message"로 들어오는 메시지를 처리
-    @MessageMapping("/chat/message")
+    // websocket "/pub/message"로 들어오는 메시지를 처리
+    @MessageMapping("/message")
     public void message(MessageDto message) {
 
         // 클라이언트의 쪽지방(topic) 입장, 대화를 위해 리스너와 연동

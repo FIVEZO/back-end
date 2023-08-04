@@ -19,7 +19,6 @@ public class MessageRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private String name;
     private String sender;
     @Column(unique = true)
     private String roomId;

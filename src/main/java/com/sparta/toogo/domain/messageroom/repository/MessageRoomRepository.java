@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MessageRoomRepository extends JpaRepository<MessageRoom, Long> {
-    MessageRoom findByIdAndUser(Long id, User user);
     List<MessageRoom> findByUserOrReceiver(User user, String receiver);
+    MessageRoom findByIdAndUserOrIdAndReceiver(Long id, User user, Long id1, String nickname);
 }

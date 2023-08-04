@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.messageroom.controller;
 
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
+import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
@@ -29,11 +30,11 @@ public class MessageRoomController {
         return messageRoomService.findAllRoomByUser(userDetails.getUser());
     }
 
-//    // 쪽지방 선택 조회
-//    @GetMapping("room/{id}")
-//    public MessageRoomDto findRoom(@PathVariable Long id) {
-//        return messageRoomService.findRoom(id);
-//    }
+    // 사용자 관련 쪽지방 선택 조회
+    @GetMapping("room/{id}")
+    public MessageRoomDto findRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return messageRoomService.findRoom(id, userDetails.getUser());
+    }
 
     // 쪽지방 삭제
     @DeleteMapping("room/{id}")
