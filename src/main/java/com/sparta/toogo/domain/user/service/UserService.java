@@ -12,12 +12,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_RESOURCE;
-import static com.sparta.toogo.global.enums.ErrorCode.INVALID_ADMIN_NUMBER;
+import java.util.Objects;
+
+import static com.sparta.toogo.global.enums.ErrorCode.*;
 import static com.sparta.toogo.global.enums.SuccessCode.LOGOUT_SUCCESS;
 import static com.sparta.toogo.global.enums.SuccessCode.USER_SIGNUP_SUCCESS;
 
@@ -30,6 +32,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RedisService redisService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${admin.token}")
     private String ADMIN_TOKEN;
@@ -39,6 +42,11 @@ public class UserService {
         String email = userRequestDto.getEmail();
         String password = passwordEncoder.encode(userRequestDto.getPassword());
         String nickname = userRequestDto.getNickname();
+        String code = userRequestDto.getCode();
+
+        if (userRequestDto.getCode() == null || redisTemplate.opsForValue().get(code) == null || Objects.equals(redisTemplate.opsForValue().get(code), email)) {
+            throw new UserException(INCORRECT_CODE);
+        }
 
         if (checkEmail(email) || checkNickname(nickname)) {
             throw new UserException(DUPLICATE_RESOURCE);
