@@ -41,14 +41,9 @@ public class MyPageService {
         return ResponseUtil.ok(new MyPageDto());
     }
 
-    public MsgResponseDto deleteUser(Long loginId, User user) {
-
-        if (user.getId().equals(loginId)) {
+    public MsgResponseDto deleteUser(User user) {
             user.Delete();
             userRepository.delete(user);
-        } else {
-            throw new MyPageException(ErrorCode.ID_NOT_FOUND);
-        }
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
@@ -67,11 +62,7 @@ public class MyPageService {
         return scrapList;
     }
 
-    public MyPageResponseDto updateUser(Long loginId, MyPageRequestDto requestDto, User user) {
-        if (!user.getId().equals(loginId)) {
-            throw new MyPageException(NO_AUTHORITY_TO_DATA);
-        }
-
+    public MyPageResponseDto updateUser(MyPageRequestDto requestDto, User user) {
         // 닉네임 수정
         String nickname = user.getNickname();
         if (requestDto.getNickname() != null) {
@@ -79,7 +70,6 @@ public class MyPageService {
                 throw new MyPageException(DUPLICATE_NICKNAME);
             }
         }
-
         // 비밀번호 수정
         String newPassword = user.getPassword();
         if (requestDto.getPassword() != null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우

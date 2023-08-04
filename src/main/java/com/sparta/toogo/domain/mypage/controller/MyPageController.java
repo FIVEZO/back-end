@@ -25,10 +25,9 @@ public class MyPageController {
         return myPageService.getMyPage(userDetails.getUser());
     }
 
-    @DeleteMapping("/{loginId}")
-    public MsgResponseDto deleteUser(@PathVariable Long loginId,
-                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.deleteUser(loginId, userDetails.getUser());
+    @DeleteMapping("/delete")
+    public MsgResponseDto deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return myPageService.deleteUser(userDetails.getUser());
     }
 
     @GetMapping("/scrap/{pageNum}")
@@ -37,10 +36,9 @@ public class MyPageController {
         return myPageService.getMyScrap(userDetails.getUser(), pageNum - 1);
     }
 
-    @PatchMapping("/{loginId}")
-    public MyPageResponseDto updateMyPage(@PathVariable Long loginId,
-                                          @RequestBody MyPageRequestDto requestDto,
+    @PatchMapping("/update")
+    public MyPageResponseDto updateMyPage(@RequestBody MyPageRequestDto requestDto,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.updateUser(loginId, requestDto, userDetails.getUser());
+        return myPageService.updateUser(requestDto, userDetails.getUser());
     }
 }
