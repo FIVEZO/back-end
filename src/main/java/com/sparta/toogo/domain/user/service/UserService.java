@@ -44,8 +44,8 @@ public class UserService {
         String nickname = userRequestDto.getNickname();
         String code = userRequestDto.getCode();
 
-        if (userRequestDto.getCode() == null || redisTemplate.opsForValue().get(code) == null || Objects.equals(redisTemplate.opsForValue().get(code), email)) {
-            throw new UserException(INCORRECT_CODE);
+        if (userRequestDto.getCode() == null || Objects.equals(redisTemplate.opsForValue().get(code), email)) {
+            throw new UserException(CODE_VERIFICATION_COMPLETED);
         }
 
         if (checkEmail(email) || checkNickname(nickname)) {
