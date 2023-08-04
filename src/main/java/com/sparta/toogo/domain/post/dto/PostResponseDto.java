@@ -23,7 +23,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
-        this.title = post.getTitle();
+        this.title = processTitle(post.getTitle(), post.getCountry());
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
@@ -31,9 +31,16 @@ public class PostResponseDto {
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = false;
-        this.country = getCountry();
+        this.country = post.getCountry();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
+    }
+
+    private String processTitle(String title, String country) {
+        if(title == null || country == null) {
+            return title;
+        }
+        return "[" + country + "]" + title;
     }
 
     public PostResponseDto(Post post, long scrapPostSum) {
