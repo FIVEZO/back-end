@@ -44,7 +44,7 @@ public class UserService {
         String nickname = userRequestDto.getNickname();
         String code = userRequestDto.getCode();
 
-        if (userRequestDto.getCode() == null || Objects.equals(redisTemplate.opsForValue().get(code), email)) {
+        if (code == null || !Objects.equals(redisService.getCode(code), email)) {
             throw new UserException(CODE_VERIFICATION_COMPLETED);
         }
 
@@ -65,6 +65,7 @@ public class UserService {
         User user = new User(email, password, nickname, role);
 
         userRepository.save(user);
+        redisService.deleteCode(code);
         return new UserResponseDto(USER_SIGNUP_SUCCESS);
     }
 

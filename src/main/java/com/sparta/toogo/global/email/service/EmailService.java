@@ -99,7 +99,6 @@ public class EmailService {
         if (email == null) {
             throw new EmailException(NOT_FOUND_EMAIL);
         }
-        redisService.deleteCode(code);
         return true;
     }
 }
