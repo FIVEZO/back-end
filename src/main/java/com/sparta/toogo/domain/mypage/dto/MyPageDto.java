@@ -6,15 +6,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MyPageDto {
-    //    @NotEmpty(message = "닉네임은 필수입니다.")
-    private String nickname;
-    private String profileImg;
-    private String email;
-    private String loginId;
 
-    public MyPageDto(String nickname, String profileImg) {
-        this.nickname = nickname;
-        this.profileImg = profileImg;
+    private Long myScrapCount;
+
+    public MyPageDto(Long myScrapCount) {
+        this.myScrapCount = myScrapCount;
     }
 
 //    public MyPageDto(User user){

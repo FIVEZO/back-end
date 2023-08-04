@@ -30,6 +30,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath contents = createString("contents");
 
+    public final StringPath country = createString("country");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 

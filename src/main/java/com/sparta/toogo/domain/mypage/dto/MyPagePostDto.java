@@ -1,4 +1,4 @@
-package com.sparta.toogo.domain.post.dto;
+package com.sparta.toogo.domain.mypage.dto;
 
 import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;

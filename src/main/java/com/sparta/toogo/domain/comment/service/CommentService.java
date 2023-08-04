@@ -14,7 +14,11 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,13 @@ public class CommentService {
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
     }
+
+//    public List<CommentResponseDto> getComment(Long postId, User user) {
+//        List<Comment> comments = commentRepository.findByPostIdAndUserOrderByCreatedAtDesc(postId, user);
+//        return comments.stream()
+//                .map(CommentResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
 
     private Post findPost(Category.PostCategory category, Long postId) {
         return postRepository.findByCategoryAndId(category, postId)

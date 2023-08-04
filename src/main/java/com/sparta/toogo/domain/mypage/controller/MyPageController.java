@@ -4,7 +4,7 @@ import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
 import com.sparta.toogo.domain.mypage.service.MyPageService;
-import com.sparta.toogo.domain.post.dto.MyPagePostDto;
+import com.sparta.toogo.domain.mypage.dto.MyPagePostDto;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
