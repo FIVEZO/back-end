@@ -1,5 +1,7 @@
 package com.sparta.toogo.global.email.service;
 
+import com.sparta.toogo.domain.user.exception.UserException;
+import com.sparta.toogo.domain.user.service.UserService;
 import com.sparta.toogo.global.email.dto.EmailResponseDto;
 import com.sparta.toogo.global.email.exception.EmailException;
 import com.sparta.toogo.global.redis.service.RedisService;
@@ -14,8 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static com.sparta.toogo.global.enums.ErrorCode.INCORRECT_CODE;
-import static com.sparta.toogo.global.enums.ErrorCode.NOT_FOUND_EMAIL;
+import static com.sparta.toogo.global.enums.ErrorCode.*;
 import static com.sparta.toogo.global.enums.SuccessCode.EMAIL_VERIFICATION_SENT;
 
 @Service
@@ -29,9 +30,11 @@ public class EmailService {
     private String ADMIN_EMAIL;
     private final String ADMIN_NAME = "OE";
     private final RedisService redisService;
+    private final UserService userService;
 
     public static final String code = createKey();
 
+    // 메세지 만듬
     private MimeMessage createMessage(String email) throws Exception {
         System.out.println("보내는 대상 : " + email);
         System.out.println("인증 번호 : " + code);
@@ -60,6 +63,7 @@ public class EmailService {
         return message;
     }
 
+    // 코드 만듬
     public static String createKey() {
         StringBuilder key = new StringBuilder();
         Random rnd = new Random();
@@ -80,6 +84,9 @@ public class EmailService {
 
     // 메세지 전송
     public EmailResponseDto sendSimpleMessage(String email) throws Exception {
+        if (userService.checkEmail(email)) {
+            throw new UserException(DUPLICATE_RESOURCE);
+        }
         MimeMessage message = createMessage(email);
         try {
             redisService.setCodeExpire(code, email, 60 * 5L); // 유효시간
