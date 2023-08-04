@@ -35,6 +35,9 @@ public class Post extends Timestamped {
     private String contents;
 
     @Column
+    private String country;
+
+    @Column
     private Long scrapPostSum;
 
     @Enumerated(EnumType.STRING)
@@ -59,6 +62,7 @@ public class Post extends Timestamped {
 //        this.nickname = requestDto.getNickname();
         this.scrapPostSum = 0L;
         this.category = Category.findByNumber(category);
+        this.country = requestDto.getCountry();
     }
 
     public void update(PostRequestDto requestDto) {

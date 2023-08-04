@@ -5,7 +5,7 @@ import com.sparta.toogo.domain.mypage.dto.MyPageDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
-import com.sparta.toogo.domain.post.dto.MyPagePostDto;
+import com.sparta.toogo.domain.mypage.dto.MyPagePostDto;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
@@ -38,7 +38,9 @@ public class MyPageService {
     private final PasswordEncoder passwordEncoder;
 
     public ApiResponse<?> getMyPage(User user) {
-        return ResponseUtil.ok(new MyPageDto());
+        Long myScrapCount = scrapRepository.countByUser(user);
+        MyPageDto myPageDto = new MyPageDto(myScrapCount);
+        return ResponseUtil.ok(myPageDto);
     }
 
     public MsgResponseDto deleteUser(Long loginId, User user) {

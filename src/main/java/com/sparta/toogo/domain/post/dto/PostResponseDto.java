@@ -19,6 +19,7 @@ public class PostResponseDto {
     private Long scrapPostSum;    //  스크랩 기능
     private List<CommentResponseDto> commentList;
     private boolean isScrap;
+    private String country;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -30,6 +31,7 @@ public class PostResponseDto {
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = false;
+        this.country = getCountry();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
     }
@@ -55,5 +57,6 @@ public class PostResponseDto {
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = isScrap;
+        this.country = post.getCountry();
     }
 }

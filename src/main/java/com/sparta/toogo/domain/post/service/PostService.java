@@ -116,8 +116,8 @@ public class PostService {
 
         List<PostResponseDto> postList = query
                 .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset()) // 현재 페이지의 시작 위치를 반환(가져올 데이터의 시작 위치)
+                .limit(pageable.getPageSize()) // 쿼리로 가져올 최대 항목 수
                 .fetch()
                 .stream()
                 .map(PostResponseDto::new)
