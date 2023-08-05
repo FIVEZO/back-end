@@ -11,7 +11,7 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     INCORRECT_CODE(BAD_REQUEST, "잘못된 인증번호입니다."),
-    CODE_VERIFICATION_COMPLETED(BAD_REQUEST, "올바른 인증 코드를 입력해 주세요."),
+    EMAIL_CODE_INCOMPLETE(BAD_REQUEST, "올바른 이메일 또는 인증 코드를 입력해 주세요."),
     CODE_SEND_FAILED(BAD_REQUEST, "인증 코드 전송이 실패하였습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
