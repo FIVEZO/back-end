@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.post.controller;
 
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.domain.post.service.PostService;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
@@ -31,10 +32,10 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByCategory(@PathVariable Long category,
-                                                                    @RequestParam("page") int pageNum) {
+    public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
+                                                                       @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
-        List<PostResponseDto> response = postService.getPostsByCategory(category, pageNum -1);
+        List<PostResponseGetDto> response = postService.getPostsByCategory(category, pageNum -1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

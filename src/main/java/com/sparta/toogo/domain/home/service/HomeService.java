@@ -19,12 +19,11 @@ public class HomeService {
     private final PostRepository postRepository;
 
     public List<HomeResponseDto> getHome() {
-        Pageable pageable = PageRequest.of(0, 12, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC,"createdAt"));
         Page<Post> postList = postRepository.findAll(pageable);
 
         return postList.stream()
                 .map(HomeResponseDto::new)
                 .toList();
     }
-
 }

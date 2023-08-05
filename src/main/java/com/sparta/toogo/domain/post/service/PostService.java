@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.exception.PostException;
@@ -47,7 +48,7 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> getPostsByCategory(Long category, int pageNum) {
+    public List<PostResponseGetDto> getPostsByCategory(Long category, int pageNum) {
         log.info("get 동작중!");
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
@@ -59,7 +60,7 @@ public class PostService {
         }
         log.info("get 동작중중!");
         return posts.stream()
-                .map(PostResponseDto::new)
+                .map(PostResponseGetDto::new)
                 .collect(Collectors.toList());
     }
 

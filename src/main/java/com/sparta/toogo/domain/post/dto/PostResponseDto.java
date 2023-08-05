@@ -20,6 +20,9 @@ public class PostResponseDto {
     private List<CommentResponseDto> commentList;
     private boolean isScrap;
     private String country;
+    private double latitude;
+    private double longitude;
+    private String meetDate;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -32,6 +35,8 @@ public class PostResponseDto {
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = false;
         this.country = post.getCountry();
+        this.latitude = post.getLatitude();
+        this.longitude = post.getLongitude();
  //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
         // korea.jpg (경복궁)
     }
@@ -41,17 +46,6 @@ public class PostResponseDto {
             return title;
         }
         return "[" + country + "]" + title;
-    }
-
-    public PostResponseDto(Post post, long scrapPostSum) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.contents = post.getContents();
-        this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
-        this.nickname = post.getUser().getNickname();
-        this.scrapPostSum = scrapPostSum;
-        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 
     public PostResponseDto(Post post, boolean isScrap) {
@@ -65,5 +59,7 @@ public class PostResponseDto {
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.isScrap = isScrap;
         this.country = post.getCountry();
+        this.latitude = post.getLatitude();
+        this.longitude = post.getLongitude();
     }
 }

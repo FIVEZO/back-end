@@ -1,16 +1,12 @@
-package com.sparta.toogo.domain.home.dto;
+package com.sparta.toogo.domain.post.dto;
 
 import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @Getter
-@NoArgsConstructor
-public class HomeResponseDto {
+public class PostResponseGetDto {
 
     private Long id;
     private String nickname;
@@ -19,26 +15,22 @@ public class HomeResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private String meetDate;
+    private Long scrapPostSum;
 
-    public HomeResponseDto(Post post){
+    public PostResponseGetDto(Post post) {
         this.id = post.getId();
         this.nickname = post.getUser().getNickname();
         this.title = processTitle(post.getTitle(), post.getCountry());
         this.country = post.getCountry();
         this.contents = post.getContents();
- //       this.createdAt = post.getCreatedAt();
+        this.createdAt = post.getCreatedAt();
         this.meetDate = post.getMeetDate();
+        this.scrapPostSum = post.getScrapPostSum();
 
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
-        ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
-        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
-
-        this.createdAt = koreaTime.toLocalDateTime();
     }
 
     private String processTitle(String title, String country) {
-        if(title == null || country == null) {
+        if (title == null || country == null) {
             return title;
         }
         return "[" + country + "]" + title;
