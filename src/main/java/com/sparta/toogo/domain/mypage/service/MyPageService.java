@@ -39,7 +39,7 @@ public class MyPageService {
 
     public ApiResponse<?> getMyPage(User user) {
         Long myScrapCount = scrapRepository.countByUser(user);
-        MyPageDto myPageDto = new MyPageDto(myScrapCount);
+        MyPageDto myPageDto = new MyPageDto(myScrapCount, user);
         return ResponseUtil.ok(myPageDto);
     }
 

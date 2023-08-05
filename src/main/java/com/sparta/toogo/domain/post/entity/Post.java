@@ -46,6 +46,9 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private double longitude;
 
+    @Column
+    private String meetDate;
+
     @Enumerated(EnumType.STRING)
     private Category.PostCategory category;
 
@@ -71,11 +74,13 @@ public class Post extends Timestamped {
         this.country = requestDto.getCountry();
         this.latitude = requestDto.getLatitude();
         this.longitude = requestDto.getLongitude();
+        this.meetDate = requestDto.getMeetDate();
     }
 
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+        this.meetDate = requestDto.getMeetDate();
     }
 
     // 포스트 스크랩 수

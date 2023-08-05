@@ -10,4 +10,5 @@ public class PostRequestDto {
     private String country;
     private double latitude;
     private double longitude;
+    private String meetDate;
 }
