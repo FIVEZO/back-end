@@ -24,8 +24,10 @@ public class RedisService {
 
     // 발급된 Access Token과 Refresh Token을 저장 (key : refresh, value : access)
     public void saveAccessToken(String refreshToken, String accessToken, Date refreshExpire) {
-        redisTemplate.opsForValue().set(refreshToken, accessToken); // key : value
-        redisTemplate.expireAt(refreshToken, refreshExpire); // 키 값에 해당 객체 만료일(자동삭제) 설정
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        Long refreshExpireToLong = refreshExpire.getTime() / 1000L;
+        Duration expireDuration = Duration.ofSeconds(refreshExpireToLong);
+        valueOperations.set(refreshToken, accessToken, expireDuration);
     }
 
     // token 삭제

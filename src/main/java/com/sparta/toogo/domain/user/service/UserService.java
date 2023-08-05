@@ -43,7 +43,7 @@ public class UserService {
         String code = userRequestDto.getCode();
 
         if (redisService.getCode(code) == null || !Objects.equals(redisService.getCode(code), email)) {
-            throw new UserException(CODE_VERIFICATION_COMPLETED);
+            throw new UserException(EMAIL_CODE_INCOMPLETE);
         }
 
         if (checkEmail(email) || checkNickname(nickname)) {
