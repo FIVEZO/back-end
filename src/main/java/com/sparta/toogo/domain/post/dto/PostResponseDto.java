@@ -22,6 +22,7 @@ public class PostResponseDto {
     private String country;
     private double latitude;
     private double longitude;
+    private String meetDate;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -45,17 +46,6 @@ public class PostResponseDto {
             return title;
         }
         return "[" + country + "]" + title;
-    }
-
-    public PostResponseDto(Post post, long scrapPostSum) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.contents = post.getContents();
-        this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
-        this.nickname = post.getUser().getNickname();
-        this.scrapPostSum = scrapPostSum;
-        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 
     public PostResponseDto(Post post, boolean isScrap) {
