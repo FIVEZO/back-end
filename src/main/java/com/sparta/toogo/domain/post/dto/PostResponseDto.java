@@ -35,7 +35,7 @@ public class PostResponseDto {
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
-        this.isScrap = false;
+//        this.isScrap = false;
         this.country = post.getCountry();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
