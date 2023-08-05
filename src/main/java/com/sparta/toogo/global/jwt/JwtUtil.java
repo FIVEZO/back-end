@@ -33,8 +33,9 @@ public class JwtUtil {
     public final String HEADER_REFRESH_TOKEN = "RefreshToken";
     public final String AUTHORIZATION_KEY = "auth";
     private final String BEARER = "Bearer ";
-    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 60 * 60 * 3000L;
-    private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 14 * 24 * 60 * 60 * 1000L;
+    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 3 * 60 * 60 * 3000L;
+    private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000L;
+
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private Key key;
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
@@ -178,11 +179,7 @@ public class JwtUtil {
 
     // 발급된 토큰 값 Redis에 저장 (key : refresh / value : access)
     public void saveTokenToRedis(String refreshToken, String accessToken) {
-        try {
-            Date refreshExpire = getUserInfo(substringToken(refreshToken)).getExpiration(); // refresh 토큰의 만료일
-            redisService.saveAccessToken(refreshToken, accessToken, refreshExpire);
-        } catch (Exception e) {
-            log.error("Error");
-        }
+        Date refreshExpire = getUserInfo(substringToken(refreshToken)).getExpiration(); // refresh 토큰의 만료일
+        redisService.saveAccessToken(refreshToken, accessToken, refreshExpire);
     }
 }

@@ -4,6 +4,7 @@ import com.sparta.toogo.domain.user.service.UserService;
 import com.sparta.toogo.global.email.dto.EmailResponseDto;
 import com.sparta.toogo.global.email.exception.EmailException;
 import com.sparta.toogo.global.redis.service.RedisService;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 import static com.sparta.toogo.global.enums.ErrorCode.*;
@@ -32,7 +34,7 @@ public class EmailService {
     private final UserService userService;
 
     // 메세지 만듦
-    private MimeMessage createMessage(String email) throws Exception {
+    private MimeMessage createMessage(String email) throws MessagingException, UnsupportedEncodingException {
         String code = createKey();
         System.out.println("보내는 대상 : " + email);
         System.out.println("인증 번호 : " + code);
@@ -76,7 +78,7 @@ public class EmailService {
     }
 
     // 메세지 전송
-    public EmailResponseDto sendSimpleMessage(String email) throws Exception {
+    public EmailResponseDto sendSimpleMessage(String email) throws MessagingException, UnsupportedEncodingException {
         if (userService.checkEmail(email)) {
             throw new EmailException(DUPLICATE_EMAIL);
         }
