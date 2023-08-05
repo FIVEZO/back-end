@@ -22,37 +22,37 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CommentException.class)
-    public ApiResponse<?> handleUserException(CommentException e) {
+    public ApiResponse<?> handleCommentException(CommentException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(MapException.class)
-    public ApiResponse<?> handleUserException(MapException e) {
+    public ApiResponse<?> handleMapException(MapException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(MessageException.class)
-    public ApiResponse<?> handleUserException(MessageException e) {
+    public ApiResponse<?> handleMessageException(MessageException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(MessageRoomException.class)
-    public ApiResponse<?> handleUserException(MessageRoomException e) {
+    public ApiResponse<?> handleMessageRoomException(MessageRoomException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(MyPageException.class)
-    public ApiResponse<?> handleUserException(MyPageException e) {
+    public ApiResponse<?> handleMyPageException(MyPageException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(PostException.class)
-    public ApiResponse<?> handleUserException(PostException e) {
+    public ApiResponse<?> handlePostException(PostException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
     @ExceptionHandler(ScrapException.class)
-    public ApiResponse<?> handleUserException(ScrapException e) {
+    public ApiResponse<?> handleScrapException(ScrapException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ApiResponse<?> handleUserException(UnauthorizedException e) {
+    public ApiResponse<?> handleUnauthorizedException(UnauthorizedException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 

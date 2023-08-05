@@ -16,8 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_RESOURCE;
-import static com.sparta.toogo.global.enums.ErrorCode.INVALID_ADMIN_NUMBER;
+import java.util.Objects;
+
+import static com.sparta.toogo.global.enums.ErrorCode.*;
 import static com.sparta.toogo.global.enums.SuccessCode.LOGOUT_SUCCESS;
 import static com.sparta.toogo.global.enums.SuccessCode.USER_SIGNUP_SUCCESS;
 
@@ -39,6 +40,11 @@ public class UserService {
         String email = userRequestDto.getEmail();
         String password = passwordEncoder.encode(userRequestDto.getPassword());
         String nickname = userRequestDto.getNickname();
+        String code = userRequestDto.getCode();
+
+        if (redisService.getCode(code) == null || !Objects.equals(redisService.getCode(code), email)) {
+            throw new UserException(CODE_VERIFICATION_COMPLETED);
+        }
 
         if (checkEmail(email) || checkNickname(nickname)) {
             throw new UserException(DUPLICATE_RESOURCE);
@@ -57,6 +63,7 @@ public class UserService {
         User user = new User(email, password, nickname, role);
 
         userRepository.save(user);
+        redisService.deleteCode(code);
         return new UserResponseDto(USER_SIGNUP_SUCCESS);
     }
 

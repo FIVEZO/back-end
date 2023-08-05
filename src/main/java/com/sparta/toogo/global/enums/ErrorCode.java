@@ -11,6 +11,8 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     INCORRECT_CODE(BAD_REQUEST, "잘못된 인증번호입니다."),
+    CODE_VERIFICATION_COMPLETED(BAD_REQUEST, "올바른 인증 코드를 입력해 주세요."),
+    CODE_SEND_FAILED(BAD_REQUEST, "인증 코드 전송이 실패하였습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
@@ -31,8 +33,9 @@ public enum ErrorCode {
     NOT_FOUND_EMAIL(NOT_FOUND, "다시 시도해 주세요."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다."),
+    DUPLICATE_RESOURCE(CONFLICT, "중복된 이메일 또는 닉네임입니다."),
     DUPLICATE_NICKNAME(CONFLICT, "중복된 닉네임입니다."),
+    DUPLICATE_EMAIL(CONFLICT, "중복된 이메일입니다."),
 
     ;
 
