@@ -1,6 +1,5 @@
 package com.sparta.toogo.global.email.service;
 
-import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.service.UserService;
 import com.sparta.toogo.global.email.dto.EmailResponseDto;
 import com.sparta.toogo.global.email.exception.EmailException;
@@ -31,10 +30,10 @@ public class EmailService {
     private final String ADMIN_NAME = "OE";
     private final RedisService redisService;
     private final UserService userService;
-    public final String code = createKey();
 
     // 메세지 만듦
     private MimeMessage createMessage(String email) throws Exception {
+        String code = createKey();
         System.out.println("보내는 대상 : " + email);
         System.out.println("인증 번호 : " + code);
         MimeMessage message = emailSender.createMimeMessage();
@@ -59,6 +58,7 @@ public class EmailService {
         message.setText(msg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress(ADMIN_EMAIL, ADMIN_NAME)); // 보내는 사람
 
+        redisService.setCodeExpire(code, email, 60 * 5L); // 유효시간
         return message;
     }
 
@@ -67,7 +67,6 @@ public class EmailService {
         StringBuilder key = new StringBuilder();
         Random rnd = new Random();
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
         for (int i = 0; i < 8; i++) {
             int index = rnd.nextInt(characters.length());
             char randomChar = characters.charAt(index);
@@ -86,11 +85,10 @@ public class EmailService {
         }
         MimeMessage message = createMessage(email);
         try {
-            redisService.setCodeExpire(code, email, 60 * 5L); // 유효시간
             emailSender.send(message);
         } catch (MailException exception) {
             exception.printStackTrace();
-            throw new EmailException(INCORRECT_CODE);
+            throw new EmailException(CODE_SEND_FAILED);
         }
         return new EmailResponseDto(EMAIL_VERIFICATION_SENT);
     }
