@@ -13,6 +13,7 @@ public enum ErrorCode {
     INCORRECT_CODE(BAD_REQUEST, "잘못된 인증번호입니다."),
     EMAIL_CODE_INCOMPLETE(BAD_REQUEST, "올바른 이메일 또는 인증 코드를 입력해 주세요."),
     CODE_SEND_FAILED(BAD_REQUEST, "인증 코드 전송이 실패하였습니다."),
+    NEW_PASSWORD_SEND_FAILED(BAD_REQUEST, "새 비밀번호 전송이 실패하였습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
@@ -25,7 +26,8 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : 서버는 요청 받은 리소스를 찾을 수 없다는 의미입니다. */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다."),
-    ID_NOT_FOUND(NOT_FOUND, "ID 를 찾을 수 없습니다."),
+    EMAIL_NOT_FOUND(NOT_FOUND, "해당 이메일을 찾을 수 없습니다."),
+    ID_NOT_FOUND(NOT_FOUND, "ID를 찾을 수 없습니다."),
     NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     NOT_FOUND_DATA(NOT_FOUND, "해당 게시물을 찾을 수 없습니다."),
     NOT_FOUND_COMMENT(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),

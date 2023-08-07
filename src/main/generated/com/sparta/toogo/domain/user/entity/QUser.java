@@ -48,8 +48,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<UserRoleEnum> role = createEnum("role", UserRoleEnum.class);
 
-    public final BooleanPath userStatus = createBoolean("userStatus");
-
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);
     }

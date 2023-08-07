@@ -6,6 +6,8 @@ import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.service.UserService;
+import com.sparta.toogo.global.email.dto.EmailResponseDto;
+import com.sparta.toogo.global.email.service.EmailService;
 import com.sparta.toogo.global.jwt.JwtUtil;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.util.ResponseUtil;
@@ -22,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final KakaoService kakaoService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ApiResponse<?> signUp(@RequestBody @Valid UserRequestDto userRequestDto) {

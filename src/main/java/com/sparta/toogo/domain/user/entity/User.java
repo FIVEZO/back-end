@@ -38,9 +38,6 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column(nullable = false)
-    private boolean userStatus = true;
-
     @Column
     private Long kakaoId;
 

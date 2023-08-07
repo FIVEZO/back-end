@@ -8,6 +8,7 @@ import com.sparta.toogo.domain.mypage.exception.MyPageException;
 import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.scrap.exception.ScrapException;
 import com.sparta.toogo.domain.user.exception.UserException;
+import com.sparta.toogo.global.email.exception.EmailException;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
@@ -63,6 +64,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     public ApiResponse<?> handleUnauthorizedException(UnauthorizedException e) {
+        return ResponseUtil.error(e.getErrorCode());
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ApiResponse<?> handleEmailException(EmailException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 
