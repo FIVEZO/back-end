@@ -53,10 +53,6 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public void Delete() {
-        this.userStatus = false;
-    }
-
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email = email;
         this.password = password;
