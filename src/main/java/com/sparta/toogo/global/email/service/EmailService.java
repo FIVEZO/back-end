@@ -76,7 +76,10 @@ public class EmailService {
         String newPassword = createKey();
         System.out.println("보내는 대상 : " + email);
         System.out.println("새 비밀번호 : " + newPassword);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailException(EMAIL_NOT_FOUND));
+        if (!userRepository.existsByEmail(email)) {
+            throw new EmailException(EMAIL_NOT_FOUND);
+        }
+        User user = userRepository.findByEmail(email).orElse(null);
         String password = passwordEncoder.encode(newPassword);
         user.updatePassword(user, password);
         userRepository.save(user);
