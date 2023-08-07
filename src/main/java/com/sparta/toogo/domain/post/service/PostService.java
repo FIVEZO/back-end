@@ -16,14 +16,12 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +46,8 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
+    // 전체 조회
     public List<PostResponseGetDto> getPostsByCategory(Long category, int pageNum) {
-        log.info("get 동작중!");
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
 
@@ -58,12 +56,13 @@ public class PostService {
         if (posts.isEmpty()) {
             throw new PostException(ErrorCode.NOT_FOUND_DATA);
         }
-        log.info("get 동작중중!");
+
         return posts.stream()
                 .map(PostResponseGetDto::new)
                 .collect(Collectors.toList());
     }
 
+    // 상세 조회
     public PostResponseDto getDetailPost(Long category, Long postId, Long userId) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
@@ -101,6 +100,7 @@ public class PostService {
                 .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
     }
 
+    // 검색
     public List<PostResponseDto> searchPost(String keyword, Long category, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 20);
         Category.PostCategory categoryEnum = Category.findByNumber(category);
@@ -123,54 +123,7 @@ public class PostService {
                 .stream()
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
-//        Page<Post> postPage;
-//
-//        if (categoryEnum != null) {
-//            postPage = postRepository.findByTitleContainingOrContentsContaining(keyword, keyword, pageable);
-//        } else {
-//            postPage = postRepository.findByCategoryAndTitleContainingOrCategoryAndContentsContaining(categoryEnum, keyword, categoryEnum, keyword, pageable);
-//        }
-//
-//        List<PostResponseDto> postResponseDtoList = postPage.getContent().stream()
-//                .map(PostResponseDto::new)
-//                .collect(Collectors.toList());
 
-//        List<Post> postList = postRepository.findByTitleContainingOrContentsContaining(keyword,keyword);
-//
-//        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
-//
-//        for(Post posts : postList) {
-//            postResponseDtoList.add(new PostResponseDto(posts));
-//        }
         return postList;
-
-
-
-
-//        List<PostResponseDto> postList = queryFactory.selectFrom(post)
-//                .where(titleOrContentsContain)
-//                .orderBy(categoryEnum == Category.PostCategory.RECENT ? post.createdAt.desc() :
-//                         categoryEnum == Category.PostCategory.SCRAP ? post.scrapPostSum.desc() :
-//                                 post.createdAt.desc()) // 기본은 최신순으로 정렬
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch()
-//                .stream()
-//                .map(PostResponseDto::new)
-//                .collect(Collectors.toList());
-
-
     }
 }
-// 대륙(6), 국가(18)
-
-//public String countryUrl(String country) {
-//ArrayList koreaUrl = new ArrayList();
-//koreaUrl.add("한국이미지1")
-//koreaUrl.add("한국이미지2")
-//switch(country)
-//	case "한국"
-//		url = koreaUrl
-//}
-// @Column(Id , country, url)
-//select url from countryUrl where country = "한국"
