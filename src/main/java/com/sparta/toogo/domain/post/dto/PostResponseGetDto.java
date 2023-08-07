@@ -25,7 +25,6 @@ public class PostResponseGetDto {
         this.title = processTitle(post.getTitle(), post.getCountry());
         this.country = post.getCountry();
         this.contents = post.getContents();
-//        this.createdAt = post.getCreatedAt();
         this.meetDate = post.getMeetDate();
         this.scrapPostSum = post.getScrapPostSum();
         ZoneId utcZone = ZoneId.of("UTC");

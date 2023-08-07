@@ -33,6 +33,7 @@ public class MyPageService {
     private final ScrapRepository scrapRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 마이페이지 조회
     public ApiResponse<?> getMyPage(User user) {
         Long myScrapCount = scrapRepository.countByUser(user);
         MyPageDto myPageDto = new MyPageDto(myScrapCount, user);
@@ -44,6 +45,7 @@ public class MyPageService {
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
+    // 내가 스크랩한 게시물 조회
     public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
         Long myScrapCount = scrapRepository.countByUser(user);
 
