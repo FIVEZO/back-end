@@ -4,17 +4,23 @@ import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
+import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import com.sparta.toogo.global.jwt.JwtUtil;
 import com.sparta.toogo.global.redis.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+import static com.sparta.toogo.global.enums.ErrorCode.*;
+import static com.sparta.toogo.global.enums.SuccessCode.LOGOUT_SUCCESS;
+import static com.sparta.toogo.global.enums.SuccessCode.USER_SIGNUP_SUCCESS;
 
 @Slf4j(topic = "UserService")
 @Service
@@ -32,32 +38,39 @@ public class UserService {
     @Transactional
     public UserResponseDto signUp(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
-        String nickname = userRequestDto.getNickname();
         String password = passwordEncoder.encode(userRequestDto.getPassword());
+        String nickname = userRequestDto.getNickname();
+        String code = userRequestDto.getCode();
+
+        if (redisService.getCode(code) == null || !Objects.equals(redisService.getCode(code), email)) {
+            throw new UserException(EMAIL_CODE_INCOMPLETE);
+        }
 
         if (checkEmail(email) || checkNickname(nickname)) {
-            throw new IllegalArgumentException("데이터가 이미 존재합니다.");
+            throw new UserException(DUPLICATE_RESOURCE);
         }
 
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
         if (userRequestDto.isAdmin()) {
             if (!ADMIN_TOKEN.equals(userRequestDto.getAdminToken())) {
-                throw new IllegalArgumentException("관리자 번호가 유효하지 않습니다.");
+                throw new UserException(INVALID_ADMIN_NUMBER);
             }
             role = UserRoleEnum.ADMIN;
         }
 
         // 사용자 등록
-        User user = User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .role(role)
-                .build();
+        User user = new User(email, password, nickname, role);
 
         userRepository.save(user);
-        return new UserResponseDto("가입 완료", HttpStatus.OK.value());
+        redisService.deleteCode(code);
+        return new UserResponseDto(USER_SIGNUP_SUCCESS);
+    }
+
+    public UserResponseDto logOut(HttpServletRequest req) {
+        String refreshToken = req.getHeader(jwtUtil.HEADER_REFRESH_TOKEN);
+        redisService.deleteToken(refreshToken);
+        return new UserResponseDto(LOGOUT_SUCCESS);
     }
 
     public Boolean checkEmail(String email) {
@@ -66,11 +79,5 @@ public class UserService {
 
     public Boolean checkNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
-    }
-
-    public UserResponseDto logOut(HttpServletRequest req) {
-        String refreshToken = req.getHeader(jwtUtil.HEADER_REFRESH_TOKEN);
-        redisService.deleteToken(refreshToken);
-        return new UserResponseDto("로그아웃 성공", HttpStatus.NO_CONTENT.value());
     }
 }

@@ -4,6 +4,7 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import org.springframework.http.HttpStatus;
+
 import java.util.Map;
 
 public class ResponseUtil {
