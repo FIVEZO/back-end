@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -27,6 +28,7 @@ import static com.sparta.toogo.global.enums.SuccessCode.NEW_PASSWORD_SENT;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmailService {
 
     @Autowired

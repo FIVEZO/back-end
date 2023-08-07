@@ -35,9 +35,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> kakaoId = createNumber("kakaoId", Long.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
-
     public final com.sparta.toogo.domain.mypage.entity.QMyPage myPage;
 
     public final StringPath nickname = createString("nickname");
