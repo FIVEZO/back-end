@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import static com.sparta.toogo.global.enums.SuccessCode.USER_LOGIN_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -39,13 +41,13 @@ public class UserController {
     }
 
     @GetMapping("/kakao")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public UserResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         User user = kakaoService.kakaoLogin(code);
         String createAccessToken = kakaoService.kakaoAccessToken(user);
         String createRefreshToken = kakaoService.kakaoRefreshToken(user);
         jwtUtil.saveTokenToRedis(createRefreshToken, createAccessToken);
         jwtUtil.addTokenToHeader(createAccessToken, createRefreshToken, response);
-        return "redirect:/";
+        return new UserResponseDto(USER_LOGIN_SUCCESS);
     }
 
     @PostMapping("/logout")
