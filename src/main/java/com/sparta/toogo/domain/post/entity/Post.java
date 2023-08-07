@@ -12,7 +12,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -68,7 +67,6 @@ public class Post extends Timestamped {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.user = user;
-//        this.nickname = requestDto.getNickname();
         this.scrapPostSum = 0L;
         this.category = Category.findByNumber(category);
         this.country = requestDto.getCountry();

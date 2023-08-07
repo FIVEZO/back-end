@@ -1,17 +1,12 @@
 package com.sparta.toogo.domain.mypage.service;
 
-import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
-import com.sparta.toogo.domain.mypage.dto.MyPageDto;
-import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
-import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
+import com.sparta.toogo.domain.mypage.dto.*;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
-import com.sparta.toogo.domain.mypage.dto.MyPagePostDto;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
-import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sparta.toogo.global.enums.ErrorCode.*;
+import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_NICKNAME;
+import static com.sparta.toogo.global.enums.ErrorCode.INCORRECT_PASSWORD;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +33,7 @@ public class MyPageService {
     private final ScrapRepository scrapRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 마이페이지 조회
     public ApiResponse<?> getMyPage(User user) {
         Long myScrapCount = scrapRepository.countByUser(user);
         MyPageDto myPageDto = new MyPageDto(myScrapCount, user);
@@ -49,6 +46,7 @@ public class MyPageService {
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
+    // 내가 스크랩한 게시물 조회
     public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
         Long myScrapCount = scrapRepository.countByUser(user);
 

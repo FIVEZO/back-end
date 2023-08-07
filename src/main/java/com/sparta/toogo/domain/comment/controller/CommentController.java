@@ -4,14 +4,14 @@ import com.sparta.toogo.domain.comment.dto.CommentRequestDto;
 import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
 import com.sparta.toogo.domain.comment.service.CommentService;
 import com.sparta.toogo.global.enums.SuccessCode;
+import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
+import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/post/{category}/{postId}")
@@ -46,9 +46,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<String> deleteCommenet(@PathVariable Long commentId,
-                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<String> deleteCommenet(@PathVariable Long commentId,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         SuccessCode successCode = commentService.deleteComment(commentId, userDetails.getUser());
-        return new ResponseEntity<>(successCode.getDetail(), successCode.getHttpStatus());
+        return ResponseUtil.ok(successCode.getDetail());
     }
 }
