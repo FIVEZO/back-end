@@ -25,6 +25,7 @@ public class PostResponseDto {
     private double latitude;
     private double longitude;
     private String meetDate;
+    private Long category;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -47,8 +48,6 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
     }
-    //       this.image = "http://localhost:8080/images/" + post.getCountry() + ".jpg";
-    // korea.jpg (경복궁)
 
     private String processTitle(String title, String country) {
         if (title == null || country == null) {
@@ -61,7 +60,6 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-//        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
@@ -70,6 +68,7 @@ public class PostResponseDto {
         this.country = post.getCountry();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
+        this.category = post.getCategory().getValue();
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
