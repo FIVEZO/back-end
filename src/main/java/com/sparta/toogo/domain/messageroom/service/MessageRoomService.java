@@ -2,14 +2,12 @@ package com.sparta.toogo.domain.messageroom.service;
 
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
-import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
-import com.sparta.toogo.domain.message.repository.MessageRepository;
+import com.sparta.toogo.global.redis.service.RedisSubscriber;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.user.entity.User;
-import com.sparta.toogo.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

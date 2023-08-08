@@ -1,4 +1,4 @@
-package com.sparta.toogo.domain.message.redis.service;
+package com.sparta.toogo.global.redis.service;
 
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import lombok.RequiredArgsConstructor;

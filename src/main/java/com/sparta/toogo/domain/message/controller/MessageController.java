@@ -1,7 +1,7 @@
 package com.sparta.toogo.domain.message.controller;
 
 import com.sparta.toogo.domain.message.dto.MessageDto;
-import com.sparta.toogo.domain.message.redis.service.RedisPublisher;
+import com.sparta.toogo.global.redis.service.RedisPublisher;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;

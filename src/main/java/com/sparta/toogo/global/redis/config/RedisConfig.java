@@ -1,4 +1,4 @@
-package com.sparta.toogo.domain.message.redis.config;
+package com.sparta.toogo.global.redis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

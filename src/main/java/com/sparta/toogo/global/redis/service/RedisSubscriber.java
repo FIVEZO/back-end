@@ -1,4 +1,4 @@
-package com.sparta.toogo.domain.message.redis.service;
+package com.sparta.toogo.global.redis.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.toogo.domain.message.dto.MessageDto;
