@@ -20,10 +20,6 @@ public class Category {
         PostCategory(int value) {
             this.value = value;
         }
-        @Override
-        public String toString() {
-            return name();
-        }
 
         public Long getValue() {
             return (long) value;
