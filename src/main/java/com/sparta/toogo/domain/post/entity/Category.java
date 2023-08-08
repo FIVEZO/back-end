@@ -11,9 +11,8 @@ public class Category {
 
         OCEANIA(4),
 
-        NORTH_AMERICA(5),
+        AMERICA(5);
 
-        SOUTH_AMERICA(6);
 
         private int value;
 
