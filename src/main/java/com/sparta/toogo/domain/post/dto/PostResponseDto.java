@@ -54,7 +54,7 @@ public class PostResponseDto {
         if (title == null || country == null) {
             return title;
         }
-        return "[" + country + "]" + title;
+        return "[" + country + "] " + title;
     }
 
     public PostResponseDto(Post post, boolean isScrap) {
