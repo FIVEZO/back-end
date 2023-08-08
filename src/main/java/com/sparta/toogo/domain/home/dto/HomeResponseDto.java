@@ -1,6 +1,5 @@
 package com.sparta.toogo.domain.home.dto;
 
-import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class HomeResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private String meetDate;
-    private Category.PostCategory category;
+    private Long category;
 
     public HomeResponseDto(Post post){
         this.id = post.getId();
@@ -30,8 +29,7 @@ public class HomeResponseDto {
         this.contents = post.getContents();
  //       this.createdAt = post.getCreatedAt();
         this.meetDate = post.getMeetDate();
-        this.category = post.getCategory();
-
+        this.category = post.getCategory().getValue();
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
