@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/comment")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long category,
                                                             @PathVariable Long postId,
                                                             @RequestBody CommentRequestDto requestDto,
