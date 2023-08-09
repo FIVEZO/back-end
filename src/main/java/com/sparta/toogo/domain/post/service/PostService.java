@@ -39,6 +39,14 @@ public class PostService {
     private final ScrapRepository scrapRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
+
+        String title = requestDto.getTitle();
+        String contents = requestDto.getContents();
+
+        if(title.isEmpty() || contents.isEmpty()) {
+            throw new PostException(ErrorCode.EMPTY_TITLE_OR_CONTENTS);
+        }
+
         Post post = new Post(category, requestDto, user);
 
         postRepository.save(post);
@@ -53,9 +61,9 @@ public class PostService {
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
-        if (posts.isEmpty()) {
-            throw new PostException(ErrorCode.NOT_FOUND_DATA);
-        }
+//        if (posts.isEmpty()) {
+//            throw new PostException(ErrorCode.NOT_FOUND_DATA);
+//        }
 
         return posts.stream()
                 .map(PostResponseGetDto::new)
