@@ -33,7 +33,7 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다."),
     NOT_FOUND_EMAIL(NOT_FOUND, "다시 시도해 주세요."),
-    EMPTY_TITLE_OR_CONTENTS(FORBIDDEN,"제목이나 내용을 입력해주세요."),
+    EMPTY_TITLE_OR_CONTENTS(NOT_FOUND,"제목이나 내용을 입력해주세요."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "중복된 이메일 또는 닉네임입니다."),
