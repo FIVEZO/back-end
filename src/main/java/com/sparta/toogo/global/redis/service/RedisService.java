@@ -48,7 +48,7 @@ public class RedisService {
     }
 
     public String findKeyByValue(String value) {
-        Set<String> keys = redisTemplate.keys("*");
+        Set<String> keys = redisTemplate.keys("*@*");
         for (String key : keys) {
             String val = redisTemplate.opsForValue().get(key);
             if (value.equals(val)) {
