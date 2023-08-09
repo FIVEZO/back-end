@@ -8,6 +8,7 @@ import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,9 +32,14 @@ public class MessageRoomController {
     }
 
     // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
-    @GetMapping("room/{id}")
-    public MessageRoomDto findRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return messageRoomService.findRoom(id, userDetails.getUser());
+//    @GetMapping("room/{id}")
+//    public MessageRoomDto findRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return messageRoomService.findRoom(id, userDetails.getUser());
+//    }
+
+    @GetMapping("/room/{roomId}")
+    public void enterRoom(Model model, @PathVariable String roomId) {
+        model.addAttribute("roomId", roomId);
     }
 
     // 쪽지방 삭제
