@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/comment")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long category,
                                                             @PathVariable Long postId,
                                                             @RequestBody CommentRequestDto requestDto,
@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/comment/{commentId}")
-    public ApiResponse<String> deleteCommenet(@PathVariable Long commentId,
+    public ApiResponse<String> deleteComment(@PathVariable Long commentId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
         SuccessCode successCode = commentService.deleteComment(commentId, userDetails.getUser());
         return ResponseUtil.ok(successCode.getDetail());
