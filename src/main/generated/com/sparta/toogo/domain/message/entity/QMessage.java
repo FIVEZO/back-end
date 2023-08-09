@@ -33,6 +33,10 @@ public class QMessage extends EntityPathBase<Message> {
 
     public final com.sparta.toogo.domain.messageroom.entity.QMessageRoom messageRoom;
 
+    public final StringPath receiver = createString("receiver");
+
+    public final StringPath roomId = createString("roomId");
+
     public final StringPath sender = createString("sender");
 
     public final com.sparta.toogo.domain.user.entity.QUser user;
