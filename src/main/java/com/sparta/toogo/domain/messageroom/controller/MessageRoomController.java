@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/api")
 public class MessageRoomController {
     private final MessageRoomService messageRoomService;
 
@@ -30,7 +30,7 @@ public class MessageRoomController {
         return messageRoomService.findAllRoomByUser(userDetails.getUser());
     }
 
-    // 사용자 관련 쪽지방 선택 조회
+    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
     @GetMapping("room/{id}")
     public MessageRoomDto findRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.findRoom(id, userDetails.getUser());

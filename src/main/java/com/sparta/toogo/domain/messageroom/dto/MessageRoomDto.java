@@ -1,12 +1,17 @@
 package com.sparta.toogo.domain.messageroom.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.user.entity.User;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,6 +26,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     private String roomId;
     private String sender;     // 메시지 송신자
     private String receiver;   // 메시지 수신자
+//    List<MessageDto> messageList = new ArrayList<>();
 
     // 쪽지방 생성
     public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user) {
@@ -33,6 +39,15 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     }
 
     // 사용자 관련 쪽지방 선택 조회
+//    public MessageRoomDto(MessageRoom messageRoom, List<MessageDto> messageList) {
+//        this.id = messageRoom.getId();
+//        this.roomId = messageRoom.getRoomId();
+//        this.sender = messageRoom.getSender();
+//        this.receiver = messageRoom.getReceiver();
+//        this.messageList = messageList;
+//    }
+
+    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
     public MessageRoomDto(MessageRoom messageRoom) {
         this.id = messageRoom.getId();
         this.roomId = messageRoom.getRoomId();

@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.message.redis.config;
 
+import com.sparta.toogo.domain.message.dto.MessageDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -27,7 +28,20 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());        // Key Serializer
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));      // Value Serializer
+//        redisTemplate.setValueSerializer(new StringRedisSerializer());      // Value Serializer
 
         return redisTemplate;
+    }
+
+    // Redis 에 메시지 내역을 저장하기 위한 직렬화/역직렬화
+    @Bean
+    public RedisTemplate<String, MessageDto> redisTemplateMessage(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, MessageDto> redisTemplateMessage = new RedisTemplate<>();
+        redisTemplateMessage.setConnectionFactory(connectionFactory);
+        redisTemplateMessage.setKeySerializer(new StringRedisSerializer());        // Key Serializer
+        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));      // Value Serializer
+//        redisTemplateMessage.setValueSerializer(new StringRedisSerializer());      // Value Serializer
+
+        return redisTemplateMessage;
     }
 }

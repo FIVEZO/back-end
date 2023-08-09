@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,8 +70,15 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
+
+                                .requestMatchers("/ws-stomp").permitAll()
+                                .requestMatchers("/api/room/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
+                                .requestMatchers("/message/**").permitAll()
+
                                 .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
+
 
         // 필터 관리
 

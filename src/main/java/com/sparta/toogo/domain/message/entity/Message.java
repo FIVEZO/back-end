@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.message.entity;
 
+import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.util.Timestamped;
@@ -15,14 +16,17 @@ public class Message extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "sender")
     private String sender;
-
+    @Column(name = "roomId")
+    private String roomId;
+    @Column(name = "receiver")
+    private String receiver;
     @Column(name = "message")
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "messageRoomId", nullable = false)
+    @JoinColumn(name = "messageRoom", nullable = false)
     private MessageRoom messageRoom;
 
 //    @ManyToOne
@@ -32,4 +36,23 @@ public class Message extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+    // 대화 저장
+    public Message(MessageDto messageDto) {
+        super();
+        this.sender = messageDto.getSender();
+        this.roomId = messageDto.getRoomId();
+        this.receiver = messageDto.getReceiver();
+        this.message = messageDto.getMessage();
+    }
+
+    // 대화 저장 - 테스트용
+    public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom, User user) {
+        this.sender = sender;
+        this.roomId = roomId;
+        this.receiver = receiver;
+        this.message = message;
+        this.messageRoom = messageRoom;
+        this.user = user;
+    }
 }

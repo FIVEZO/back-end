@@ -1,9 +1,13 @@
 package com.sparta.toogo.domain.messageroom.service;
 
+import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
+import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
+import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
+import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
@@ -29,6 +33,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageRoomService {
     private final MessageRoomRepository messageRoomRepository;
+    private final MessageService messageService;
 
     // 쪽지방(topic)에 발행되는 메시지 처리하는 리스너
     private final RedisMessageListenerContainer redisMessageListener;
@@ -72,7 +77,7 @@ public class MessageRoomService {
         return messageRoomDtos;
     }
 
-    // 사용자 관련 쪽지방 선택 조회
+    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
     public MessageRoomDto findRoom(Long id, User user) {
         MessageRoom messageRoom = messageRoomRepository.findByIdAndUserOrIdAndReceiver(id, user, id, user.getNickname());
         if (messageRoom == null) {
@@ -80,6 +85,13 @@ public class MessageRoomService {
         }
 
         return new MessageRoomDto(messageRoom);
+
+//        List<MessageDto> messageList = messageService.getMessage(messageRoom.getRoomId());
+////        List<MessageDto> messageList = new ArrayList<>();
+//        for (Message message : messageRoom.getMessageList()) {
+//            messageList.add(new MessageDto(message));
+//        }
+//        return new MessageRoomDto(messageRoom, messageList);
     }
 
     // 쪽지방 삭제
