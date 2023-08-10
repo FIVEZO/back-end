@@ -8,7 +8,7 @@ public class PostRequestDto {
     private String title;
     private String contents;
     private String country;
-    private String latitude; // 위도
-    private String longitude; // 경도
+    private Double latitude; // 위도
+    private Double longitude; // 경도
     private String meetDate;
 }
