@@ -37,9 +37,9 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Double> latitude = createNumber("latitude", Double.class);
+    public final StringPath latitude = createString("latitude");
 
-    public final NumberPath<Double> longitude = createNumber("longitude", Double.class);
+    public final StringPath longitude = createString("longitude");
 
     public final StringPath meetDate = createString("meetDate");
 
