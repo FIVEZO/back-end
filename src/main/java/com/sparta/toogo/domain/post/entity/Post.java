@@ -40,10 +40,10 @@ public class Post extends Timestamped {
     private Long scrapPostSum;
 
     @Column(nullable = false)
-    private Double latitude;
+    private double latitude;
 
     @Column(nullable = false)
-    private Double longitude;
+    private double longitude;
 
     @Column
     private String meetDate;

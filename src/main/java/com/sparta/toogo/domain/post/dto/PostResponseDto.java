@@ -22,8 +22,8 @@ public class PostResponseDto {
     private List<CommentResponseDto> commentList;
     private boolean isScrap;
     private String country;
-    private Double latitude;
-    private Double longitude;
+    private double latitude;
+    private double longitude;
     private String meetDate;
     private Long category;
 
