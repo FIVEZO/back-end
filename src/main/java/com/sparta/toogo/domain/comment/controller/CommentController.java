@@ -3,6 +3,7 @@ package com.sparta.toogo.domain.comment.controller;
 import com.sparta.toogo.domain.comment.dto.CommentRequestDto;
 import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
 import com.sparta.toogo.domain.comment.service.CommentService;
+import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+    private final NotificationService notificationService;
 
     @PostMapping("/comment")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long category,
@@ -26,6 +28,7 @@ public class CommentController {
                                                             @RequestBody CommentRequestDto requestDto,
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto response = commentService.createComment(category, postId, requestDto, userDetails.getUser());
+        notificationService.notifyComment(postId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

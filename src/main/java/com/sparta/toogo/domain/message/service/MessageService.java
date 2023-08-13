@@ -26,23 +26,20 @@ public class MessageService {
     private final MessageRoomRepository messageRoomRepository;
 
     // 대화 저장
-//    public void saveMessage(MessageDto messageDto) {
     public void saveMessage(Long id, MessageDto messageDto, User user) {
         MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
         );
 
         // DB 저장
-//        Message message = new Message(messageDto);
         Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage(), messageRoom, user);
         messageRepository.save(message);
 
         // redis 저장 (roomId 를 Key 값으로)
         redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(), messageDto);        // list 로 redis 에 저장
-//        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(), message);        // list 로 redis 에 저장
     }
 
-    // 대화 조회 - 일단 DB 에서
+    // 대화 조회 - DB 에서
     public List<MessageResponseDto> loadMessage(String roomId) {
         List<Message> messageDtoList = messageRepository.findByRoomId(roomId);
 
@@ -54,6 +51,10 @@ public class MessageService {
 
         return messageResponseDtoList;
     }
+    
+    // 대화 조회 - redis 에서
+//    public List<MessageResponseDto> loadMessage(String roomId) {
+//        List<MessageDto> messageDtoList = redisTemplateMessage.opsForList().range("roomId", 0, 99);
 
     // 대화 조회 - 일단 redis 에서 --> object(Json 객체) 가 string 으로 역직렬화 되지 않는 문제
     //        string 과 object 같이 받아와서
@@ -87,36 +88,8 @@ public class MessageService {
 //
 //        List<MessageResponseDto> messageResponseDtoList = new ArrayList<>();
 //
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        for (MessageDto messageDto : messageDtoList) {
-//            MessageResponseDto messageResponseDto = convertToMessageResponseDto(messageDto);
-//            messageResponseDtoList.add(messageResponseDto);
-//        }
-//
-//        return messageResponseDtoList;
-//    }
-//
-//    private MessageResponseDto convertToMessageResponseDto(MessageDto messageDto) throws JsonProcessingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String messageDtoMapper = objectMapper.writeValueAsString(messageDto);
-//        return objectMapper.readValue(messageDtoMapper, MessageResponseDto.class);
-//    }
-
-//    // 대화 조회 - 테스트용
-//    public List<MessageResponseDto> loadMessage(Long id) {
-//        MessageRoom messageRoom = messageRoomRepository.findAllById(id).orElseThrow(
-//                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
-//        );
-//
-//        // 문제 발생?
-////        List<MessageDto> messageDtoList = redisTemplateMessage.opsForList().range(messageRoom.getRoomId(), 0, 99);
-//        List<MessageDto> messageDtoList = Collections.singletonList(redisTemplateMessage.opsForValue().get(messageRoom.getRoomId()));
-//
-//        List<MessageResponseDto> messageResponseDtoList = new ArrayList<>();
-//
-//        for (MessageDto messageDto : messageDtoList) {
-//            messageResponseDtoList.add(new MessageResponseDto(messageDto));
+//        for (MessageDto message : messageDtoList) {
+//            messageResponseDtoList.add(new MessageResponseDto(message));
 //        }
 //
 //        return messageResponseDtoList;
