@@ -57,4 +57,12 @@ public class Message extends Timestamped {
         this.messageRoom = messageRoom;
         this.user = user;
     }
+
+    public Message(String sender, String roomId, String receiver, String message) {
+        super();
+        this.sender = sender;
+        this.roomId = roomId;
+        this.receiver = receiver;
+        this.message = message;
+    }
 }

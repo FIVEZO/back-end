@@ -28,10 +28,13 @@ public class MessageController {
 //    @MessageMapping("/message")
 //    @MessageMapping("/message/{roomId}")
 //    @MessageMapping("/message/{id}")     // websocket "/pub/message"로 들어오는 메시지를 처리
-    @MessageMapping("/message/{id}")     // websocket "/pub/message"로 들어오는 메시지를 처리
+    @MessageMapping("/message")     // websocket "/pub/message"로 들어오는 메시지를 처리
+    @SendTo("/topic/message")
 //    public void message(@RequestBody MessageDto messageDto) {
 //    public void message(@PathVariable Long id, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    public void message(@DestinationVariable Long id, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//    public void message(@DestinationVariable Long id, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//    public void message(@RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void message(MessageDto messageDto) {
 
         // 클라이언트의 쪽지방(topic) 입장, 대화를 위해 리스너와 연동
         messageRoomService.enterMessageRoom(messageDto.getRoomId());
@@ -40,7 +43,9 @@ public class MessageController {
         redisPublisher.publish(messageRoomService.getTopic(messageDto.getRoomId()), messageDto);
 
 //        messageService.saveMessage(messageDto);
-        messageService.saveMessage(id, messageDto, userDetails.getUser());
+//        messageService.saveMessage(id, messageDto, userDetails.getUser());
+//        messageService.saveMessage(messageDto, userDetails.getUser());
+        messageService.saveMessage(messageDto);
     }
 
     // 대화 내역 조회
