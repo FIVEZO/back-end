@@ -1,19 +1,16 @@
 package com.sparta.toogo.domain.message.controller;
 
 import com.sparta.toogo.domain.message.dto.MessageDto;
-import com.sparta.toogo.domain.message.dto.MessageResponseDto;
-import com.sparta.toogo.domain.message.redis.service.RedisPublisher;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
-import com.sparta.toogo.global.security.UserDetailsImpl;
+import com.sparta.toogo.global.redis.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
