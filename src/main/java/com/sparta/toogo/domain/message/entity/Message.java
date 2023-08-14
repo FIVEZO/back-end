@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.message.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.user.entity.User;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "message")
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
