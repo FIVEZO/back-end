@@ -61,10 +61,17 @@ public class PostService {
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
-//        if (posts.isEmpty()) {
-//            throw new PostException(ErrorCode.NOT_FOUND_DATA);
-//        }
 
+        return posts.stream()
+                .map(PostResponseGetDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<PostResponseGetDto> getPostsByCategoryAndCountry(Long category, String country, int pageNum) {
+        Category.PostCategory categoryEnum = Category.findByNumber(category);
+        System.out.println("여ㄱㅇ");
+        Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Post> posts = postRepository.findAllByCategoryAndCountry(categoryEnum, country, pageable);
         return posts.stream()
                 .map(PostResponseGetDto::new)
                 .collect(Collectors.toList());
@@ -134,4 +141,5 @@ public class PostService {
 
         return postList;
     }
+
 }

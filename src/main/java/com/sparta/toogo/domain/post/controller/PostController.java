@@ -9,8 +9,6 @@ import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,23 +30,31 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
-                                                                       @RequestParam("page") int pageNum) {
+    public ApiResponse<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
+                                                                    @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
         List<PostResponseGetDto> response = postService.getPostsByCategory(category, pageNum -1);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseUtil.ok(response);
+    }
+
+    @GetMapping("/{category}/{country}/list")
+    public ApiResponse<List<PostResponseGetDto>> getPostsByCategoryAndCountry(@PathVariable Long category,
+                                                                              @PathVariable String country,
+                                                                              @RequestParam("page") int pageNum) {
+        List<PostResponseGetDto> response = postService.getPostsByCategoryAndCountry(category, country, pageNum -1);
+        return ResponseUtil.ok(response);
     }
 
     @GetMapping("/{category}/{postId}")
-    public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
-                                                         @PathVariable Long postId,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<PostResponseDto> getDetailPost(@PathVariable Long category,
+                                                      @PathVariable Long postId,
+                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = 0L;
         if(userDetails != null) {
             userId = userDetails.getUser().getId();
         }
         PostResponseDto response = postService.getDetailPost(category, postId, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseUtil.ok(response);
     }
 
     @PatchMapping("/{category}/{postId}")
