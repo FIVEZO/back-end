@@ -27,17 +27,21 @@ public class Message extends Timestamped {
     @Column(name = "message")
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "messageRoom", nullable = false)
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "messageRoom", nullable = false)
+//    private MessageRoom messageRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
     private MessageRoom messageRoom;
 
 //    @ManyToOne
 //    @JoinColumn(name = "mypageId", nullable = false)
 //    private Mypage mypage;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "userId")
+//    private User user;
 
     // 대화 저장
     public Message(MessageDto messageDto) {
@@ -55,7 +59,7 @@ public class Message extends Timestamped {
         this.receiver = receiver;
         this.message = message;
         this.messageRoom = messageRoom;
-        this.user = user;
+//        this.user = user;
     }
 
     public Message(String sender, String roomId, String receiver, String message) {
