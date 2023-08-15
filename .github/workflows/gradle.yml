@@ -29,7 +29,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      uses: gradle/gradle-build-action@v3 # v2.6.0
       with:
         arguments: build
 
@@ -45,7 +45,7 @@ jobs:
     #       ${{ runner.os }}-gradle-
 
     ## create application.properties
-    - name: make application.properties
+    - name: Make application.properties
       if: contains(github.ref, 'dev3') # branch가 develop일 때
       run: |
           # spring의 resources 경로로 이동
