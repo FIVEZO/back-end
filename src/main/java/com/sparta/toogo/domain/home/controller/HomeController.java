@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.home.controller;
 
+import com.sparta.toogo.domain.home.dto.HomeCountryCountDto;
 import com.sparta.toogo.domain.home.dto.HomeResponseDto;
 import com.sparta.toogo.domain.home.service.HomeService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,10 @@ public class HomeController {
     @GetMapping("/homepost")
     public List<HomeResponseDto> getHome() {
         return homeService.getHome();
+    }
+
+    @GetMapping("/count")
+    public HomeCountryCountDto getCountryCount() {
+        return homeService.getCountryCount();
     }
 }

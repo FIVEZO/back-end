@@ -41,7 +41,7 @@ public class RedisService {
     }
 
     // 유효 시간 동안(key, value)저장
-    public void setCodeExpire(String key, String value, long duration) {
+    public void setCodeExpire(String key, String value, Long duration) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);

@@ -35,9 +35,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> kakaoId = createNumber("kakaoId", Long.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
-
     public final com.sparta.toogo.domain.mypage.entity.QMyPage myPage;
 
     public final StringPath nickname = createString("nickname");
@@ -47,8 +44,6 @@ public class QUser extends EntityPathBase<User> {
     public final ListPath<com.sparta.toogo.domain.post.entity.Post, com.sparta.toogo.domain.post.entity.QPost> posts = this.<com.sparta.toogo.domain.post.entity.Post, com.sparta.toogo.domain.post.entity.QPost>createList("posts", com.sparta.toogo.domain.post.entity.Post.class, com.sparta.toogo.domain.post.entity.QPost.class, PathInits.DIRECT2);
 
     public final EnumPath<UserRoleEnum> role = createEnum("role", UserRoleEnum.class);
-
-    public final BooleanPath userStatus = createBoolean("userStatus");
 
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);

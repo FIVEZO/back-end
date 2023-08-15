@@ -18,6 +18,7 @@ public enum SuccessCode {
     DISLIKE_CANCEL(OK, "싫어요 취소"),
     LOGOUT_SUCCESS(OK, "로그아웃 성공"),
     EMAIL_VERIFICATION_SENT(OK, "이메일 인증 코드가 전송되었습니다."),
+    NEW_PASSWORD_SENT(OK, "새 비밀번호가 전송되었습니다."),
 
     /* 201 CREATED : 요청이 성공적이었으며 그 결과로 새로운 리소스가 생성 되었다는 의미입니다. */
     USER_SIGNUP_SUCCESS(CREATED, "회원가입 성공"),

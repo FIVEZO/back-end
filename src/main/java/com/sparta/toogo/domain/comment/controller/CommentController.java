@@ -8,8 +8,6 @@ import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +18,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
-    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long category,
-                                                            @PathVariable Long postId,
-                                                            @RequestBody CommentRequestDto requestDto,
-                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/comment")
+    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long category,
+                                                         @PathVariable Long postId,
+                                                         @RequestBody CommentRequestDto requestDto,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto response = commentService.createComment(category, postId, requestDto, userDetails.getUser());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseUtil.ok(response);
     }
 
 //    @GetMapping("/comment")
@@ -38,15 +36,15 @@ public class CommentController {
 //    }
 
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,
-                                                            @RequestBody CommentRequestDto requestDto,
-                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long commentId,
+                                                         @RequestBody CommentRequestDto requestDto,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto response = commentService.updateComment(commentId, requestDto, userDetails.getUser());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseUtil.ok(response);
     }
 
     @DeleteMapping("/comment/{commentId}")
-    public ApiResponse<String> deleteCommenet(@PathVariable Long commentId,
+    public ApiResponse<String> deleteComment(@PathVariable Long commentId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
         SuccessCode successCode = commentService.deleteComment(commentId, userDetails.getUser());
         return ResponseUtil.ok(successCode.getDetail());

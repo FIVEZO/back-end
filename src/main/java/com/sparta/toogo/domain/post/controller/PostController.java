@@ -33,16 +33,24 @@ public class PostController {
 
     @GetMapping("/{category}")
     public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
-                                                                       @RequestParam("page") int pageNum) {
+                                                                    @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
         List<PostResponseGetDto> response = postService.getPostsByCategory(category, pageNum -1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{category}/{country}/list")
+    public ApiResponse<List<PostResponseGetDto>> getPostsByCategoryAndCountry(@PathVariable Long category,
+                                                                              @PathVariable String country,
+                                                                              @RequestParam("page") int pageNum) {
+        List<PostResponseGetDto> response = postService.getPostsByCategoryAndCountry(category, country, pageNum -1);
+        return ResponseUtil.ok(response);
+    }
+
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
-                                                         @PathVariable Long postId,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                      @PathVariable Long postId,
+                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = 0L;
         if(userDetails != null) {
             userId = userDetails.getUser().getId();
@@ -67,10 +75,11 @@ public class PostController {
     }
 
     @GetMapping("/{category}/search/{pageNum}")
-    public List<PostResponseDto> searchPost(@PathVariable Long category,
-                                            @RequestParam String keyword,
-                                            @PathVariable int pageNum) {
-        return postService.searchPost(keyword, category, pageNum - 1);
+    public ResponseEntity<List<PostResponseDto>> searchPost(@PathVariable Long category,
+                                                            @RequestParam String keyword,
+                                                            @PathVariable int pageNum) {
+        List<PostResponseDto> response = postService.searchPost(keyword, category, pageNum - 1);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

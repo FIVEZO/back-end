@@ -19,6 +19,8 @@ public class HomeResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private String meetDate;
+    private Long category;
+
 
     public HomeResponseDto(Post post){
         this.id = post.getId();
@@ -28,7 +30,7 @@ public class HomeResponseDto {
         this.contents = post.getContents();
  //       this.createdAt = post.getCreatedAt();
         this.meetDate = post.getMeetDate();
-
+        this.category = post.getCategory().getValue();
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
@@ -37,10 +39,12 @@ public class HomeResponseDto {
         this.createdAt = koreaTime.toLocalDateTime();
     }
 
+
+
     private String processTitle(String title, String country) {
         if(title == null || country == null) {
             return title;
         }
-        return "[" + country + "]" + title;
+        return "[" + country + "] " + title;
     }
 }

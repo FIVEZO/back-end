@@ -38,9 +38,6 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column(nullable = false)
-    private boolean userStatus = true;
-
     @Column
     private Long kakaoId;
 
@@ -52,10 +49,6 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
-
-    public void Delete() {
-        this.userStatus = false;
-    }
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email = email;

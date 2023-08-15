@@ -24,4 +24,9 @@ public class EmailController {
     public Boolean confirmEmail(@RequestParam String code) {
         return emailService.checkCode(code);
     }
+
+    @PostMapping("/find/password")
+    public EmailResponseDto findPassword(@RequestParam String email) throws Exception {
+        return emailService.sendNewPassword(email);
+    }
 }

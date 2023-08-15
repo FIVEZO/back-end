@@ -18,6 +18,7 @@ public class PostResponseGetDto {
     private LocalDateTime createdAt;
     private String meetDate;
     private Long scrapPostSum;
+    private Long category;
 
     public PostResponseGetDto(Post post) {
         this.id = post.getId();
@@ -27,6 +28,7 @@ public class PostResponseGetDto {
         this.contents = post.getContents();
         this.meetDate = post.getMeetDate();
         this.scrapPostSum = post.getScrapPostSum();
+        this.category = post.getCategory().getValue();
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
@@ -40,6 +42,6 @@ public class PostResponseGetDto {
         if (title == null || country == null) {
             return title;
         }
-        return "[" + country + "]" + title;
+        return "[" + country + "] " + title;
     }
 }

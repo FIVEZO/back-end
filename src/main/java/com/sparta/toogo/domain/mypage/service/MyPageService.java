@@ -44,8 +44,7 @@ public class MyPageService {
     }
 
     public MsgResponseDto deleteUser(User user) {
-            user.Delete();
-            userRepository.delete(user);
+        userRepository.delete(user);
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
 
