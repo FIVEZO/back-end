@@ -9,6 +9,8 @@ import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +28,8 @@ public class CommentController {
                                                          @RequestBody CommentRequestDto requestDto,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto response = commentService.createComment(category, postId, requestDto, userDetails.getUser());
-        return ResponseUtil.ok(response);
         notificationService.notifyComment(postId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseUtil.ok(response);
     }
 
 //    @GetMapping("/comment")
