@@ -3,12 +3,11 @@ package com.sparta.toogo.domain.mypage.service;
 import com.sparta.toogo.domain.mypage.dto.*;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
 import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
-import com.sparta.toogo.global.responsedto.ApiResponse;
-import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_NICKNAME;
 import static com.sparta.toogo.global.enums.ErrorCode.INCORRECT_PASSWORD;
@@ -32,12 +32,15 @@ public class MyPageService {
     private final UserRepository userRepository;
     private final ScrapRepository scrapRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PostRepository postRepository;
 
     // 마이페이지 조회
-    public ApiResponse<?> getMyPage(User user) {
-        Long myScrapCount = scrapRepository.countByUser(user);
-        MyPageDto myPageDto = new MyPageDto(myScrapCount, user);
-        return ResponseUtil.ok(myPageDto);
+    public List<MyPageDto> getMyPage(User user) {
+
+        List<Post> userPosts = postRepository.findByUser(user);
+        return userPosts.stream()
+                .map(MyPageDto::new)
+                .collect(Collectors.toList());
     }
 
     public MsgResponseDto deleteUser(User user) {
