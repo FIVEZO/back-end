@@ -29,7 +29,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     // 쪽지방 생성
     public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user) {
         MessageRoomDto messageRoomDto = new MessageRoomDto();
-        messageRoomDto.roomName = "쪽지방이름";
+        messageRoomDto.roomName = messageRequestDto.getReceiver();
         messageRoomDto.roomId = UUID.randomUUID().toString();
         messageRoomDto.sender = user.getNickname();
         messageRoomDto.receiver = messageRequestDto.getReceiver();
