@@ -9,6 +9,8 @@ import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +32,11 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ApiResponse<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
+    public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
                                                                     @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
         List<PostResponseGetDto> response = postService.getPostsByCategory(category, pageNum -1);
-        return ResponseUtil.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{category}/{country}/list")
@@ -46,7 +48,7 @@ public class PostController {
     }
 
     @GetMapping("/{category}/{postId}")
-    public ApiResponse<PostResponseDto> getDetailPost(@PathVariable Long category,
+    public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
                                                       @PathVariable Long postId,
                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = 0L;
@@ -54,7 +56,7 @@ public class PostController {
             userId = userDetails.getUser().getId();
         }
         PostResponseDto response = postService.getDetailPost(category, postId, userId);
-        return ResponseUtil.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{category}/{postId}")

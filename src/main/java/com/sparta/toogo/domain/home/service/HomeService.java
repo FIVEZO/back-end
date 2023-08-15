@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,25 +52,25 @@ public class HomeService {
 
         QPost post = QPost.post;
 
-        Category.PostCategory asiaCategoryEnum = Category.findByNumber(1L);
+ //       Category.PostCategory asiaCategoryEnum = Category.findByNumber(1L);
         Long ASIAPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)
-                .where(post.category.eq(asiaCategoryEnum))
+                .where(post.category.eq(Category.PostCategory.ASIA))
                 .fetchOne();
 
-        Category.PostCategory africaCategoryEnum = Category.findByNumber(2L);
+//        Category.PostCategory africaCategoryEnum = Category.findByNumber(2L);
         Long AFRICAPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)
-                .where(post.category.eq(africaCategoryEnum))
+                .where(post.category.eq(Category.PostCategory.AFRICA))
                 .fetchOne();
 
-        Category.PostCategory europeCategoryEnum = Category.findByNumber(3L);
+//        Category.PostCategory europeCategoryEnum = Category.findByNumber(3L);
         Long EUROPEPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)
-                .where(post.category.eq(europeCategoryEnum))
+                .where(post.category.eq(Category.PostCategory.EUROPE))
                 .fetchOne();
 
         Long OCEANIAPostCount = jpaQueryFactory
