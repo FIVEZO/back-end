@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.mypage.dto;
 
+import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
