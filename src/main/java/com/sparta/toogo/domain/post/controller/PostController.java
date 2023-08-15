@@ -75,10 +75,11 @@ public class PostController {
     }
 
     @GetMapping("/{category}/search/{pageNum}")
-    public List<PostResponseDto> searchPost(@PathVariable Long category,
-                                            @RequestParam String keyword,
-                                            @PathVariable int pageNum) {
-        return postService.searchPost(keyword, category, pageNum - 1);
+    public ResponseEntity<List<PostResponseDto>> searchPost(@PathVariable Long category,
+                                                            @RequestParam String keyword,
+                                                            @PathVariable int pageNum) {
+        List<PostResponseDto> response = postService.searchPost(keyword, category, pageNum - 1);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
