@@ -117,7 +117,7 @@ public class PostService {
     }
 
     // 검색
-    public ResponseEntity<List<PostResponseDto>> searchPost(String keyword, Long category, int pageNum) {
+    public List<PostResponseDto> searchPost(String keyword, Long category, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 20);
         Category.PostCategory categoryEnum = Category.findByNumber(category);
 
@@ -140,7 +140,7 @@ public class PostService {
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(postList);
+        return postList;
     }
 
 }
