@@ -16,4 +16,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategory(Category.PostCategory categoryEnum, Pageable pageable);
 
 
+    List<Post> findAllByCategoryAndCountry(Category.PostCategory categoryEnum, String country, Pageable pageable);
 }

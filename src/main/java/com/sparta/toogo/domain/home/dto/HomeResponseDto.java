@@ -21,6 +21,7 @@ public class HomeResponseDto {
     private String meetDate;
     private Long category;
 
+
     public HomeResponseDto(Post post){
         this.id = post.getId();
         this.nickname = post.getUser().getNickname();
@@ -37,6 +38,8 @@ public class HomeResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
     }
+
+
 
     private String processTitle(String title, String country) {
         if(title == null || country == null) {
