@@ -1,12 +1,11 @@
 package com.sparta.toogo.domain.mypage.controller;
 
-import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
-import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
-import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
+import com.sparta.toogo.domain.mypage.dto.*;
 import com.sparta.toogo.domain.mypage.service.MyPageService;
-import com.sparta.toogo.domain.mypage.dto.MyPagePostDto;
+import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
+import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,9 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-    @GetMapping
+    @GetMapping("/post")
     public ApiResponse<?> getMyPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.getMyPage(userDetails.getUser());
+        return ResponseUtil.ok(myPageService.getMyPage(userDetails.getUser()));
     }
 
     @DeleteMapping("/delete")

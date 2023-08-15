@@ -1,21 +1,41 @@
 package com.sparta.toogo.domain.mypage.dto;
 
+import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
 public class MyPageDto {
 
-    private Long myScrapCount;
+    private Long id;
     private String nickname;
-//    private String profileImg;
+    private String title;
+    private String country;
+    private String contents;
+    private LocalDateTime createdAt;
+    private String meetDate;
+    private Long scrapPostSum ;
 
-    public MyPageDto(Long myScrapCount, User user) {
-        this.myScrapCount = myScrapCount;
-        this.nickname = user.getNickname();
- //       this.profileImg = user.getProfileImg();
+    public MyPageDto(Post post) {
+
+        this.id = post.getId();
+        this.nickname = post.getUser().getNickname();
+        this.title = post.getTitle();
+        this.country = post.getCountry();
+        this.contents = post.getContents();
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+        this.createdAt = koreaTime.toLocalDateTime();
+        this.meetDate = post.getMeetDate();
+        this.scrapPostSum  = post.getScrapPostSum();
     }
 
 //    public MyPageDto(User user){
