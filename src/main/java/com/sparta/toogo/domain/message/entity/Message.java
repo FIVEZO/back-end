@@ -27,17 +27,21 @@ public class Message extends Timestamped {
     @Column(name = "message")
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "messageRoom", nullable = false)
-    private MessageRoom messageRoom;
-
-//    @ManyToOne
-//    @JoinColumn(name = "mypageId", nullable = false)
-//    private Mypage mypage;
+// @ManyToOne(fetch = FetchType.LAZY)
+// @JoinColumn(name = "messageRoom", nullable = false)
+// private MessageRoom messageRoom;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+    @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
+    private MessageRoom messageRoom;
+
+// @ManyToOne
+// @JoinColumn(name = "mypageId", nullable = false)
+// private Mypage mypage;
+
+// @ManyToOne
+// @JoinColumn(name = "userId")
+// private User user;
 
     // 대화 저장
     public Message(MessageDto messageDto) {
@@ -49,13 +53,13 @@ public class Message extends Timestamped {
     }
 
     // 대화 저장 - 테스트용
-    public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom, User user) {
+    public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom) {
         this.sender = sender;
         this.roomId = roomId;
         this.receiver = receiver;
         this.message = message;
         this.messageRoom = messageRoom;
-        this.user = user;
+// this.user = user;
     }
 
     public Message(String sender, String roomId, String receiver, String message) {

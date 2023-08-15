@@ -1,19 +1,14 @@
 package com.sparta.toogo.domain.messageroom.service;
 
-import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
-import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
-import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
-import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.user.entity.User;
-import com.sparta.toogo.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +28,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageRoomService {
     private final MessageRoomRepository messageRoomRepository;
-    private final MessageService messageService;
 
     // 쪽지방(topic)에 발행되는 메시지 처리하는 리스너
     private final RedisMessageListenerContainer redisMessageListener;
@@ -60,7 +54,7 @@ public class MessageRoomService {
     public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
         MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
         opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
 
         return new MessageResponseDto(messageRoom);
     }
@@ -69,9 +63,29 @@ public class MessageRoomService {
     public List<MessageResponseDto> findAllRoomByUser(User user) {
         List<MessageRoom> messageRooms = messageRoomRepository.findByUserOrReceiver(user, user.getNickname());      // sender & receiver 모두 해당 쪽지방 조회 가능 (1:1 대화)
         List<MessageResponseDto> messageRoomDtos = new ArrayList<>();
+
         for (MessageRoom messageRoom : messageRooms) {
-            MessageResponseDto messageRoomDto = new MessageResponseDto(messageRoom.getId(), messageRoom.getRoomId(), messageRoom.getSender(), messageRoom.getReceiver());
-            messageRoomDtos.add(messageRoomDto);
+            //  user 가 sender 인 경우
+            if (user.getNickname().equals(messageRoom.getSender())) {
+                MessageResponseDto messageRoomDto = new MessageResponseDto(
+                        messageRoom.getId(),
+                        messageRoom.getReceiver(),        // roomName
+                        messageRoom.getRoomId(),
+                        messageRoom.getSender(),
+                        messageRoom.getReceiver());
+
+                messageRoomDtos.add(messageRoomDto);
+            // user 가 receiver 인 경우
+            } else {
+                MessageResponseDto messageRoomDto = new MessageResponseDto(
+                        messageRoom.getId(),
+                        messageRoom.getSender(),        // roomName
+                        messageRoom.getRoomId(),
+                        messageRoom.getSender(),
+                        messageRoom.getReceiver());
+
+                messageRoomDtos.add(messageRoomDto);
+            }
         }
 
         return messageRoomDtos;
@@ -85,13 +99,6 @@ public class MessageRoomService {
         }
 
         return new MessageRoomDto(messageRoom);
-
-//        List<MessageDto> messageList = messageService.getMessage(messageRoom.getRoomId());
-////        List<MessageDto> messageList = new ArrayList<>();
-//        for (Message message : messageRoom.getMessageList()) {
-//            messageList.add(new MessageDto(message));
-//        }
-//        return new MessageRoomDto(messageRoom, messageList);
     }
 
     // 쪽지방 삭제

@@ -1,6 +1,5 @@
 package com.sparta.toogo.domain.message.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.sparta.toogo.domain.message.entity.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
