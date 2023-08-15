@@ -17,8 +17,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stomp")
                 .setAllowedOriginPatterns("*")       // 해당 설정이 있으면 postman 으로 웹소켓 연결 불가능
-                .setAllowedOrigins("*")
-                .withSockJS();
+                .setAllowedOrigins("*");
+//                .withSockJS();
     }
 
     // Stomp 사용을 위한 Message Broker 설정.
