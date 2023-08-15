@@ -75,7 +75,7 @@ public class PostController {
     }
 
     @GetMapping("/{category}/search/{pageNum}")
-    public List<PostResponseDto> searchPost(@PathVariable Long category,
+    public ResponseEntity<List<PostResponseDto>> searchPost(@PathVariable Long category,
                                             @RequestParam String keyword,
                                             @PathVariable int pageNum) {
         return postService.searchPost(keyword, category, pageNum - 1);

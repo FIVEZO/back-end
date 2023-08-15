@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -116,7 +117,7 @@ public class PostService {
     }
 
     // 검색
-    public List<PostResponseDto> searchPost(String keyword, Long category, int pageNum) {
+    public ResponseEntity<List<PostResponseDto>> searchPost(String keyword, Long category, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 20);
         Category.PostCategory categoryEnum = Category.findByNumber(category);
 
@@ -139,7 +140,7 @@ public class PostService {
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
 
-        return postList;
+        return ResponseEntity.ok(postList);
     }
 
 }
