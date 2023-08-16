@@ -4,7 +4,6 @@ import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
-import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,9 @@ public class MessageService {
 
     // 대화 저장
     public void saveMessage(MessageDto messageDto) {
+        // DB 저장
+        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
+        messageRepository.save(message);
 
         // 직렬화
         redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));
@@ -36,10 +40,6 @@ public class MessageService {
 
         // 스케줄링 기능 (1시간 마다)
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
-
-        // DB 저장
-        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
-        messageRepository.save(message);
     }
 
     // 대화 조회 - Redis & DB
@@ -63,10 +63,14 @@ public class MessageService {
     }
 
     // 대화 저장 - 테스트용
-//    public MessageResponseDto createMessage(Long id, MessageDto messageDto, User user) {
-//        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
-//        );
+//    public MessageResponseDto createMessage(String roomId, MessageDto messageDto, User user) {
+////        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
+////                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
+////        );
+//
+//        // DB 저장
+//        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
+//        Message saveMessage = messageRepository.save(message);
 //
 //        // 직렬화
 //        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));
@@ -76,10 +80,6 @@ public class MessageService {
 //
 //        // 스케줄링 기능 (1시간 마다)
 //        redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
-//
-//        // DB 저장
-//        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
-//        Message saveMessage = messageRepository.save(message);
 //
 //        return new MessageResponseDto(saveMessage);
 //    }

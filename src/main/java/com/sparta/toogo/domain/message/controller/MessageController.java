@@ -1,16 +1,21 @@
 package com.sparta.toogo.domain.message.controller;
 
 import com.sparta.toogo.domain.message.dto.MessageDto;
+import com.sparta.toogo.domain.message.dto.MessageResponseDto;
+import com.sparta.toogo.domain.message.redis.service.RedisPublisher;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
-import com.sparta.toogo.global.redis.service.RedisPublisher;
+import com.sparta.toogo.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -41,9 +46,8 @@ public class MessageController {
     }
 
     // 메시지 작성 - 테스트용
-//    @PostMapping("/room/{id}/message")
-//    public MessageDto createMessage(@PathVariable Long id, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-////        return messageService.createMessage(id, messageDto, userDetails.getUser());
-//        return new MessageDto(id, messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage());
+//    @PostMapping("/room/{roomId}/message")
+//    public MessageResponseDto createMessage(@PathVariable String roomId, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return messageService.createMessage(roomId, messageDto, userDetails.getUser());
 //    }
 }

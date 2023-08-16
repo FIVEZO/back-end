@@ -1,8 +1,11 @@
 package com.sparta.toogo.domain.message.dto;
 
+import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +16,7 @@ public class MessageResponseDto {
     private String roomId;
     private String receiver;
     private String message;
+    private LocalDateTime createdAt;
 
     // 쪽지방 생성
     public MessageResponseDto(MessageRoom messageRoom) {
@@ -30,5 +34,22 @@ public class MessageResponseDto {
         this.roomId = roomId;
         this.sender = sender;
         this.receiver = receiver;
+    }
+
+//    // 대화 저장 - 테스트용
+//    public MessageResponseDto(Message saveMessage) {
+//        this.id = saveMessage.getId();
+//        this.sender = saveMessage.getSender();
+//        this.roomId = saveMessage.getRoomId();
+//        this.receiver = saveMessage.getReceiver();
+//        this.createdAt = saveMessage.getCreatedAt();
+//    }
+
+    public void setLatestMessageContent(String message) {
+        this.message = message;
+    }
+
+    public void setLatestMessageCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
