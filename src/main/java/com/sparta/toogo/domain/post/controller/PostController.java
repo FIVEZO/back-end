@@ -74,11 +74,10 @@ public class PostController {
         return ResponseUtil.ok(postService.deletePost(category, postId, userDetails.getUser()));
     }
 
-    @GetMapping("/{category}/search/{pageNum}")
-    public ResponseEntity<List<PostResponseDto>> searchPost(@PathVariable Long category,
-                                                            @RequestParam String keyword,
+    @GetMapping("/search/{pageNum}")
+    public ResponseEntity<List<PostResponseDto>> searchPost(@RequestParam String keyword,
                                                             @PathVariable int pageNum) {
-        List<PostResponseDto> response = postService.searchPost(keyword, category, pageNum - 1);
+        List<PostResponseDto> response = postService.searchPost(keyword,pageNum - 1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

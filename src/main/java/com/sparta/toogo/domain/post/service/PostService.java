@@ -117,9 +117,8 @@ public class PostService {
     }
 
     // 검색
-    public List<PostResponseDto> searchPost(String keyword, Long category, int pageNum) {
+    public List<PostResponseDto> searchPost(String keyword, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 20);
-        Category.PostCategory categoryEnum = Category.findByNumber(category);
 
         BooleanExpression titleOrContentsContain = post.title.containsIgnoreCase(keyword)
                 .or(post.contents.containsIgnoreCase(keyword));
@@ -127,9 +126,6 @@ public class PostService {
         JPAQuery<Post> query = queryFactory.selectFrom(post)
                 .where(titleOrContentsContain);
 
-        if (category != null) {
-            query.where(post.category.eq(categoryEnum)); // 카테고리 필터링
-        }
 
         List<PostResponseDto> postList = query
                 .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
