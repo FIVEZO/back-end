@@ -61,10 +61,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
 
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("success", true);
-        data.put("statusCode", HttpServletResponse.SC_OK);
         data.put("msg", "로그인 성공");
-        data.put("nickName", nickname);
+        data.put("statusCode", HttpServletResponse.SC_OK);
+        data.put("nickname", nickname);
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(data);
