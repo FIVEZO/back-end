@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.message.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageResponseDto {
     private Long id;
     private String roomName;
@@ -44,6 +46,10 @@ public class MessageResponseDto {
 //        this.receiver = saveMessage.getReceiver();
 //        this.createdAt = saveMessage.getCreatedAt();
 //    }
+
+    public MessageResponseDto(String roomId) {
+        this.roomId = roomId;
+    }
 
     public void setLatestMessageContent(String message) {
         this.message = message;
