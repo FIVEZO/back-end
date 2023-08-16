@@ -38,6 +38,15 @@ public class MyPageDto {
         this.scrapPostSum  = post.getScrapPostSum();
     }
 
+    public MyPageDto(Post post, Long myScrapCount) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.createdAt = post.getCreatedAt();
+        this.nickname = post.getUser().getNickname();
+//        this.myScrapCount = myScrapCount;
+    }
+
 //    public MyPageDto(User user){
 //        this.nickname = user.getNickname();
 //        this.profileImg = user.getProfileImg();

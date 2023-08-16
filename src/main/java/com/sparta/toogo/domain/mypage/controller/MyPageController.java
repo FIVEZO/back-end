@@ -30,9 +30,9 @@ public class MyPageController {
     }
 
     @GetMapping("/scrap/{pageNum}")
-    public List<MyPagePostDto> getMyScrap(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ApiResponse<?> getMyScrap(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                           @PathVariable int pageNum) {
-        return myPageService.getMyScrap(userDetails.getUser(), pageNum - 1);
+        return ResponseUtil.ok(myPageService.getMyScrap(userDetails.getUser(), pageNum - 1));
     }
 
     @PatchMapping("/update")

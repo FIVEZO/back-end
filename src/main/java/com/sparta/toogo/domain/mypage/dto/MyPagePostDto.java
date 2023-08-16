@@ -12,6 +12,7 @@ public class MyPagePostDto {
     private String title;
     private String contents;
     private LocalDateTime createdAt;
+    private String nickname;
 //    private Long myScrapCount;
 
     public MyPagePostDto(Post post) {
@@ -27,6 +28,7 @@ public class MyPagePostDto {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
+        this.nickname = post.getUser().getNickname();
 //        this.myScrapCount = myScrapCount;
     }
 }
