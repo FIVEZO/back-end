@@ -44,6 +44,9 @@ public class MyPageDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.nickname = post.getUser().getNickname();
+        this.country = post.getCountry();
+        this.meetDate = post.getMeetDate();
+        this.scrapPostSum  = post.getScrapPostSum();
 //        this.myScrapCount = myScrapCount;
     }
 
