@@ -26,25 +26,6 @@ public class MessageService {
     private final MessageRoomRepository messageRoomRepository;
 
     // 대화 저장
-//    public void saveMessage(MessageDto messageDto) {
-//    public void saveMessage(Long id, MessageDto messageDto, User user) {
-//        MessageRoom messageRoom = messageRoomRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
-//        );
-//
-//        // 직렬화
-//        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));
-//
-//        // redis 저장
-//        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(), messageDto);
-//
-//        // 스케줄링 기능 (1시간 마다)
-//        redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
-//
-//        // DB 저장
-//        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage(), messageRoom, user);
-//        messageRepository.save(message);
-//    }
     public void saveMessage(MessageDto messageDto) {
 
         // 직렬화
@@ -97,7 +78,7 @@ public class MessageService {
 //        redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
 //
 //        // DB 저장
-//        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage(), messageRoom, user);
+//        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
 //        Message saveMessage = messageRepository.save(message);
 //
 //        return new MessageResponseDto(saveMessage);

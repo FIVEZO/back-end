@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -67,20 +68,23 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/count").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
 
                                 .requestMatchers("/ws-stomp", "/sub/**", "/pub/**").permitAll()
+                                .requestMatchers("/api/room/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
 
                                 .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
+
 
         // 필터 관리
 
         http.addFilterBefore(corsConfig.corsFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
