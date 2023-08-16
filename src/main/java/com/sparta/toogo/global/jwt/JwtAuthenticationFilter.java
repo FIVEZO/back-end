@@ -64,6 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         data.put("success", true);
         data.put("statusCode", HttpServletResponse.SC_OK);
         data.put("msg", "로그인 성공");
+        data.put("nickName", nickname);
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(data);

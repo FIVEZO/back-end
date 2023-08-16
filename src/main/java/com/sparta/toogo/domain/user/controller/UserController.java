@@ -47,7 +47,7 @@ public class UserController {
         String createRefreshToken = kakaoService.kakaoRefreshToken(user);
         jwtUtil.saveTokenToRedis(createRefreshToken, createAccessToken);
         jwtUtil.addTokenToHeader(createAccessToken, createRefreshToken, response);
-        return new UserResponseDto(USER_LOGIN_SUCCESS);
+        return new UserResponseDto(USER_LOGIN_SUCCESS, user);
     }
 
     @PostMapping("/logout")

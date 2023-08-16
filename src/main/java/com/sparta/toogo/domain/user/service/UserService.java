@@ -64,7 +64,7 @@ public class UserService {
 
         userRepository.save(user);
         redisService.deleteCode(code);
-        return new UserResponseDto(USER_SIGNUP_SUCCESS);
+        return new UserResponseDto(USER_SIGNUP_SUCCESS, user);
     }
 
     public UserResponseDto logOut(HttpServletRequest req) {
