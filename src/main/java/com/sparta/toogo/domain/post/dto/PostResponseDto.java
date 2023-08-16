@@ -70,6 +70,7 @@ public class PostResponseDto {
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
         this.category = post.getCategory().getValue();
+        this.meetDate = post.getMeetDate();
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
