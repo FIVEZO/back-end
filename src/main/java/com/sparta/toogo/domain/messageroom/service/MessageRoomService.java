@@ -54,12 +54,30 @@ public class MessageRoomService {
 
     // 쪽지방 생성
     public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
-        MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
-        opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+        MessageRoom messageRoom = messageRoomRepository.findBySenderAndReceiver(user.getNickname(), messageRequestDto.getReceiver());
+        
+        // 처음 쪽지방 생성 또는 이미 생성된 쪽지방이 아닌 경우
+        if ((messageRoom == null) || (messageRoom != null && (!user.getNickname().equals(messageRoom.getSender()) && !messageRequestDto.getReceiver().equals(messageRoom.getReceiver())))) {
+            MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
+            opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
+//        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
 
-        return new MessageResponseDto(messageRoom);
+            return new MessageResponseDto(messageRoom);
+        // 이미 생성된 쪽지방인 경우
+        } else {
+            return new MessageResponseDto(messageRoom.getRoomId());
+        }
+
     }
+    //    public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
+//        MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
+//        opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
+////        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+//        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+//
+//        return new MessageResponseDto(messageRoom);
+//    }
 
     // 사용자 관련 쪽지방 전체 조회
     public List<MessageResponseDto> findAllRoomByUser(User user) {

@@ -30,6 +30,9 @@ public class MessageRoom {
 //    @JoinColumn(name = "mypageId", nullable = false)
 //    private Mypage mypage;
 
+    @OneToMany(mappedBy = "messageRoom", cascade = CascadeType.REMOVE)
+    private List<Message> messageList = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;

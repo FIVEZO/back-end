@@ -27,6 +27,9 @@ public class Message extends Timestamped {
     @Column(name = "message")
     private String message;
 
+    @Column(name = "sentTime")
+    private String sentTime;
+
 // @ManyToOne(fetch = FetchType.LAZY)
 // @JoinColumn(name = "messageRoom", nullable = false)
 // private MessageRoom messageRoom;
@@ -44,12 +47,18 @@ public class Message extends Timestamped {
 // private User user;
 
     // 대화 저장
-    public Message(MessageDto messageDto) {
+//    public Message(MessageDto messageDto) {
+//        super();
+//        this.sender = messageDto.getSender();
+//        this.roomId = messageDto.getRoomId();
+//        this.receiver = messageDto.getReceiver();
+//        this.message = messageDto.getMessage();
+//    }
+    public Message(String sender, String roomId, String message) {
         super();
-        this.sender = messageDto.getSender();
-        this.roomId = messageDto.getRoomId();
-        this.receiver = messageDto.getReceiver();
-        this.message = messageDto.getMessage();
+        this.sender = sender;
+        this.roomId = roomId;
+        this.message = message;
     }
 
     // 대화 저장 - 테스트용
@@ -69,4 +78,6 @@ public class Message extends Timestamped {
         this.receiver = receiver;
         this.message = message;
     }
+
+
 }

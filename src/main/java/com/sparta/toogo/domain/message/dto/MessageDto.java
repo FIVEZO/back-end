@@ -11,13 +11,14 @@ import lombok.Setter;
 public class MessageDto {
     private String sender;
     private String roomId;
-    private String receiver;
+//    private String receiver;
     private String message;
+    private String sentTime;
 
     public MessageDto(Message message) {
         this.sender = message.getSender();
         this.roomId = message.getRoomId();
-        this.receiver = message.getReceiver();
+//        this.receiver = message.getReceiver();
         this.message = message.getMessage();
     }
 }

@@ -24,6 +24,8 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage> messageList = this.<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage>createList("messageList", com.sparta.toogo.domain.message.entity.Message.class, com.sparta.toogo.domain.message.entity.QMessage.class, PathInits.DIRECT2);
+
     public final StringPath receiver = createString("receiver");
 
     public final StringPath roomId = createString("roomId");
