@@ -3,13 +3,13 @@ package com.sparta.toogo.domain.messageroom.service;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.entity.Message;
-import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.global.redis.service.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -85,7 +86,7 @@ public class MessageRoomService {
                 }
 
                 messageRoomDtos.add(messageRoomDto);
-            // user 가 receiver 인 경우
+                // user 가 receiver 인 경우
             } else {
                 MessageResponseDto messageRoomDto = new MessageResponseDto(
                         messageRoom.getId(),
@@ -126,7 +127,7 @@ public class MessageRoomService {
         if (user.getNickname().equals(messageRoom.getSender())) {
             messageRoomRepository.delete(messageRoom);
             opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
-        // receiver 가 삭제할 경우
+            // receiver 가 삭제할 경우
         } else if (user.getNickname().equals(messageRoom.getReceiver())) {
             messageRoom.setReceiver("Not_Exist_Receiver");
             messageRoomRepository.save(messageRoom);
