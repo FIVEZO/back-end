@@ -49,17 +49,17 @@ public class MyPageService {
     }
 
     // 내가 스크랩한 게시물 조회
-    public List<MyPagePostDto> getMyScrap(User user, int pageNum) {
+    public List<MyPageDto> getMyScrap(User user, int pageNum) {
         Long myScrapCount = scrapRepository.countByUser(user);
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Scrap> scraps = scrapRepository.findAllByUser(pageable, user);
-        List<MyPagePostDto> scrapList = new ArrayList<>();
+        List<MyPageDto> scrapList = new ArrayList<>();
 
         for (Scrap scrap : scraps) {
             Post post = scrap.getPost();
 
-            scrapList.add(new MyPagePostDto(post, myScrapCount));
+            scrapList.add(new MyPageDto(post, myScrapCount));
         }
         return scrapList;
     }
