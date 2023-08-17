@@ -33,8 +33,8 @@ public class JwtUtil {
     public final String HEADER_REFRESH_TOKEN = "RefreshToken";
     public final String AUTHORIZATION_KEY = "auth";
     private final String BEARER = "Bearer ";
-    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 3 * 60 * 60 * 3000L;
-    private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000L;
+    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 1 * 60 * 60 * 1000L;
+    private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 3000L;
 
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private Key key;
@@ -84,7 +84,7 @@ public class JwtUtil {
     public String getAccessTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader(HEADER_ACCESS_TOKEN);
         if (StringUtils.hasText(token)) {
-            return substringToken(token);
+            return token;
         }
         return null;
     }
@@ -93,7 +93,7 @@ public class JwtUtil {
     public String getRefreshTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader(HEADER_REFRESH_TOKEN);
         if (StringUtils.hasText(token)) {
-            return substringToken(token);
+            return token;
         }
         return null;
     }
@@ -108,17 +108,18 @@ public class JwtUtil {
 
     // JWT 토큰의 사용자 정보 가져오는 메서드
     public Claims getUserInfo(String tokenValue) {
+        String token = substringToken(tokenValue);
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(tokenValue)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
     // JWT accessToken 검증 메서드
     public boolean validateAccessToken(String accessToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken); // key로 accessToken 검증
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(accessToken)); // key로 accessToken 검증
             return true;
         } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -127,7 +128,7 @@ public class JwtUtil {
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT accessToken, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            log.error("JWT claims is empty, 잘못된 JWT 토큰입니다.");
         }
         return false;
     }
@@ -138,6 +139,10 @@ public class JwtUtil {
         if ((accessToken.isEmpty() && accessToken != null) || (refreshToken.isEmpty() && refreshToken != null)) {
             log.error("AccessToken 또는 RefreshToken이 존재하지 않습니다.");
             throw new NullPointerException("AccessToken 또는 RefreshToken이 존재하지 않습니다.");
+        }
+
+        if (!validateAccessToken(refreshToken)) {
+            throw new IllegalArgumentException("유효하지 않는 JWT 서명 입니다.");
         }
 
         // redis에서 기존에 저장된 AccessToken 조회
@@ -179,7 +184,7 @@ public class JwtUtil {
 
     // 발급된 토큰 값 Redis에 저장 (key : refresh / value : access)
     public void saveTokenToRedis(String refreshToken, String accessToken) {
-        Date refreshExpire = getUserInfo(substringToken(refreshToken)).getExpiration(); // refresh 토큰의 만료일
+        Date refreshExpire = getUserInfo(refreshToken).getExpiration(); // refresh 토큰의 만료일
         redisService.saveAccessToken(refreshToken, accessToken, refreshExpire);
     }
 }
