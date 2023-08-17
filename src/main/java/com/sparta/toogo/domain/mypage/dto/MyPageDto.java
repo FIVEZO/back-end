@@ -20,7 +20,8 @@ public class MyPageDto {
     private String contents;
     private LocalDateTime createdAt;
     private String meetDate;
-    private Long scrapPostSum ;
+    private Long scrapPostSum;
+    private Long category;
 
     public MyPageDto(Post post) {
 
@@ -36,6 +37,7 @@ public class MyPageDto {
         this.createdAt = koreaTime.toLocalDateTime();
         this.meetDate = post.getMeetDate();
         this.scrapPostSum  = post.getScrapPostSum();
+        this.category = post.getCategory().getValue();
     }
 
     public MyPageDto(Post post, Long myScrapCount) {
@@ -47,6 +49,7 @@ public class MyPageDto {
         this.country = post.getCountry();
         this.meetDate = post.getMeetDate();
         this.scrapPostSum  = post.getScrapPostSum();
+        this.category = post.getCategory().getValue();
 //        this.myScrapCount = myScrapCount;
     }
 
