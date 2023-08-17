@@ -123,9 +123,15 @@ public class PostService {
         BooleanExpression titleOrContentsContain = post.title.containsIgnoreCase(keyword)
                 .or(post.contents.containsIgnoreCase(keyword));
 
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(titleOrContentsContain);
+        BooleanExpression titleContainsCountry = post.title.containsIgnoreCase("[" + keyword + "]")
+                .or(post.country.containsIgnoreCase(keyword));
 
+        JPAQuery<Post> query = queryFactory.selectFrom(post)
+                .where(titleOrContentsContain.or(titleContainsCountry));
+        for (Post post : query.fetch())
+        {
+            System.out.println("post Title = " + post.getTitle());
+        }
 
         List<PostResponseDto> postList = query
                 .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
@@ -134,8 +140,8 @@ public class PostService {
                 .fetch()
                 .stream()
                 .map(PostResponseDto::new)
-                .collect(Collectors.toList());
-
+                .toList();
+        System.out.println("postList = " + postList);
         return postList;
     }
 
