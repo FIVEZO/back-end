@@ -126,12 +126,9 @@ public class MessageRoomService {
         return messageRoomDtos;
     }
 
-    // 특정 쪽지방 입장
-
-
     // 사용자 관련 쪽지방 선택 조회
-    public MessageRoomDto findRoom(Long id, User user) {
-        MessageRoom messageRoom = messageRoomRepository.findByIdAndUserOrIdAndReceiver(id, user, id, user.getNickname());
+    public MessageRoomDto findRoom(String roomId, User user) {
+        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, user.getNickname());
         if (messageRoom == null) {
             throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
         }
