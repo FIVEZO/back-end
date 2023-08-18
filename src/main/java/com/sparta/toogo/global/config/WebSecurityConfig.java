@@ -68,6 +68,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/count").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
 
