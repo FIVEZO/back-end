@@ -30,7 +30,10 @@ public class MessageRoomController {
         return messageRoomService.findAllRoomByUser(userDetails.getUser());
     }
 
-    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
+    // 특정 쪽지방 입장
+
+
+    // 사용자 관련 쪽지방 선택 조회
     @GetMapping("room/{id}")
     public MessageRoomDto findRoom(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.findRoom(id, userDetails.getUser());

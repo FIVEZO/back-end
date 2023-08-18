@@ -126,7 +126,10 @@ public class MessageRoomService {
         return messageRoomDtos;
     }
 
-    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
+    // 특정 쪽지방 입장
+
+
+    // 사용자 관련 쪽지방 선택 조회
     public MessageRoomDto findRoom(Long id, User user) {
         MessageRoom messageRoom = messageRoomRepository.findByIdAndUserOrIdAndReceiver(id, user, id, user.getNickname());
         if (messageRoom == null) {
