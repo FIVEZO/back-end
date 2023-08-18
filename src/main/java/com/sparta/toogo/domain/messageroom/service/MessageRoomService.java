@@ -9,7 +9,11 @@ import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.post.entity.Category;
+import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +24,14 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MessageRoomService {
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final MessageRoomRepository messageRoomRepository;
     private final MessageRepository messageRepository;
 
@@ -127,13 +131,35 @@ public class MessageRoomService {
     }
 
     // 사용자 관련 쪽지방 선택 조회
-    public MessageRoomDto findRoom(String roomId, User user) {
-        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, user.getNickname());
+    public MessageRoomDto findRoom(String roomId, Long postId, User user) {
+        // 게시글 조회
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+
+        // 사용자 조회
+        User receiver = userRepository.findById(post.getUser().getId()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
+
+        // sender & receiver 모두 messageRoom 조회 가능
+        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, receiver.getNickname());
         if (messageRoom == null) {
             throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
         }
 
-        return new MessageRoomDto(messageRoom);
+        MessageRoomDto messageRoomDto = new MessageRoomDto(
+                messageRoom.getId(),
+                messageRoom.getRoomName(),
+                messageRoom.getRoomId(),
+                messageRoom.getSender(),
+                messageRoom.getReceiver());
+
+        messageRoomDto.setMessageRoomCategory(post.getCategory().getValue());
+        messageRoomDto.setMessageRoomCountry(post.getCountry());
+        messageRoomDto.setMessageRoomTitle(post.getTitle());
+
+        return messageRoomDto;
     }
 
     // 쪽지방 삭제
