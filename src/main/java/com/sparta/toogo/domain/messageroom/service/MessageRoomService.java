@@ -8,7 +8,10 @@ import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.domain.user.repository.UserRepository;
 import com.sparta.toogo.global.redis.service.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class MessageRoomService {
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final MessageRoomRepository messageRoomRepository;
     private final MessageRepository messageRepository;
 
@@ -56,7 +61,7 @@ public class MessageRoomService {
     // 쪽지방 생성
     public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
         MessageRoom messageRoom = messageRoomRepository.findBySenderAndReceiver(user.getNickname(), messageRequestDto.getReceiver());
-        
+
         // 처음 쪽지방 생성 또는 이미 생성된 쪽지방이 아닌 경우
         if ((messageRoom == null) || (messageRoom != null && (!user.getNickname().equals(messageRoom.getSender()) && !messageRequestDto.getReceiver().equals(messageRoom.getReceiver())))) {
             MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
@@ -65,7 +70,7 @@ public class MessageRoomService {
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
 
             return new MessageResponseDto(messageRoom);
-        // 이미 생성된 쪽지방인 경우
+            // 이미 생성된 쪽지방인 경우
         } else {
             return new MessageResponseDto(messageRoom.getRoomId());
         }
@@ -128,13 +133,35 @@ public class MessageRoomService {
     }
 
     // 사용자 관련 쪽지방 선택 조회
-    public MessageRoomDto findRoom(String roomId, User user) {
-        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, user.getNickname());
+    public MessageRoomDto findRoom(String roomId, Long postId, User user) {
+        // 게시글 조회
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+
+        // 사용자 조회
+        User receiver = userRepository.findById(post.getUser().getId()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
+
+        // sender & receiver 모두 messageRoom 조회 가능
+        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, receiver.getNickname());
         if (messageRoom == null) {
             throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
         }
 
-        return new MessageRoomDto(messageRoom);
+        MessageRoomDto messageRoomDto = new MessageRoomDto(
+                messageRoom.getId(),
+                messageRoom.getRoomName(),
+                messageRoom.getRoomId(),
+                messageRoom.getSender(),
+                messageRoom.getReceiver());
+
+        messageRoomDto.setMessageRoomCategory(post.getCategory().getValue());
+        messageRoomDto.setMessageRoomCountry(post.getCountry());
+        messageRoomDto.setMessageRoomTitle(post.getTitle());
+
+        return messageRoomDto;
     }
 
     // 쪽지방 삭제
