@@ -37,9 +37,10 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         return messageRoomDto;
     }
 
-    // 사용자 관련 쪽지방 선택 조회 (특정 쪽지방 입장)
+    // 사용자 관련 쪽지방 선택 조회
     public MessageRoomDto(MessageRoom messageRoom) {
         this.id = messageRoom.getId();
+        this.roomName = messageRoom.getRoomName();
         this.roomId = messageRoom.getRoomId();
         this.sender = messageRoom.getSender();
         this.receiver = messageRoom.getReceiver();
