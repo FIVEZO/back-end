@@ -158,7 +158,7 @@ public class JwtUtil {
 
     // AccessToken, RefreshToken 재발급 메서드
     public void regenerateToken(String refreshToken, HttpServletResponse res) {
-        Long userId = Long.parseLong(getUserInfo(substringToken(refreshToken)).getSubject());
+        Long userId = Long.parseLong(getUserInfo(refreshToken).getSubject());
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NullPointerException("해당 유저는 존재하지 않습니다."));
