@@ -54,7 +54,10 @@ public class MessageService {
         if (redisMessageList == null || redisMessageList.isEmpty()) {
             List<Message> dbMessageList = messageRepository.findTop100ByRoomIdOrderByCreatedAtAsc(roomId);
             for (Message message : dbMessageList) {
-                messageList.add(new MessageDto(message));
+                MessageDto messageDto = new MessageDto(message);
+                messageList.add(messageDto);
+                redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));      // 직렬화
+                redisTemplateMessage.opsForList().rightPush(roomId, messageDto);                                // redis 저장
             }
         } else {
             messageList.addAll(redisMessageList);
