@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2-jdk-slim-buster AS builder
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
