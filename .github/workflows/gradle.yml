@@ -64,7 +64,7 @@ jobs:
           sudo usermod -aG docker $USER
           newgrp docker
           sudo docker image prune -f
-          sudo docker stop $(docker ps -a -q) 
+          sudo docker stop $(docker ps -a -q)
           sudo docker rm $(docker ps -a -q)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/firstdocker
           sudo docker run -d -p 443:443 ${{ secrets.DOCKER_REPO }}/firstdocker
