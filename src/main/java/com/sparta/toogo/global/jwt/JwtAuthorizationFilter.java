@@ -36,23 +36,25 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.info(accessTokenValue);
 
             if (!jwtUtil.validateAccessToken(accessTokenValue)) {
-                log.error("AccessTokenValue Error");
-
+                log.error("AccessToken 검증 실패");
                 String refreshTokenValue = jwtUtil.getRefreshTokenFromHeader(req);
 
                 if (StringUtils.hasText(refreshTokenValue)) {
-
                     // 유효한 refreshToken인지 검증
                     if (jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
                         jwtUtil.regenerateToken(refreshTokenValue, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
+                        res.getWriter().write("새로운 AccessToken, RefreshToken이 발급되었습니다.");
                     } else {
                         log.error("RefreshToken 검증 오류");
+                        res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        res.getWriter().write("RefreshToken 검증에 실패했습니다.");
                     }
                 } else {
-                    log.error("RefreshToken이 없습니다.");
+                    log.error("RefreshToken 검증 오류");
+                    res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    res.getWriter().write("RefreshToken 검증에 실패했습니다.");
                 }
-                return;
             }
             Claims info = jwtUtil.getUserInfo(accessTokenValue);
 
@@ -64,6 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         } else {
             log.info("로그인 하지 않은 사용자");
+            res.getWriter().write("로그인 하지 않은 사용자");
         }
         filterChain.doFilter(req, res);
     }
