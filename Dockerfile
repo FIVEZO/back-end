@@ -1,8 +1,6 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17.0.2-jdk-slim-buster AS builder
 
 WORKDIR /app
-
-EXPOSE 8080
 
 COPY build/libs/toogo-0.0.1-SNAPSHOT.jar app.jar
 
