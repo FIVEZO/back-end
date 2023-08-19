@@ -1,7 +1,6 @@
 package com.sparta.toogo.domain.user.entity;
 
 import com.sparta.toogo.domain.comment.entity.Comment;
-import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.global.util.Timestamped;
