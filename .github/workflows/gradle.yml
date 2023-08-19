@@ -61,8 +61,6 @@ jobs:
         password: ${{ secrets.KEY }}
         port: 22
         script: |
-          sudo usermod -aG docker ubuntu
-          newgrp docker
           sudo docker image prune -f
           sudo docker stop $(docker ps -a -q) 
           sudo docker rm $(docker ps -a -q)
