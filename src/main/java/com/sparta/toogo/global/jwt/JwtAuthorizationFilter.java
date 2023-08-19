@@ -48,12 +48,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     } else {
                         log.error("RefreshToken 검증 오류");
                         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        res.getWriter().write("RefreshToken 검증에 실패했습니다.");
                     }
                 } else {
                     log.error("RefreshToken 검증 오류");
                     res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    res.getWriter().write("RefreshToken 검증에 실패했습니다.");
                 }
             }
             Claims info = jwtUtil.getUserInfo(accessTokenValue);
