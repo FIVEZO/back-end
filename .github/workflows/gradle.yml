@@ -67,4 +67,5 @@ jobs:
           sudo docker stop $(docker ps -a -q)
           sudo docker rm $(docker ps -a -q)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/firstdocker
-          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/firstdocker
+          sudo docker-compose up -d
+#          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/firstdocker
