@@ -17,6 +17,7 @@ public class MessageResponseDto {
     private String sender;
     private String roomId;
     private String receiver;
+    private Long postId;
     private String message;
     private LocalDateTime createdAt;
 
@@ -27,6 +28,7 @@ public class MessageResponseDto {
         this.sender = messageRoom.getSender();
         this.roomId = messageRoom.getRoomId();
         this.receiver = messageRoom.getReceiver();
+        this.postId = messageRoom.getPost().getId();
     }
 
     // 사용자 관련 쪽지방 전체 조회

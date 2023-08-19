@@ -58,30 +58,24 @@ public class MessageRoomService {
 
     // 쪽지방 생성
     public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
+        Post post = postRepository.findById(messageRequestDto.getPostId()).orElseThrow(
+                () -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
+        );
+
         MessageRoom messageRoom = messageRoomRepository.findBySenderAndReceiver(user.getNickname(), messageRequestDto.getReceiver());
-        
+
         // 처음 쪽지방 생성 또는 이미 생성된 쪽지방이 아닌 경우
-        if ((messageRoom == null) || (messageRoom != null && (!user.getNickname().equals(messageRoom.getSender()) && !messageRequestDto.getReceiver().equals(messageRoom.getReceiver())))) {
+        if ((messageRoom == null) || (messageRoom != null && (!user.getNickname().equals(messageRoom.getSender()) && !messageRequestDto.getReceiver().equals(messageRoom.getReceiver()) && !messageRequestDto.getPostId().equals(post.getId())))) {
             MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-//        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
-            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
+            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user, post));
 
             return new MessageResponseDto(messageRoom);
-        // 이미 생성된 쪽지방인 경우
+            // 이미 생성된 쪽지방인 경우
         } else {
             return new MessageResponseDto(messageRoom.getRoomId());
         }
-
     }
-    //    public MessageResponseDto createRoom(MessageRequestDto messageRequestDto, User user) {
-//        MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
-//        opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-////        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
-//        MessageRoom messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user));
-//
-//        return new MessageResponseDto(messageRoom);
-//    }
 
     // 사용자 관련 쪽지방 전체 조회
     public List<MessageResponseDto> findAllRoomByUser(User user) {
@@ -131,9 +125,12 @@ public class MessageRoomService {
     }
 
     // 사용자 관련 쪽지방 선택 조회
-    public MessageRoomDto findRoom(String roomId, Long postId, User user) {
+    public MessageRoomDto findRoom(String roomId, User user) {
+        MessageRoom messageRoom = messageRoomRepository.findByRoomId(roomId);
+
+        // 사용자 에세 userId
         // 게시글 조회
-        Post post = postRepository.findById(postId).orElseThrow(
+        Post post = postRepository.findById(messageRoom.getPost().getId()).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
@@ -143,7 +140,7 @@ public class MessageRoomService {
         );
 
         // sender & receiver 모두 messageRoom 조회 가능
-        MessageRoom messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, receiver.getNickname());
+        messageRoom = messageRoomRepository.findByRoomIdAndUserOrRoomIdAndReceiver(roomId, user, roomId, receiver.getNickname());
         if (messageRoom == null) {
             throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
         }
@@ -155,6 +152,7 @@ public class MessageRoomService {
                 messageRoom.getSender(),
                 messageRoom.getReceiver());
 
+        messageRoomDto.setMessageRoomPostId(post.getId());
         messageRoomDto.setMessageRoomCategory(post.getCategory().getValue());
         messageRoomDto.setMessageRoomCountry(post.getCountry());
         messageRoomDto.setMessageRoomTitle(post.getTitle());

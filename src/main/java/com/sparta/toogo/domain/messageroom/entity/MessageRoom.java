@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.messageroom.entity;
 
 import com.sparta.toogo.domain.message.entity.Message;
+import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -37,13 +38,18 @@ public class MessageRoom {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "postId")
+    private Post post;
+
     // 쪽지방 생성
-    public MessageRoom(Long id, String roomName, String sender, String roomId, String receiver, User user) {
+    public MessageRoom(Long id, String roomName, String sender, String roomId, String receiver, User user, Post post) {
         this.id = id;
         this.roomName = roomName;
         this.sender = sender;
         this.roomId = roomId;
         this.receiver = receiver;
         this.user = user;
+        this.post = post;
     }
 }

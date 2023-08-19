@@ -31,9 +31,9 @@ public class MessageRoomController {
     }
 
     // 사용자 관련 쪽지방 선택 조회
-    @GetMapping("room/{roomId}/{postId}")
-    public MessageRoomDto findRoom(@PathVariable String roomId, @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return messageRoomService.findRoom(roomId, postId, userDetails.getUser());
+    @GetMapping("room/{roomId}")
+    public MessageRoomDto findRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return messageRoomService.findRoom(roomId, userDetails.getUser());
     }
 
     // 쪽지방 삭제

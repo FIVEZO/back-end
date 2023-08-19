@@ -24,6 +24,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     private String roomId;
     private String sender;     // 메시지 송신자
     private String receiver;   // 메시지 수신자
+    private Long postId;
     private int category;      // 게시글 카테고리
     private String title;       // 게시글 제목
     private String country;     // 게시글 나라
@@ -48,6 +49,9 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         this.receiver = receiver;
     }
 
+    public void setMessageRoomPostId(Long postId) {
+        this.postId = postId;
+    }
     public void setMessageRoomCategory(int category) {
         this.category = category;
     }
