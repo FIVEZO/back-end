@@ -62,7 +62,7 @@ jobs:
         port: 22
         script: |
           sudo docker image prune -f
-          sudo docker stop $(docker ps -q --filter "name!=redis")
-          sudo docker rm -f $(docker ps -aq --filter "name!=redis")
+          sudo docker stop $(docker ps -a --filter "name!=redis")
+          sudo docker rm -f $(docker ps -a --filter "name!=redis")
           sudo docker pull ${{ secrets.DOCKER_REPO }}/firstdocker
           sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/firstdocker
