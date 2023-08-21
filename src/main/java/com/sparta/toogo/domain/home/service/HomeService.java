@@ -128,7 +128,7 @@ public class HomeService {
 //        ));
 //
 //        return countryCounts;
-//    }
+//
 //
 //    private Long getPostCountByCategory(Category.PostCategory category) {
 //        return jpaQueryFactory

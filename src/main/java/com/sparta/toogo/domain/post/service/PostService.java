@@ -16,14 +16,14 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.sparta.toogo.domain.post.entity.QPost.post;
@@ -56,17 +56,26 @@ public class PostService {
     }
 
     // 전체 조회
-    public List<PostResponseGetDto> getPostsByCategory(Long category, int pageNum) {
+    public Map<String, Object> getPostsByCategory(Long category, int pageNum) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("categoryEnum = " + categoryEnum);
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<Post> posts = postRepository.findAllByCategory(categoryEnum, pageable); // ASIA : Long 1L
+        Page<Post> postsPage = postRepository.findAllByCategory(categoryEnum, pageable);
 
-        return posts.stream()
+        List<PostResponseGetDto> postResponseList = postsPage.getContent().stream()
                 .map(PostResponseGetDto::new)
                 .collect(Collectors.toList());
+
+        int totalPages = postsPage.getTotalPages();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", postResponseList);
+        response.put("totalPages", totalPages);
+
+        return response;
     }
+
 
     public List<PostResponseGetDto> getPostsByCategoryAndCountry(Long category, String country, int pageNum) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
@@ -120,22 +129,25 @@ public class PostService {
     public List<PostResponseDto> searchPost(String keyword, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 20);
 
-        BooleanExpression titleOrContentsContain = post.title.containsIgnoreCase(keyword)
-                .or(post.contents.containsIgnoreCase(keyword));
+        String[] keywords = keyword.split(" "); // 입력된 키워드를 공백으로 분리
 
-        BooleanExpression titleContainsCountry = post.title.containsIgnoreCase("[" + keyword + "]")
-                .or(post.country.containsIgnoreCase(keyword));
+        List<BooleanExpression> expressions = new ArrayList<>();
 
-        BooleanExpression titleOrContentsOrDateContain = titleOrContentsContain
-                .or(post.meetDate.containsIgnoreCase(keyword));
+        for (String key : keywords) {
+            BooleanExpression titleOrContentsContain = post.title.containsIgnoreCase(key)
+                    .or(post.contents.containsIgnoreCase(key));
 
+            BooleanExpression titleContainsCountry = post.title.containsIgnoreCase("[" + key + "]")
+                    .or(post.country.containsIgnoreCase(key));
+
+            BooleanExpression titleOrContentsOrDateContain = titleOrContentsContain
+                    .or(post.meetDate.containsIgnoreCase(key));
+
+            expressions.add(titleOrContentsContain.or(titleContainsCountry).or(titleOrContentsOrDateContain));
+        }
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(titleOrContentsContain.or(titleContainsCountry).or(titleOrContentsOrDateContain));
-        for (Post post : query.fetch())
-        {
-            System.out.println("post Title = " + post.getTitle());
-        }
+                .where(expressions.toArray(new BooleanExpression[expressions.size()])); // 수정된 부분
 
         List<PostResponseDto> postList = query
                 .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
@@ -145,6 +157,7 @@ public class PostService {
                 .stream()
                 .map(PostResponseDto::new)
                 .toList();
+
         System.out.println("postList = " + postList);
         return postList;
     }
