@@ -16,7 +16,6 @@ public class PostResponseDto {
     private String title;
     private String contents;
     private LocalDateTime createdAt;
-    //    private LocalDateTime modifiedAt;
     private String nickname;
     private Long scrapPostSum;    //  스크랩 기능
     private List<CommentResponseDto> commentList;
@@ -25,14 +24,13 @@ public class PostResponseDto {
     private double latitude;
     private double longitude;
     private String meetDate;
+    private Long people;
     private Long category;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = processTitle(post.getTitle(), post.getCountry());
         this.contents = post.getContents();
-//        this.createdAt = post.getCreatedAt();
-//        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
@@ -48,6 +46,7 @@ public class PostResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+        this.people = post.getPeople();
     }
 
     private String processTitle(String title, String country) {
@@ -61,7 +60,6 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-//        this.modifiedAt = post.getModifiedAt();
         this.nickname = post.getUser().getNickname();
         this.scrapPostSum = post.getScrapPostSum();
         this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
@@ -77,6 +75,7 @@ public class PostResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+        this.people = post.getPeople();
     }
 }
 
