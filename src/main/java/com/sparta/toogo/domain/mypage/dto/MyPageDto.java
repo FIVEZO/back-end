@@ -46,7 +46,11 @@ public class MyPageDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-        this.createdAt = post.getCreatedAt();
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+        this.createdAt = koreaTime.toLocalDateTime();
         this.nickname = post.getUser().getNickname();
         this.country = post.getCountry();
         this.meetDate = post.getMeetDate();

@@ -4,6 +4,8 @@ import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter
 public class MyPagePostDto {
@@ -19,7 +21,12 @@ public class MyPagePostDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-        this.createdAt = post.getCreatedAt();
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+
+        this.createdAt = koreaTime.toLocalDateTime();
 //        this.myScrapCount = 0L; // 초기화 추가
     }
 
@@ -27,7 +34,12 @@ public class MyPagePostDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-        this.createdAt = post.getCreatedAt();
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = post.getCreatedAt().atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+
+        this.createdAt = koreaTime.toLocalDateTime();
         this.nickname = post.getUser().getNickname();
 //        this.myScrapCount = myScrapCount;
     }
