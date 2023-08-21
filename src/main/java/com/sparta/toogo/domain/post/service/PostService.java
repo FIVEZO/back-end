@@ -126,8 +126,12 @@ public class PostService {
         BooleanExpression titleContainsCountry = post.title.containsIgnoreCase("[" + keyword + "]")
                 .or(post.country.containsIgnoreCase(keyword));
 
+        BooleanExpression titleOrContentsOrDateContain = titleOrContentsContain
+                .or(post.meetDate.containsIgnoreCase(keyword));
+
+
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(titleOrContentsContain.or(titleContainsCountry));
+                .where(titleOrContentsContain.or(titleContainsCountry).or(titleOrContentsOrDateContain));
         for (Post post : query.fetch())
         {
             System.out.println("post Title = " + post.getTitle());
@@ -144,5 +148,4 @@ public class PostService {
         System.out.println("postList = " + postList);
         return postList;
     }
-
 }

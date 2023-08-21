@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -34,39 +36,23 @@ public class HomeService {
                 .toList();
     }
 
-//            List<HomeResponseDto> homeResponseList = new ArrayList<>();
-//
-//            HomeCountryCountDto homeCountryCountDto = getCountryCount();
-//            homeResponseList.add(new HomeResponseDto(homeCountryCountDto));
-//
-//            Pageable pageable = PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "createdAt"));
-//            Page<Post> postList = postRepository.findAll(pageable);
-//
-//            homeResponseList.addAll(postList.stream()
-//                    .map(HomeResponseDto::new)
-//                    .toList());
-//
-//            return homeResponseList;
 
     public HomeCountryCountDto getCountryCount() {
 
         QPost post = QPost.post;
 
- //       Category.PostCategory asiaCategoryEnum = Category.findByNumber(1L);
         Long ASIAPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)
                 .where(post.category.eq(Category.PostCategory.ASIA))
                 .fetchOne();
 
-//        Category.PostCategory africaCategoryEnum = Category.findByNumber(2L);
         Long AFRICAPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)
                 .where(post.category.eq(Category.PostCategory.AFRICA))
                 .fetchOne();
 
-//        Category.PostCategory europeCategoryEnum = Category.findByNumber(3L);
         Long EUROPEPostCount = jpaQueryFactory
                 .select(post.id.count())
                 .from(post)

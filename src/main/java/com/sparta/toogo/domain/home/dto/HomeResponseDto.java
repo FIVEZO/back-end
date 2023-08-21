@@ -20,6 +20,7 @@ public class HomeResponseDto {
     private LocalDateTime createdAt;
     private String meetDate;
     private Long category;
+    private Long people;
 
 
     public HomeResponseDto(Post post){
@@ -37,6 +38,7 @@ public class HomeResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+        this.people = post.getPeople();
     }
 
 

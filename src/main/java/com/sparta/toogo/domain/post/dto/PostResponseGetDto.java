@@ -19,6 +19,7 @@ public class PostResponseGetDto {
     private String meetDate;
     private Long scrapPostSum;
     private Long category;
+    private Long people;
 
     public PostResponseGetDto(Post post) {
         this.id = post.getId();
@@ -35,6 +36,7 @@ public class PostResponseGetDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+        this.people = post.getPeople();
     }
 
 
