@@ -9,12 +9,14 @@ import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/post")
@@ -32,12 +34,13 @@ public class PostController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
-                                                                    @RequestParam("page") int pageNum) {
+    public ResponseEntity<Map<String, Object>> getPostsByCategory(@PathVariable Long category,
+                                                                  @RequestParam("page") int pageNum) {
         log.info("get 동작중!");
-        List<PostResponseGetDto> response = postService.getPostsByCategory(category, pageNum -1);
+        Map<String, Object> response = postService.getPostsByCategory(category, pageNum - 1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @GetMapping("/{category}/{country}/list")
     public ApiResponse<List<PostResponseGetDto>> getPostsByCategoryAndCountry(@PathVariable Long category,
