@@ -33,7 +33,7 @@ public class JwtUtil {
     public final String HEADER_REFRESH_TOKEN = "RefreshToken";
     public final String AUTHORIZATION_KEY = "auth";
     private final String BEARER = "Bearer ";
-    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 3 * 60 * 60 * 1000L;
+    private final Long ACCESS_TOKEN_EXPIRATION_TIME = 1 * 5 * 60 * 1000L;
     private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 3000L;
 
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -157,7 +157,7 @@ public class JwtUtil {
     }
 
     // AccessToken, RefreshToken 재발급 메서드
-    public void regenerateToken(String refreshToken, HttpServletResponse res) {
+    public String regenerateToken(String refreshToken, HttpServletResponse res) {
         Long userId = Long.parseLong(getUserInfo(refreshToken).getSubject());
 
         User user = userRepository.findById(userId)
@@ -174,6 +174,7 @@ public class JwtUtil {
         redisService.deleteToken(refreshToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
+        return newAccessToken;
     }
 
     // Redis에 저장된 AccessToken 반환 (key : refresh / value : access)

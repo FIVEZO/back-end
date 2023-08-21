@@ -42,10 +42,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 if (StringUtils.hasText(refreshTokenValue)) {
                     // 유효한 refreshToken인지 검증
                     if (jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
-                        jwtUtil.regenerateToken(refreshTokenValue, res);
+                        accessTokenValue = jwtUtil.regenerateToken(refreshTokenValue, res);
 
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
-                        res.getWriter().write("새로운 AccessToken, RefreshToken이 발급되었습니다.");
                     } else {
                         log.error("RefreshToken 검증 오류");
                         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
