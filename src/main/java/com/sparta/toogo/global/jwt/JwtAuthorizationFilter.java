@@ -62,8 +62,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 log.error(e.getMessage());
                 return;
             }
-        } else {
-            log.info("로그인 하지 않은 사용자");
         }
         filterChain.doFilter(req, res);
     }
