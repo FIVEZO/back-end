@@ -43,8 +43,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     // 유효한 refreshToken인지 검증
                     if (jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
                         accessTokenValue = jwtUtil.regenerateToken(refreshTokenValue, res);
-                        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
+                        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "새로운 AccessToken, RefreshToken이 발급되었습니다.");
                     } else {
                         log.error("RefreshToken 검증 오류");
                         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
