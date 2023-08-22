@@ -66,7 +66,7 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageRoom> messageRoom;
 
     public Post(Long category, PostRequestDto requestDto, User user) {
