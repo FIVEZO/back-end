@@ -66,8 +66,7 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
 
-    @OneToOne
-    @JoinColumn(name = "messageRoomId")
+    @OneToOne(mappedBy = "post", cascade = CascadeType.REMOVE)
     private MessageRoom messageRoom;
 
     public Post(Long category, PostRequestDto requestDto, User user) {
