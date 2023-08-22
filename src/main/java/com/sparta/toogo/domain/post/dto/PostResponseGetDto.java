@@ -1,13 +1,17 @@
 package com.sparta.toogo.domain.post.dto;
 
 import com.sparta.toogo.domain.post.entity.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostResponseGetDto {
 
     private Long id;

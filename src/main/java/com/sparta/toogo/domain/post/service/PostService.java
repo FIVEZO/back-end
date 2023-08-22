@@ -77,14 +77,23 @@ public class PostService {
     }
 
 
-    public List<PostResponseGetDto> getPostsByCategoryAndCountry(Long category, String country, int pageNum) {
+    public Map<String, Object> getPostsByCategoryAndCountry(Long category, String country, int pageNum) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         System.out.println("여ㄱㅇ");
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<Post> posts = postRepository.findAllByCategoryAndCountry(categoryEnum, country, pageable);
-        return posts.stream()
+        Page<Post> posts = postRepository.findAllByCategoryAndCountry(categoryEnum, country, pageable);
+
+        List<PostResponseGetDto> postResponseList = posts.getContent().stream()
                 .map(PostResponseGetDto::new)
-                .collect(Collectors.toList());
+                .toList();
+
+        int totalPages = posts.getTotalPages();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", postResponseList);
+        response.put("totalPages", totalPages);
+
+        return response;
     }
 
     // 상세 조회
