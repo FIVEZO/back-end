@@ -30,7 +30,7 @@ public class Post extends Timestamped {
     @Column
     private String title;
 
-    @Column
+    @Column(length = 1000)
     private String contents;
 
     @Column
