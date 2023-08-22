@@ -66,8 +66,8 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private MessageRoom messageRoom;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<MessageRoom> messageRoom;
 
     public Post(Long category, PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
@@ -96,5 +96,4 @@ public class Post extends Timestamped {
     public void minusScrapPostSum(){
         this.scrapPostSum -= 1;
     }
-
 }

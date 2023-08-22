@@ -38,8 +38,8 @@ public class MessageRoom {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "postId")
+    @ManyToOne
+    @JoinColumn(name = "postId", nullable = false)
     private Post post;
 
     // 쪽지방 생성
