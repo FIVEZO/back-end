@@ -61,7 +61,6 @@ public class UserService {
 
         // 사용자 등록
         User user = new User(email, password, nickname, role);
-
         userRepository.save(user);
         redisService.deleteCode(code);
         return new UserResponseDto(USER_SIGNUP_SUCCESS, user);
