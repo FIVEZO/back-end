@@ -43,7 +43,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath meetDate = createString("meetDate");
 
-    public final com.sparta.toogo.domain.messageroom.entity.QMessageRoom messageRoom;
+    public final ListPath<com.sparta.toogo.domain.messageroom.entity.MessageRoom, com.sparta.toogo.domain.messageroom.entity.QMessageRoom> messageRoom = this.<com.sparta.toogo.domain.messageroom.entity.MessageRoom, com.sparta.toogo.domain.messageroom.entity.QMessageRoom>createList("messageRoom", com.sparta.toogo.domain.messageroom.entity.MessageRoom.class, com.sparta.toogo.domain.messageroom.entity.QMessageRoom.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
@@ -76,7 +76,6 @@ public class QPost extends EntityPathBase<Post> {
 
     public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.messageRoom = inits.isInitialized("messageRoom") ? new com.sparta.toogo.domain.messageroom.entity.QMessageRoom(forProperty("messageRoom"), inits.get("messageRoom")) : null;
         this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
