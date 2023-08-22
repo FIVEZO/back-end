@@ -10,8 +10,6 @@ import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +52,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
     @DeleteMapping("/comment/{commentId}")
     public ApiResponse<String> deleteComment(@PathVariable Long commentId,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         SuccessCode successCode = commentService.deleteComment(commentId, userDetails.getUser());
         return ResponseUtil.ok(successCode.getDetail());
     }

@@ -48,17 +48,17 @@ public class PostController {
     public ApiResponse<Map<String, Object>> getPostsByCategoryAndCountry(@PathVariable Long category,
                                                                          @PathVariable String country,
                                                                          @RequestParam("page") int pageNum) {
-        Map<String, Object> response = postService.getPostsByCategoryAndCountry(category, country, pageNum -1);
+        Map<String, Object> response = postService.getPostsByCategoryAndCountry(category, country, pageNum - 1);
         return ResponseUtil.ok(response);
     }
 
     @Operation(summary = "게시글 선택 조회", description = "게시글을 조회합니다.")
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
-                                                      @PathVariable Long postId,
-                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                         @PathVariable Long postId,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = 0L;
-        if(userDetails != null) {
+        if (userDetails != null) {
             userId = userDetails.getUser().getId();
         }
         PostResponseDto response = postService.getDetailPost(category, postId, userId);
@@ -87,7 +87,7 @@ public class PostController {
     public ResponseEntity<List<PostResponseDto>> searchPost(@RequestParam("keyword") String keyword,
                                                             @PathVariable int pageNum) {
         log.info("keyword = {} ", keyword);
-        List<PostResponseDto> response = postService.searchPost(keyword,pageNum - 1);
+        List<PostResponseDto> response = postService.searchPost(keyword, pageNum - 1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

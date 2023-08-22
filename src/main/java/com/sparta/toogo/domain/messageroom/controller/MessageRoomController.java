@@ -35,7 +35,7 @@ public class MessageRoomController {
     @Operation(summary = "쪽지방 선택 조회", description = "사용자 자신과 관련된 쪽지방을 선택 조회합니다.")
     @GetMapping("room/{roomId}")
     public MessageRoomDto findRoom(
-            @Parameter(description = "roomId", required = true, example = "9e648d2d-5e2e-42b3-82fc-b8bef8111cbe")  @PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @Parameter(description = "roomId", required = true, example = "9e648d2d-5e2e-42b3-82fc-b8bef8111cbe") @PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return messageRoomService.findRoom(roomId, userDetails.getUser());
     }
 
