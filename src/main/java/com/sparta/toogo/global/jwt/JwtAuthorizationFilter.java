@@ -1,5 +1,8 @@
 package com.sparta.toogo.global.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.toogo.global.enums.ErrorCode;
+import com.sparta.toogo.global.exception.UnauthorizedException;
 import com.sparta.toogo.global.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -7,6 +10,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,6 +22,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -38,29 +46,27 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if (!jwtUtil.validateAccessToken(accessTokenValue)) {
                 log.error("AccessToken 검증 실패");
                 String refreshTokenValue = jwtUtil.getRefreshTokenFromHeader(req);
-
                 if (StringUtils.hasText(refreshTokenValue)) {
                     // 유효한 refreshToken인지 검증
-                    if (jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
-                        accessTokenValue = jwtUtil.regenerateToken(refreshTokenValue, res);
+                    if (!jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
+                        throw new IllegalArgumentException("RefreshToken 인증 실패");
+                    }
+                    try {
+                        jwtUtil.regenerateToken(refreshTokenValue, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
+                        throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
+                    } catch (UnauthorizedException e) {
+                        log.error("토큰 재발급");
                         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "새로운 AccessToken, RefreshToken이 발급되었습니다.");
-                        return;
-                    } else {
-                        log.error("RefreshToken 검증 오류");
-                        res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
                 }
             }
             Claims info = jwtUtil.getUserInfo(accessTokenValue);
-
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {
-                log.error(e.getMessage());
-                return;
+                log.error("인증 오류");
             }
         }
         filterChain.doFilter(req, res);

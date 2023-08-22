@@ -7,9 +7,9 @@ public class UnauthorizedException extends GlobalException{
         super(errorCode);
     }
 
-//    public UnauthorizedException(String message) {
-//        super(message);
-//    }
+    public UnauthorizedException(String message) {
+        super(ErrorCode.valueOf(message));
+    }
 //
 //    public UnauthorizedException(String message, Throwable cause) {
 //        super(message, cause);

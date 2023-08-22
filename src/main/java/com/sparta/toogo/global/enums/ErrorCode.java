@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     UNAUTHORIZED_USER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
     INCORRECT_PASSWORD(UNAUTHORIZED, "잘못된 비밀번호입니다."),
+    REGENERATED_TOKEN(UNAUTHORIZED, "토큰 재발급"),
 
     /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
     NO_AUTHORITY_TO_DATA(FORBIDDEN, "작성자만 수정, 삭제할 수 있습니다."),
@@ -33,7 +34,7 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다."),
     NOT_FOUND_EMAIL(NOT_FOUND, "다시 시도해 주세요."),
-    EMPTY_TITLE_OR_CONTENTS(NOT_FOUND,"제목이나 내용을 입력해주세요."),
+    EMPTY_TITLE_OR_CONTENTS(NOT_FOUND, "제목이나 내용을 입력해주세요."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "중복된 이메일 또는 닉네임입니다."),
