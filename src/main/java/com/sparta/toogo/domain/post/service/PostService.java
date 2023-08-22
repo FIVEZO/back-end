@@ -3,6 +3,9 @@ package com.sparta.toogo.domain.post.service;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
+import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
@@ -34,10 +37,12 @@ import static com.sparta.toogo.global.enums.ErrorCode.NO_AUTHORITY_TO_DATA;
 @Slf4j
 @Transactional
 public class PostService {
+    private final MessageRoomRepository messageRoomRepository;
 
     private final PostRepository postRepository;
     private final JPAQueryFactory queryFactory;
     private final ScrapRepository scrapRepository;
+    private final MessageRoomService messageRoomService;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
 
@@ -117,6 +122,9 @@ public class PostService {
         confirmPost(categoryEnum, postId, user);
 
         queryFactory.delete(post).where(post.id.eq(postId)).execute();
+
+        MessageRoom messageRoom = messageRoomRepository.findByReceiver(user.getNickname());
+        messageRoomService.deleteRoom(messageRoom.getId(), user);
 
         return SuccessCode.POST_DELETE_SUCCESS;
     }

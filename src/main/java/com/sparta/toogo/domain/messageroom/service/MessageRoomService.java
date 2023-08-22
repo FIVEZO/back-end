@@ -169,12 +169,12 @@ public class MessageRoomService {
         // sender 가 삭제할 경우
         if (user.getNickname().equals(messageRoom.getSender())) {
             messageRoomRepository.delete(messageRoom);
-            opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
             // receiver 가 삭제할 경우
         } else if (user.getNickname().equals(messageRoom.getReceiver())) {
             messageRoom.setReceiver("Not_Exist_Receiver");
             messageRoomRepository.save(messageRoom);
         }
+        opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
 
         return new MsgResponseDto("쪽지방을 삭제했습니다.", HttpStatus.OK.value());
     }
