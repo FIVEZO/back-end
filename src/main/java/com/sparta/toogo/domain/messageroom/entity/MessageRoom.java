@@ -35,11 +35,11 @@ public class MessageRoom {
     private List<Message> messageList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "postId", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     // 쪽지방 생성

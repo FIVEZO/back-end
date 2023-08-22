@@ -11,6 +11,7 @@ import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
+import com.sparta.toogo.domain.post.entity.QPost;
 import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
@@ -121,10 +122,10 @@ public class PostService {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         confirmPost(categoryEnum, postId, user);
 
-        queryFactory.delete(post).where(post.id.eq(postId)).execute();
+        List<MessageRoom> messageRooms = messageRoomRepository.findByPostId(postId);
+        messageRoomRepository.deleteAll(messageRooms);
 
-        MessageRoom messageRoom = messageRoomRepository.findByReceiver(user.getNickname());
-        messageRoomService.deleteRoom(messageRoom.getId(), user);
+        postRepository.deleteById(postId);
 
         return SuccessCode.POST_DELETE_SUCCESS;
     }
