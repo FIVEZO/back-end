@@ -35,7 +35,6 @@ public class JwtUtil {
     private final String BEARER = "Bearer ";
     private final Long ACCESS_TOKEN_EXPIRATION_TIME = 1 * 60 * 60 * 1000L;
     private final Long REFRESSH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 3000L;
-
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private Key key;
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
@@ -145,13 +144,13 @@ public class JwtUtil {
             throw new IllegalArgumentException("유효하지 않는 JWT 서명 입니다.");
         }
 
-        // redis에서 기존에 저장된 AccessToken 조회
-        String accessTokenFromRedis = getAccessTokenFromRedis(refreshToken);
+        // redis에서 기존에 저장된 RefreshToken 조회
+        String refreshTokenFromRedis = getRefressTokenFromRedis(accessToken);
 
-        // 사용자가 보낸 Access Token과 최초 발급된 Access Token이 일치하지 않을 경우
-        if (!accessToken.equals(accessTokenFromRedis)) {
-            log.error("AccessToken이 위조되었습니다.");
-            throw new IllegalArgumentException("AccessToken이 위조되었습니다.");
+        // 사용자가 보낸 Refresh Token과 최초 발급된 Refresh Token이 일치하지 않을 경우
+        if (!substringToken(refreshToken).equals(refreshTokenFromRedis)) {
+            log.error("RefreshToken이 위조되었습니다.");
+            throw new IllegalArgumentException("RefreshToken이 위조되었습니다.");
         }
         return true;
     }
@@ -170,22 +169,24 @@ public class JwtUtil {
         String newAccessToken = createAccessToken(userId, nickname, email, userRole);
         String newRefreshToken = createRefreshToken(userId);
 
-        saveTokenToRedis(newRefreshToken, newAccessToken);
-        redisService.deleteToken(refreshToken);
+        saveTokenToRedis(newAccessToken, newRefreshToken);
+        String accessToken = redisService.findAccessByRefresh(refreshToken);
+        redisService.deleteToken(accessToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
         return newAccessToken;
     }
 
-    // Redis에 저장된 AccessToken 반환 (key : refresh / value : access)
-    public String getAccessTokenFromRedis(String refreshToken) {
+    // Redis에 저장된 RefreshToken 반환 (key : access / value : refresh)
+    public String getRefressTokenFromRedis(String accessToken) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return redisService.getAccessToken(refreshToken);
+        return redisService.getRefreshToken(accessToken);
     }
 
-    // 발급된 토큰 값 Redis에 저장 (key : refresh / value : access)
-    public void saveTokenToRedis(String refreshToken, String accessToken) {
+    // 발급된 토큰 값 Redis에 저장 (key : access / value : refresh)
+    public void saveTokenToRedis(String accessToken, String refreshToken) {
         Date refreshExpire = getUserInfo(refreshToken).getExpiration(); // refresh 토큰의 만료일
-        redisService.saveAccessToken(refreshToken, accessToken, refreshExpire);
+        String subRefreshToken = substringToken(refreshToken);
+        redisService.saveAccessToken(accessToken, subRefreshToken, refreshExpire);
     }
 }

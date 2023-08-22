@@ -32,21 +32,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-        String accessTokenValue = jwtUtil.getAccessTokenFromHeader(req);
+        String accessToken = jwtUtil.getAccessTokenFromHeader(req);
 
-        if (StringUtils.hasText(accessTokenValue)) {
-            log.info(accessTokenValue);
+        if (StringUtils.hasText(accessToken)) {
+            log.info(accessToken);
 
-            if (!jwtUtil.validateAccessToken(accessTokenValue)) {
+            if (!jwtUtil.validateAccessToken(accessToken)) {
                 log.error("AccessToken 검증 실패");
-                String refreshTokenValue = jwtUtil.getRefreshTokenFromHeader(req);
-                if (StringUtils.hasText(refreshTokenValue)) {
+                String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
+                if (StringUtils.hasText(refreshToken)) {
                     // 유효한 refreshToken인지 검증
-                    if (!jwtUtil.validateRegenerate(accessTokenValue, refreshTokenValue)) {
+                    if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
                         throw new IllegalArgumentException("RefreshToken 인증 실패");
                     }
                     try {
-                        jwtUtil.regenerateToken(refreshTokenValue, res);
+                        jwtUtil.regenerateToken(refreshToken, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
                         throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
                     } catch (UnauthorizedException e) {
@@ -56,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     }
                 }
             }
-            Claims info = jwtUtil.getUserInfo(accessTokenValue);
+            Claims info = jwtUtil.getUserInfo(accessToken);
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {

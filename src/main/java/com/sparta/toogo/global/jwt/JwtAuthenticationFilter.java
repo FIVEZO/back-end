@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum role = user.getRole();
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id);
-        jwtUtil.saveTokenToRedis(refreshToken, accessToken);
+        jwtUtil.saveTokenToRedis(accessToken, refreshToken);
         jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
 
         Map<String, Object> data = new LinkedHashMap<>();
