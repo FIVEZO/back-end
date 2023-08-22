@@ -6,6 +6,12 @@ import com.sparta.toogo.domain.message.redis.service.RedisPublisher;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -39,9 +45,10 @@ public class MessageController {
         messageService.saveMessage(messageDto);
     }
 
-    // 대화 내역 조회
+    @Operation(summary = "대화 내역 조회", description = "특정 쪽지방에 저장된 채팅을 Redis 와 DB 에서 조회합니다.")
     @GetMapping("/api/room/{roomId}/message")
-    public ResponseEntity<List<MessageDto>> loadMessage(@PathVariable String roomId) {
+    public ResponseEntity<List<MessageDto>> loadMessage(
+            @Parameter(description = "roomId", required = true, example = "9e648d2d-5e2e-42b3-82fc-b8bef8111cbe") @PathVariable String roomId) {
         return ResponseEntity.ok(messageService.loadMessage(roomId));
     }
 

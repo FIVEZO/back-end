@@ -7,6 +7,7 @@ import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @Operation(summary = "댓글 작성", description = "댓글을 작성합니다.")
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long category,
                                                             @PathVariable Long postId,
@@ -37,6 +39,7 @@ public class CommentController {
 //        return commentService.getComment(postId, userDetails.getUser());
 //    }
 
+    @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     @PatchMapping("/comment/{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,
                                                             @RequestBody CommentRequestDto requestDto,
@@ -45,6 +48,7 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
     @DeleteMapping("/comment/{commentId}")
     public ApiResponse<String> deleteCommenet(@PathVariable Long commentId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {

@@ -75,6 +75,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/room/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
 
+                                .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()        // swagger
+
                                 .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
 

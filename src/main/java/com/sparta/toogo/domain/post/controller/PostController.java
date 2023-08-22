@@ -7,6 +7,7 @@ import com.sparta.toogo.domain.post.service.PostService;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @Operation(summary = "게시글 작성", description = "게시글을 작성합니다.")
     @PostMapping("/{category}")
     public ApiResponse<?> createPost(@PathVariable Long category,
                                      @RequestBody PostRequestDto requestDto,
@@ -31,6 +33,7 @@ public class PostController {
         return ResponseUtil.ok(postService.createPost(category, requestDto, userDetails.getUser()));
     }
 
+    @Operation(summary = "게시글 전체 조회", description = "게시글 목록을 조회합니다.")
     @GetMapping("/{category}")
     public ResponseEntity<List<PostResponseGetDto>> getPostsByCategory(@PathVariable Long category,
                                                                        @RequestParam("page") int pageNum) {
@@ -39,6 +42,7 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "게시글 선택 조회", description = "게시글을 조회합니다.")
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostResponseDto> getDetailPost(@PathVariable Long category,
                                                          @PathVariable Long postId,
@@ -51,6 +55,7 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "게시글 수정", description = "게시글을 수정합니다.")
     @PatchMapping("/{category}/{postId}")
     public ApiResponse<?> updatePost(@PathVariable Long category,
                                      @PathVariable Long postId,
@@ -59,6 +64,7 @@ public class PostController {
         return ResponseUtil.ok(postService.updatePost(category, postId, userDetails.getUser(), requestDto));
     }
 
+    @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다.")
     @DeleteMapping("/{category}/{postId}")
     public ApiResponse<?> deletePost(@PathVariable Long category,
                                      @PathVariable Long postId,
@@ -66,6 +72,7 @@ public class PostController {
         return ResponseUtil.ok(postService.deletePost(category, postId, userDetails.getUser()));
     }
 
+    @Operation(summary = "게시글 검색", description = "게시글을 검색합니다.")
     @GetMapping("/{category}/search/{pageNum}")
     public List<PostResponseDto> searchPost(@PathVariable Long category,
                                             @RequestParam String keyword,
