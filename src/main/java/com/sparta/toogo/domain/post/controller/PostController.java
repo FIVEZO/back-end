@@ -2,14 +2,12 @@ package com.sparta.toogo.domain.post.controller;
 
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
-import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.domain.post.service.PostService;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import com.sparta.toogo.global.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+//@Api(tags = {"Post API"})
 @RestController
 @RequestMapping("/api/post")
 @RequiredArgsConstructor
@@ -43,10 +42,10 @@ public class PostController {
 
 
     @GetMapping("/{category}/{country}/list")
-    public ApiResponse<List<PostResponseGetDto>> getPostsByCategoryAndCountry(@PathVariable Long category,
-                                                                              @PathVariable String country,
-                                                                              @RequestParam("page") int pageNum) {
-        List<PostResponseGetDto> response = postService.getPostsByCategoryAndCountry(category, country, pageNum -1);
+    public ApiResponse<Map<String, Object>> getPostsByCategoryAndCountry(@PathVariable Long category,
+                                                                         @PathVariable String country,
+                                                                         @RequestParam("page") int pageNum) {
+        Map<String, Object> response = postService.getPostsByCategoryAndCountry(category, country, pageNum -1);
         return ResponseUtil.ok(response);
     }
 
