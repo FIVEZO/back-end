@@ -56,11 +56,12 @@ public class RedisService {
         valueOperations.set(key, value, expireDuration);
     }
 
-    public String findAccessByRefresh(String refreshToken) {
+    public String findAccessByRefresh(String subRefreshToken) {
+        String encodingRefreshToken = jasyptEncoding(subRefreshToken);
         Set<String> keys = redisTemplate.keys("Bearer*");
         for (String key : keys) {
             String val = redisTemplate.opsForValue().get(key);
-            if (refreshToken.equals(val)) {
+            if (encodingRefreshToken.equals(val)) {
                 return key;
             }
         }

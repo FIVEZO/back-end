@@ -170,7 +170,7 @@ public class JwtUtil {
         String newRefreshToken = createRefreshToken(userId);
 
         saveTokenToRedis(newAccessToken, newRefreshToken);
-        String accessToken = redisService.findAccessByRefresh(refreshToken);
+        String accessToken = redisService.findAccessByRefresh(substringToken(refreshToken));
         redisService.deleteToken(accessToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
