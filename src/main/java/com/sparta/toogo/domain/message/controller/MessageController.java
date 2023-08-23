@@ -3,6 +3,7 @@ package com.sparta.toogo.domain.message.controller;
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
+import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.redis.service.RedisPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +23,7 @@ public class MessageController {
     private final RedisPublisher redisPublisher;
     private final MessageRoomService messageRoomService;
     private final MessageService messageService;
+    private final NotificationService notificationService;
 
     // 대화 & 대화 저장
     @MessageMapping("/message")     // websocket "/pub/message" 로 들어오는 메시지를 처리
@@ -34,6 +36,9 @@ public class MessageController {
         redisPublisher.publish(messageRoomService.getTopic(messageDto.getRoomId()), messageDto);
 
         messageService.saveMessage(messageDto);
+
+        // 메시지 알림
+        notificationService.notifyMessage(messageDto.getReceiver());
     }
 
     @Operation(summary = "대화 내역 조회", description = "특정 쪽지방에 저장된 채팅을 Redis 와 DB 에서 조회합니다.")
