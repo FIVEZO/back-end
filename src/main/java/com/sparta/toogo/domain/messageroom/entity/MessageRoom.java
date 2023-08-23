@@ -3,6 +3,7 @@ package com.sparta.toogo.domain.messageroom.entity;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Table(name = "messageRoom")
 @NoArgsConstructor
-public class MessageRoom {
+public class MessageRoom extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

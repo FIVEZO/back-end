@@ -64,6 +64,13 @@ public class Message extends Timestamped {
         this.roomId = roomId;
         this.message = message;
     }
+    public Message(String sender, String roomId, String message, String sentTime) {
+        super();
+        this.sender = sender;
+        this.roomId = roomId;
+        this.message = message;
+        this.sentTime = sentTime;
+    }
 
     // 대화 저장 - 테스트용
     public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom) {
@@ -74,14 +81,4 @@ public class Message extends Timestamped {
         this.messageRoom = messageRoom;
 // this.user = user;
     }
-
-    public Message(String sender, String roomId, String receiver, String message) {
-        super();
-        this.sender = sender;
-        this.roomId = roomId;
-        this.receiver = receiver;
-        this.message = message;
-    }
-
-
 }
