@@ -37,6 +37,9 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @Column(nullable = false)
+    private String emotion;
+
     @Column
     private Long kakaoId;
 
@@ -49,24 +52,21 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public User(String email, String password, String nickname, UserRoleEnum role) {
+    public User(String email, String password, String nickname, UserRoleEnum role, String emotion) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
+        this.emotion = emotion;
     }
 
-    public User(String email, String password, String nickname, UserRoleEnum role, Long kakaoId) {
+    public User(String email, String password, String nickname, UserRoleEnum role, Long kakaoId, String emotion) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.kakaoId = kakaoId;
-    }
-
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
-        return this;
+        this.emotion = emotion;
     }
 
     public void updatePassword(User user, String newPassword) {
@@ -78,5 +78,13 @@ public class User extends Timestamped {
 
     public void updateNickname(String newNickname) {
         this.nickname = newNickname;
+    }
+
+    public void updatePw(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void updateEmotion(String newEmotion) {
+        this.emotion = newEmotion;
     }
 }

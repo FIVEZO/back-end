@@ -10,9 +10,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -55,15 +57,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = user.getEmail();
         String nickname = user.getNickname();
         UserRoleEnum role = user.getRole();
+        String emotion = user.getEmotion();
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
         jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
 
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("msg", "로그인 성공");
         data.put("statusCode", HttpServletResponse.SC_OK);
+        data.put("msg", "로그인 성공");
+        data.put("email", email);
         data.put("nickname", nickname);
+        data.put("emotion", emotion);
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(data);
@@ -80,7 +85,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("success", false);
         data.put("statusCode", HttpServletResponse.SC_BAD_REQUEST);
-        data.put("msg", "비밀번호 혹은 이메일이 틀렸습니다");
+
+        if (failed instanceof UsernameNotFoundException) {
+            data.put("msg", "등록되지 않은 이메일입니다");
+        } else if (failed instanceof BadCredentialsException) {
+            data.put("msg", "비밀번호가 틀렸습니다");
+        } else {
+            data.put("msg", "로그인 실패");
+        }
 
         // 에러 메시지를 JSON 형식으로 생성
         ObjectMapper objectMapper = new ObjectMapper();

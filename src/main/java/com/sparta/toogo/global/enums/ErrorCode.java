@@ -14,6 +14,8 @@ public enum ErrorCode {
     EMAIL_CODE_INCOMPLETE(BAD_REQUEST, "올바른 이메일 또는 인증 코드를 입력해 주세요."),
     CODE_SEND_FAILED(BAD_REQUEST, "인증 코드 전송이 실패하였습니다."),
     NEW_PASSWORD_SEND_FAILED(BAD_REQUEST, "새 비밀번호 전송이 실패하였습니다."),
+    PASSWORD_REQUIRED(BAD_REQUEST, "비밀번호를 입력해주세요."),
+    PASSWORD_MISMATCH(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),

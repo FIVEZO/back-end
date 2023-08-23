@@ -1,12 +1,14 @@
 package com.sparta.toogo.domain.user.service;
 
+import com.sparta.toogo.domain.mypage.entity.MyPage;
+import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
+import com.sparta.toogo.domain.user.entity.EmotionEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
-import com.sparta.toogo.global.jwt.JwtUtil;
 import com.sparta.toogo.global.redis.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
+    private final MyPageRepository myPageRepository;
 
     @Value("${admin.token}")
     private String ADMIN_TOKEN;
@@ -59,8 +62,11 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(email, password, nickname, role);
+        User user = new User(email, password, nickname, role, EmotionEnum.HAPPY.getEmotion());
         userRepository.save(user);
+        MyPage myPage = new MyPage();
+        myPage.setUser(user);
+        myPageRepository.save(myPage);
         redisService.deleteCode(code);
         return new UserResponseDto(USER_SIGNUP_SUCCESS, user);
     }

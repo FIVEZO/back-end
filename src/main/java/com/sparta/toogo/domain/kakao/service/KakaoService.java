@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.toogo.domain.kakao.dto.KakaoUserInfoDto;
+import com.sparta.toogo.domain.user.entity.EmotionEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.repository.UserRepository;
@@ -133,7 +134,7 @@ public class KakaoService {
             if (email == null) {
                 email = UUID.randomUUID().toString();
             }
-            kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId);
+            kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmotionEnum.HAPPY.getEmotion());
             userRepository.save(kakaoUser);
         }
         return kakaoUser;

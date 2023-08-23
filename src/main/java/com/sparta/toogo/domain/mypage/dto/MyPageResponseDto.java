@@ -1,22 +1,18 @@
 package com.sparta.toogo.domain.mypage.dto;
 
-import com.sparta.toogo.domain.post.entity.Post;
-import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
-@NoArgsConstructor
 public class MyPageResponseDto {
-    private String nickname;
-    private String profileImg;
+    private HttpStatus status;
     private String msg;
-    private int statusCode;
 
-    public MyPageResponseDto(User user) {
-        this.nickname = user.getNickname();
+    public MyPageResponseDto(SuccessCode successCode) {
+        this.status = successCode.getHttpStatus();
+        this.msg = successCode.getDetail();
     }
-
 
 //    public static MyPageResponseDto success(String msg, String nickname, String profileImg) {
 //        return new MyPageResponseDto(nickname, profileImg, msg, HttpStatus.OK.value());

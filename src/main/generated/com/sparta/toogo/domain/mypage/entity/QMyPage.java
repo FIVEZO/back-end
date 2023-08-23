@@ -24,6 +24,8 @@ public class QMyPage extends EntityPathBase<MyPage> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath introduction = createString("introduction");
+
     public final com.sparta.toogo.domain.user.entity.QUser user;
 
     public QMyPage(String variable) {

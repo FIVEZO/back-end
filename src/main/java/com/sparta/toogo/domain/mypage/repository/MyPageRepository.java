@@ -1,4 +1,7 @@
 package com.sparta.toogo.domain.mypage.repository;
 
-public interface MyPageRepository {
+import com.sparta.toogo.domain.mypage.entity.MyPage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MyPageRepository extends JpaRepository<MyPage, Long> {
 }

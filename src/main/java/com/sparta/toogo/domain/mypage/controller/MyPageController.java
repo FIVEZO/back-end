@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.mypage.controller;
 
 import com.sparta.toogo.domain.mypage.dto.MsgResponseDto;
+import com.sparta.toogo.domain.mypage.dto.MyPagePatchResponseDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageRequestDto;
 import com.sparta.toogo.domain.mypage.dto.MyPageResponseDto;
 import com.sparta.toogo.domain.mypage.service.MyPageService;
@@ -38,10 +39,17 @@ public class MyPageController {
         return ResponseUtil.ok(myPageService.getMyScrap(userDetails.getUser(), pageNum - 1));
     }
 
-    @Operation(summary = "내 정보 수정")
-    @PatchMapping("/update")
-    public MyPageResponseDto updateMyPage(@RequestBody MyPageRequestDto requestDto,
-                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.updateUser(requestDto, userDetails.getUser());
+    @Operation(summary = "닉네임, 소개 수정")
+    @PatchMapping("/nicknameupdate")
+    public MyPagePatchResponseDto nicknameUpdate(@RequestBody MyPageRequestDto requestDto,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return myPageService.nicknameUpdate(requestDto, userDetails.getUser());
+    }
+
+    @Operation(summary = "비밀번호 수정")
+    @PatchMapping("/pwupdate")
+    public MyPageResponseDto passwordUpdate(@RequestBody MyPageRequestDto requestDto,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return myPageService.passwordUpdate(requestDto, userDetails.getUser());
     }
 }

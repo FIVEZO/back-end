@@ -1,7 +1,9 @@
 package com.sparta.toogo.domain.mypage.service;
 
 import com.sparta.toogo.domain.mypage.dto.*;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
+import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
@@ -21,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_NICKNAME;
-import static com.sparta.toogo.global.enums.ErrorCode.INCORRECT_PASSWORD;
+import static com.sparta.toogo.global.enums.ErrorCode.*;
+import static com.sparta.toogo.global.enums.SuccessCode.PASSWORD_CHANGE_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class MyPageService {
     private final ScrapRepository scrapRepository;
     private final PasswordEncoder passwordEncoder;
     private final PostRepository postRepository;
+    private final MyPageRepository myPageRepository;
 
     // 내가 작성한 게시글 조회
     public List<MyPageDto> getMyPage(User user) {
@@ -64,27 +67,45 @@ public class MyPageService {
         return scrapList;
     }
 
-    public MyPageResponseDto updateUser(MyPageRequestDto requestDto, User user) {
+    public MyPagePatchResponseDto nicknameUpdate(MyPageRequestDto requestDto, User user) {
+        // 이모티콘
+        MyPage myPage = user.getMyPage();
+        String newEmotion = requestDto.getEmotion();
+        user.updateEmotion(newEmotion);
+
+        // 소개
+        String newIntroduction = requestDto.getIntroduction();
+        myPage.update(newIntroduction);
+        myPageRepository.save(myPage);
+
         // 닉네임 수정
-        if (requestDto.getNickname() != null) {
-            User existUser = userRepository.findByNickname(requestDto.getNickname());
-            if (existUser != null && requestDto.getNickname().equals(existUser.getNickname())) {
+        String newNickname = requestDto.getNickname();
+        if (newNickname != null) {
+            User existUser = userRepository.findByNickname(newNickname);
+            if (existUser != null && newNickname.equals(existUser.getNickname())) {
                 throw new MyPageException(DUPLICATE_NICKNAME);
             }
-            String newNickname = requestDto.getNickname();
             user.updateNickname(newNickname);
             userRepository.save(user);
+            return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmotion);
         }
+        String userNickname = user.getNickname();
+        return new MyPagePatchResponseDto(userNickname, newIntroduction, newEmotion);
+    }
+
+    public MyPageResponseDto passwordUpdate(MyPageRequestDto requestDto, User user) {
         // 비밀번호 수정
-        String newPassword = user.getPassword();
-        if (requestDto.getPassword() != null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우
-            if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-                throw new MyPageException(INCORRECT_PASSWORD);
-            }
-            newPassword = passwordEncoder.encode(requestDto.getNewPassword());
+        String password = requestDto.getPassword();
+        String newPassword = requestDto.getNewPassword();
+        if (password == null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우
+            throw new MyPageException(PASSWORD_REQUIRED);
         }
-        user.updatePassword(user, newPassword);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new MyPageException(PASSWORD_MISMATCH);
+        }
+        String encodingNewPassword = passwordEncoder.encode(newPassword);
+        user.updatePw(encodingNewPassword);
         userRepository.save(user);
-        return new MyPageResponseDto(user);
+        return new MyPageResponseDto(PASSWORD_CHANGE_SUCCESS);
     }
 }

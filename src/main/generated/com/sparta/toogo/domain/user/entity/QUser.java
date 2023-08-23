@@ -31,6 +31,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath email = createString("email");
 
+    public final StringPath emotion = createString("emotion");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Long> kakaoId = createNumber("kakaoId", Long.class);
