@@ -57,7 +57,7 @@ public class RedisService {
     }
 
     public String findAccessByRefresh(String refreshToken) {
-        Set<String> keys = redisTemplate.keys("*");
+        Set<String> keys = redisTemplate.keys("Bearer*");
         for (String key : keys) {
             String val = redisTemplate.opsForValue().get(key);
             if (refreshToken.equals(val)) {
