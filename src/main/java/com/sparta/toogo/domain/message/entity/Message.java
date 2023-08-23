@@ -39,9 +39,9 @@ public class Message extends Timestamped {
     @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
     private MessageRoom messageRoom;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+//    @ManyToOne
+//    @JoinColumn(name = "post_id", nullable = false)
+//    private Post post;
 // @ManyToOne
 // @JoinColumn(name = "mypageId", nullable = false)
 // private Mypage mypage;
