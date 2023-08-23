@@ -38,7 +38,8 @@ public class MessageRoom {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "messageRoom", cascade = CascadeType.REMOVE)
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     // 쪽지방 생성
