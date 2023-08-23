@@ -156,7 +156,7 @@ public class JwtUtil {
     }
 
     // AccessToken, RefreshToken 재발급 메서드
-    public String regenerateToken(String refreshToken, HttpServletResponse res) {
+    public String regenerateToken(String accessToken, String refreshToken, HttpServletResponse res) {
         Long userId = Long.parseLong(getUserInfo(refreshToken).getSubject());
 
         User user = userRepository.findById(userId)
@@ -170,7 +170,6 @@ public class JwtUtil {
         String newRefreshToken = createRefreshToken(userId);
 
         saveTokenToRedis(newAccessToken, newRefreshToken);
-        String accessToken = redisService.findAccessByRefresh(substringToken(refreshToken));
         redisService.deleteToken(accessToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");

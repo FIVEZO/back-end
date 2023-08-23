@@ -45,7 +45,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         throw new IllegalArgumentException("RefreshToken 인증 실패");
                     }
                     try {
-                        jwtUtil.regenerateToken(refreshToken, res);
+                        jwtUtil.regenerateToken(accessToken, refreshToken, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
                         throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
                     } catch (UnauthorizedException e) {
