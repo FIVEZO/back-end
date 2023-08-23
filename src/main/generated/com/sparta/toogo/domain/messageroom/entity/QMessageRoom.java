@@ -22,6 +22,11 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public static final QMessageRoom messageRoom = new QMessageRoom("messageRoom");
 
+    public final com.sparta.toogo.global.util.QTimestamped _super = new com.sparta.toogo.global.util.QTimestamped(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ListPath<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage> messageList = this.<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage>createList("messageList", com.sparta.toogo.domain.message.entity.Message.class, com.sparta.toogo.domain.message.entity.QMessage.class, PathInits.DIRECT2);

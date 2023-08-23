@@ -53,6 +53,7 @@ public class MessageResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+//        this.createdAt = createdAt;
     }
 
 //    // 대화 저장 - 테스트용

@@ -67,7 +67,6 @@ public class MessageRoomService {
         MessageRoom messageRoom = messageRoomRepository.findBySenderAndReceiverAndPostId(user.getNickname(), messageRequestDto.getReceiver(), messageRequestDto.getPostId());
 
         // 처음 쪽지방 생성 또는 이미 생성된 쪽지방이 아닌 경우
-
         if ((messageRoom == null) || !(messageRoom.getPost().getId().equals(messageRequestDto.getPostId()))) {
             MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
@@ -133,7 +132,6 @@ public class MessageRoomService {
     public MessageRoomDto findRoom(String roomId, User user) {
         MessageRoom messageRoom = messageRoomRepository.findByRoomId(roomId);
 
-        // 사용자 에세 userId
         // 게시글 조회
         Post post = postRepository.findById(messageRoom.getPost().getId()).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
