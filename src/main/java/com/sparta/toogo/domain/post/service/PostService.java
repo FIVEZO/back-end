@@ -127,6 +127,8 @@ public class PostService {
 
         postRepository.deleteById(postId);
 
+        //queryFactory.delete(post).where(post.id.eq(postId)).execute();
+
         return SuccessCode.POST_DELETE_SUCCESS;
     }
 
