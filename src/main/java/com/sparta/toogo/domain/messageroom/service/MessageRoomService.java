@@ -92,7 +92,8 @@ public class MessageRoomService {
                         messageRoom.getReceiver(),        // roomName
                         messageRoom.getRoomId(),
                         messageRoom.getSender(),
-                        messageRoom.getReceiver());
+                        messageRoom.getReceiver(),
+                        messageRoom.getCreatedAt());
 
                 // 가장 최신 메시지 & 생성 시간 조회
                 Message latestMessage = messageRepository.findTopByRoomIdOrderByCreatedAtDesc(messageRoom.getRoomId());
@@ -109,7 +110,8 @@ public class MessageRoomService {
                         messageRoom.getSender(),        // roomName
                         messageRoom.getRoomId(),
                         messageRoom.getSender(),
-                        messageRoom.getReceiver());
+                        messageRoom.getReceiver(),
+                        messageRoom.getCreatedAt());
 
                 // 가장 최신 메시지 & 생성 시간 조회
                 Message latestMessage = messageRepository.findTopByRoomIdOrderByCreatedAtDesc(messageRoom.getRoomId());

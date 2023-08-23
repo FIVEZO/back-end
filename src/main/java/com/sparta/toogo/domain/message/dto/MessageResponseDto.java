@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -32,12 +34,25 @@ public class MessageResponseDto {
     }
 
     // 사용자 관련 쪽지방 전체 조회
-    public MessageResponseDto(Long id, String roomName, String roomId, String sender, String receiver) {
+//    public MessageResponseDto(Long id, String roomName, String roomId, String sender, String receiver) {
+//        this.id = id;
+//        this.roomName = roomName;
+//        this.roomId = roomId;
+//        this.sender = sender;
+//        this.receiver = receiver;
+//    }
+    public MessageResponseDto(Long id, String roomName, String roomId, String sender, String receiver, LocalDateTime createdAt) {
         this.id = id;
         this.roomName = roomName;
         this.roomId = roomId;
         this.sender = sender;
         this.receiver = receiver;
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = createdAt.atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+
+        this.createdAt = koreaTime.toLocalDateTime();
     }
 
 //    // 대화 저장 - 테스트용
@@ -58,6 +73,13 @@ public class MessageResponseDto {
     }
 
     public void setLatestMessageCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime utcTime = createdAt.atZone(utcZone);
+        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+
+        this.createdAt = koreaTime.toLocalDateTime();
+
+//        this.createdAt = createdAt;
     }
 }

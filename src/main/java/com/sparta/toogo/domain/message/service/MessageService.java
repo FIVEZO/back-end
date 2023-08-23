@@ -30,7 +30,7 @@ public class MessageService {
     public void saveMessage(MessageDto messageDto) {
         // DB 저장
 //        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getMessage());
-        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage());
+        Message message = new Message(messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage(), messageDto.getSentTime());
         messageRepository.save(message);
 
         // 직렬화
