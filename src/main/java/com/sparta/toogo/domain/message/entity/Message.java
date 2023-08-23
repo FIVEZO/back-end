@@ -5,7 +5,7 @@ import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
-import com.sparta.toogo.global.util.Timestamped;
+import com.sparta.toogo.global.utill.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,9 +39,9 @@ public class Message extends Timestamped {
     @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
     private MessageRoom messageRoom;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+//    @ManyToOne
+//    @JoinColumn(name = "post_id", nullable = false)
+//    private Post post;
 // @ManyToOne
 // @JoinColumn(name = "mypageId", nullable = false)
 // private Mypage mypage;
