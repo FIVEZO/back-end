@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.mypage.entity;
 
+import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,10 @@ public class MyPage {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "post")
+    private Post post;
 
     public void update(String introduction) {
         this.introduction = introduction;

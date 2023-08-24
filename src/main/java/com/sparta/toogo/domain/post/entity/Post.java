@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.post.entity;
 
 import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.user.entity.User;
@@ -61,6 +62,9 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> commentList = new ArrayList<>();
+
+//    @OneToOne(mappedBy = "post", cascade = CascadeType.REMOVE)
+//    private MyPage myPage;
 
     @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
