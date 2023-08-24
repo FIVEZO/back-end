@@ -40,9 +40,6 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String emotion;
 
-    @Column(nullable = false, length = 50)
-    private String introduction;
-
     @Column
     private Long kakaoId;
 

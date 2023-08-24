@@ -6,6 +6,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
+import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
@@ -44,6 +46,7 @@ public class PostService {
     private final JPAQueryFactory queryFactory;
     private final ScrapRepository scrapRepository;
     private final MessageRoomService messageRoomService;
+    private final MyPageRepository myPageRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
 
@@ -106,8 +109,10 @@ public class PostService {
     public PostResponseDto getDetailPost(Long category, Long postId, Long userId) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
+
+        MyPage myPage = myPageRepository.findByUserId(userId);
         boolean isScrap = scrapRepository.findByPostIdAndUserId(postId, userId).isPresent();
-        return new PostResponseDto(post, isScrap);
+        return new PostResponseDto(post, myPage, isScrap);
     }
 
     public PostResponseDto updatePost(Long category, Long postId, User user, PostRequestDto requestDto) {

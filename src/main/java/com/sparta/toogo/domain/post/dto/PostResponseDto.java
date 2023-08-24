@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.post.dto;
 
 import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;
 
@@ -57,7 +58,7 @@ public class PostResponseDto {
         return "[" + country + "] " + title;
     }
 
-    public PostResponseDto(Post post, boolean isScrap) {
+    public PostResponseDto(Post post, MyPage myPage, boolean isScrap) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
@@ -77,7 +78,7 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
-        this.introduction = post.getUser().getIntroduction();
+        this.introduction = myPage.getIntroduction();
     }
 }
 
