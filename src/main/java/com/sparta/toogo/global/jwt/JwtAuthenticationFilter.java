@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = user.getEmail();
         String nickname = user.getNickname();
         UserRoleEnum role = user.getRole();
-        String emotion = user.getEmotion();
+        String emoticon = user.getEmoticon();
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         data.put("msg", "로그인 성공");
         data.put("email", email);
         data.put("nickname", nickname);
-        data.put("emotion", emotion);
+        data.put("emoticon", emoticon);
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(data);

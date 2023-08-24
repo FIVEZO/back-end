@@ -67,19 +67,19 @@ public class MyPageService {
         return scrapList;
     }
 
-    public MyPagePatchResponseDto nicknameUpdate(MyPageRequestDto requestDto, User user) {
+    public MyPagePatchResponseDto myPageUpdate(MyPageRequestDto requestDto, User user) {
         // 이모티콘
         MyPage myPage = user.getMyPage();
-        String newEmotion = requestDto.getEmotion();
-        user.updateEmotion(newEmotion);
+        String newEmoticon = requestDto.getNewEmoticon();
+        user.updateEmoticon(newEmoticon);
 
         // 소개
-        String newIntroduction = requestDto.getIntroduction();
+        String newIntroduction = requestDto.getNewIntroduction();
         myPage.update(newIntroduction);
         myPageRepository.save(myPage);
 
         // 닉네임 수정
-        String newNickname = requestDto.getNickname();
+        String newNickname = requestDto.getNewNickname();
         if (newNickname != null) {
             User existUser = userRepository.findByNickname(newNickname);
             if (existUser != null && newNickname.equals(existUser.getNickname())) {
@@ -87,10 +87,10 @@ public class MyPageService {
             }
             user.updateNickname(newNickname);
             userRepository.save(user);
-            return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmotion);
+            return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmoticon);
         }
         String userNickname = user.getNickname();
-        return new MyPagePatchResponseDto(userNickname, newIntroduction, newEmotion);
+        return new MyPagePatchResponseDto(userNickname, newIntroduction, newEmoticon);
     }
 
     public MyPageResponseDto passwordUpdate(MyPageRequestDto requestDto, User user) {

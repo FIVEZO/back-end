@@ -38,7 +38,7 @@ public class User extends Timestamped {
     private UserRoleEnum role;
 
     @Column(nullable = false)
-    private String emotion;
+    private String emoticon;
 
     @Column
     private Long kakaoId;
@@ -52,21 +52,21 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public User(String email, String password, String nickname, UserRoleEnum role, String emotion) {
+    public User(String email, String password, String nickname, UserRoleEnum role, String emoticon) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
-        this.emotion = emotion;
+        this.emoticon = emoticon;
     }
 
-    public User(String email, String password, String nickname, UserRoleEnum role, Long kakaoId, String emotion) {
+    public User(String email, String password, String nickname, UserRoleEnum role, Long kakaoId, String emoticon) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.kakaoId = kakaoId;
-        this.emotion = emotion;
+        this.emoticon = emoticon;
     }
 
     public void updatePassword(User user, String newPassword) {
@@ -84,7 +84,7 @@ public class User extends Timestamped {
         this.password = newPassword;
     }
 
-    public void updateEmotion(String newEmotion) {
-        this.emotion = newEmotion;
+    public void updateEmoticon(String newEmoticon) {
+        this.emoticon = newEmoticon;
     }
 }

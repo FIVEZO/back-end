@@ -7,11 +7,11 @@ import lombok.Getter;
 public class LogInResponseDto {
     private String email;
     private String nickname;
-    private String emotion;
+    private String emoticon;
 
     public LogInResponseDto(User user) {
         this.email = user.getEmail();
         this.nickname = user.getNickname();
-        this.emotion = user.getEmotion();
+        this.emoticon = user.getEmoticon();
     }
 }

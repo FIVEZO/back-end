@@ -40,10 +40,10 @@ public class MyPageController {
     }
 
     @Operation(summary = "닉네임, 소개 수정")
-    @PatchMapping("/nicknameupdate")
-    public MyPagePatchResponseDto nicknameUpdate(@RequestBody MyPageRequestDto requestDto,
+    @PatchMapping("/edituser")
+    public MyPagePatchResponseDto myPageUpdate(@RequestBody MyPageRequestDto requestDto,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return myPageService.nicknameUpdate(requestDto, userDetails.getUser());
+        return myPageService.myPageUpdate(requestDto, userDetails.getUser());
     }
 
     @Operation(summary = "비밀번호 수정")

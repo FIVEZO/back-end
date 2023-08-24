@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.toogo.domain.kakao.dto.KakaoUserInfoDto;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
-import com.sparta.toogo.domain.user.entity.EmotionEnum;
+import com.sparta.toogo.domain.user.entity.EmoticonEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.repository.UserRepository;
@@ -135,7 +135,7 @@ public class KakaoService {
             String encodedPassword = passwordEncoder.encode(password);
             String email = kakaoUserInfo.getEmail();
 
-            kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmotionEnum.HAPPY.getEmotion());
+            kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmoticonEnum.HAPPY.getEmoticon());
             userRepository.save(kakaoUser);
             MyPage myPage = new MyPage();
             myPage.setUser(kakaoUser);

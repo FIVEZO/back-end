@@ -4,7 +4,7 @@ import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
-import com.sparta.toogo.domain.user.entity.EmotionEnum;
+import com.sparta.toogo.domain.user.entity.EmoticonEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.exception.UserException;
@@ -62,7 +62,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(email, password, nickname, role, EmotionEnum.HAPPY.getEmotion());
+        User user = new User(email, password, nickname, role, EmoticonEnum.HAPPY.getEmoticon());
         userRepository.save(user);
         MyPage myPage = new MyPage();
         myPage.setUser(user);

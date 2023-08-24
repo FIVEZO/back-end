@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyPageRequestDto {
-    private String nickname;
-    private String introduction;
+    private String newNickname;
+    private String newIntroduction;
     private String password;
     private String newPassword;
-    private String emotion;
+    private String newEmoticon;
 }

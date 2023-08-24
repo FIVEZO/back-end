@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class MyPagePatchResponseDto {
-    private String nickname;
-    private String introduction;
-    private String emotion;
+    private String newNickname;
+    private String newIntroduction;
+    private String newEmoticon;
 
-    public MyPagePatchResponseDto(String nickname, String introduction, String emotion) {
-        this.nickname = nickname;
-        this.introduction = introduction;
-        this.emotion = emotion;
+    public MyPagePatchResponseDto(String nickname, String introduction, String emoticon) {
+        this.newNickname = nickname;
+        this.newIntroduction = introduction;
+        this.newEmoticon = emoticon;
     }
 }
