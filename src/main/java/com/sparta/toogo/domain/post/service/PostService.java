@@ -167,7 +167,7 @@ public class PostService {
         }
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(expressions.toArray(new BooleanExpression[expressions.size()])); // 수정된 부분
+                .where(expressions.toArray(new BooleanExpression[expressions.size()]));
 
         List<PostResponseDto> postList = query
                 .orderBy(post.createdAt.desc()) // 최신 게시글 순으로 정렬
