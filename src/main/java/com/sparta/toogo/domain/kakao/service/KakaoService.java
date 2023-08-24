@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.toogo.domain.kakao.dto.KakaoUserInfoDto;
+import com.sparta.toogo.domain.mypage.entity.MyPage;
+import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.entity.EmotionEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
@@ -34,6 +36,7 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
+    private final MyPageRepository myPageRepository;
 
     @Transactional
     public User kakaoLogin(String code) throws JsonProcessingException {
@@ -134,6 +137,9 @@ public class KakaoService {
 
             kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmotionEnum.HAPPY.getEmotion());
             userRepository.save(kakaoUser);
+            MyPage myPage = new MyPage();
+            myPage.setUser(kakaoUser);
+            myPageRepository.save(myPage);
         }
         return kakaoUser;
     }
