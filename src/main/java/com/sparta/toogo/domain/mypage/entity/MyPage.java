@@ -28,8 +28,4 @@ public class MyPage {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public String getIntroduction() {
-        return this.introduction;
-    }
 }
