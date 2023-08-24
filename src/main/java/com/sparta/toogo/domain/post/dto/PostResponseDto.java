@@ -27,7 +27,7 @@ public class PostResponseDto {
     private String meetDate;
     private Long people;
     private Long category;
-    private String introduction;
+    private String newintroduction;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -78,7 +78,7 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
-        this.introduction = myPage.getIntroduction();
+        this.newintroduction = myPage.getIntroduction();
     }
 }
 

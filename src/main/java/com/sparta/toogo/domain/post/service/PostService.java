@@ -111,7 +111,7 @@ public class PostService {
         Post post = findPost(categoryEnum, postId);
 
         MyPage myPage = myPageRepository.findByUserId(userId);
-        System.out.println("myPage = " + myPage);
+
         boolean isScrap = scrapRepository.findByPostIdAndUserId(postId, userId).isPresent();
         return new PostResponseDto(post, myPage, isScrap);
     }
