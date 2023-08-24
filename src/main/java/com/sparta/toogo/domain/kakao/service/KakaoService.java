@@ -131,9 +131,7 @@ public class KakaoService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
             String email = kakaoUserInfo.getEmail();
-            if (email == null) {
-                email = UUID.randomUUID().toString();
-            }
+
             kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmotionEnum.HAPPY.getEmotion());
             userRepository.save(kakaoUser);
         }

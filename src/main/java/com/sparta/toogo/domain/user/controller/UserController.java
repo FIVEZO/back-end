@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.toogo.domain.kakao.service.KakaoService;
+import com.sparta.toogo.domain.user.dto.LogInResponseDto;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
 import com.sparta.toogo.domain.user.entity.User;
@@ -46,13 +47,13 @@ public class UserController {
 
     @Operation(summary = "카카오 로그인")
     @GetMapping("/kakao")
-    public UserResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public LogInResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         User user = kakaoService.kakaoLogin(code);
         String createAccessToken = kakaoService.kakaoAccessToken(user);
         String createRefreshToken = kakaoService.kakaoRefreshToken(user);
         jwtUtil.saveTokenToRedis(createRefreshToken, createAccessToken);
         jwtUtil.addTokenToHeader(createAccessToken, createRefreshToken, response);
-        return new UserResponseDto(USER_LOGIN_SUCCESS, user);
+        return new LogInResponseDto(user);
     }
 
     @Operation(summary = "로그아웃")
