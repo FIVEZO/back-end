@@ -41,7 +41,7 @@ public class UserService {
     @Transactional
     public UserResponseDto signUp(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
-        String password = passwordEncoder.encode(userRequestDto.getPassword());
+        String password = userRequestDto.getPassword();
         String nickname = userRequestDto.getNickname();
         String code = userRequestDto.getCode();
 
@@ -56,6 +56,7 @@ public class UserService {
         if (!checkPassword(password)) {
             throw new MyPageException(INVALID_PASSWORD_FORMAT);
         }
+        String encodingPassword = passwordEncoder.encode(password);
 
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
@@ -67,7 +68,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(email, password, nickname, role, EmoticonEnum.HAPPY.getEmoticon());
+        User user = new User(email, encodingPassword, nickname, role, EmoticonEnum.HAPPY.getEmoticon());
         userRepository.save(user);
         MyPage myPage = new MyPage();
         myPage.setUser(user);
