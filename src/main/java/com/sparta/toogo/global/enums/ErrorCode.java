@@ -21,6 +21,7 @@ public enum ErrorCode {
     NICKNAME_LENGTH_INVALID(BAD_REQUEST, "닉네임은 2자 이상 15자 이하로 입력해주세요."),
     NICKNAME_FORMAT_INVALID(BAD_REQUEST, "닉네임은 문자와 숫자만 포함되어야 합니다."),
     TOO_LONG_INTRODUCTION(BAD_REQUEST, "자기소개는 70자 이하로 입력해주세요."),
+    EXCEPTED_KAKAO_USER(BAD_REQUEST, "카카오 회원은 비밀번호 변경이 불가능합니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),

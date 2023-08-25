@@ -105,6 +105,10 @@ public class MyPageService {
     }
 
     public MyPageResponseDto passwordUpdate(MyPageRequestDto requestDto, User user) {
+        // 카카오
+        if (user.getKakaoId() != null) {
+            throw new MyPageException(EXCEPTED_KAKAO_USER);
+        }
         // 비밀번호 수정
         String password = requestDto.getPassword();
         String newPassword = requestDto.getNewPassword();
