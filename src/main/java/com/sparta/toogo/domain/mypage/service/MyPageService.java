@@ -38,7 +38,7 @@ public class MyPageService {
     private final MyPageRepository myPageRepository;
 
     // 내가 작성한 게시글 조회
-    public List<MyPageDto> getMyPage(User user) {
+    public List<MyPageDto> getMyPagePost(User user) {
 
         List<Post> userPosts = postRepository.findByUser(user);
         return userPosts.stream()

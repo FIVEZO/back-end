@@ -20,10 +20,10 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-    @Operation(summary = "마이페이지 조회")
+    @Operation(summary = "내가 작성한 게시글 조회")
     @GetMapping("/post")
     public ApiResponse<?> getMyPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtil.ok(myPageService.getMyPage(userDetails.getUser()));
+        return ResponseUtil.ok(myPageService.getMyPagePost(userDetails.getUser()));
     }
 
     @Operation(summary = "회원 탈퇴")
