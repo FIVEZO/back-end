@@ -53,7 +53,7 @@ public class UserService {
             throw new UserException(DUPLICATE_RESOURCE);
         }
 
-        if (checkPassword(password)) {
+        if (!checkPassword(password)) {
             throw new MyPageException(INVALID_PASSWORD_FORMAT);
         }
 
