@@ -59,9 +59,9 @@ public class Post extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private MyPage myPage;
+//    @OneToOne(fetch = LAZY)
+//    @JoinColumn(name = "myPage_introduction")
+//    private MyPage myPage;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)

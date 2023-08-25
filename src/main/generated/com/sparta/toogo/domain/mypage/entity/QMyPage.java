@@ -26,6 +26,8 @@ public class QMyPage extends EntityPathBase<MyPage> {
 
     public final StringPath introduction = createString("introduction");
 
+    public final com.sparta.toogo.domain.post.entity.QPost post;
+
     public final com.sparta.toogo.domain.user.entity.QUser user;
 
     public QMyPage(String variable) {
@@ -46,6 +48,7 @@ public class QMyPage extends EntityPathBase<MyPage> {
 
     public QMyPage(Class<? extends MyPage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.post = inits.isInitialized("post") ? new com.sparta.toogo.domain.post.entity.QPost(forProperty("post"), inits.get("post")) : null;
         this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

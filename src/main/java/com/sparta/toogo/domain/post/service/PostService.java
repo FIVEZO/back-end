@@ -110,7 +110,7 @@ public class PostService {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
 
-        MyPage myPage = myPageRepository.findByUserId(userId);
+        MyPage myPage = myPageRepository.findByUserId(post.getUser().getId());
         String newIntroduction = null; // 기본 값 설정
 
         if (myPage != null) {
