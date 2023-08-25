@@ -22,9 +22,9 @@ public class MyPage {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "post")
-    private Post post;
+//    @OneToOne(fetch = FetchType.LAZY)
+////    @JoinColumn(name = "post")
+//    private Post post;
 
     public void update(String introduction) {
         this.introduction = introduction;

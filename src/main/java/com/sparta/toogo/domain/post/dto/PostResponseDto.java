@@ -27,7 +27,7 @@ public class PostResponseDto {
     private String meetDate;
     private Long people;
     private Long category;
-    private String newintroduction;
+    private String newIntroduction;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -58,7 +58,7 @@ public class PostResponseDto {
         return "[" + country + "] " + title;
     }
 
-    public PostResponseDto(Post post, MyPage myPage, boolean isScrap) {
+    public PostResponseDto(Post post, String newIntroduction, boolean isScrap) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
@@ -78,7 +78,9 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
-        this.newintroduction = myPage.getIntroduction();
+ //       this.newintroduction = myPage.getIntroduction();
+        this.newIntroduction = newIntroduction;
     }
+
 }
 
