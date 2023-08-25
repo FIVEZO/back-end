@@ -80,6 +80,9 @@ public class MyPageService {
         // 소개
         MyPage myPage = user.getMyPage();
         String newIntroduction = requestDto.getNewIntroduction();
+        if (newIntroduction.length() > 70) {
+            throw new MyPageException(TOO_LONG_INTRODUCTION);
+        }
         myPage.update(newIntroduction);
         myPageRepository.save(myPage);
 

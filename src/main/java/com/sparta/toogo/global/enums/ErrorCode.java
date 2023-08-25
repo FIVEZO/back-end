@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT(BAD_REQUEST, "비밀번호는 대소문자 영문과 숫자 조합으로 8자 이상 15자 이하로 입력해주세요."),
     NICKNAME_LENGTH_INVALID(BAD_REQUEST, "닉네임은 2자 이상 15자 이하로 입력해주세요."),
     NICKNAME_FORMAT_INVALID(BAD_REQUEST, "닉네임은 문자와 숫자만 포함되어야 합니다."),
+    TOO_LONG_INTRODUCTION(BAD_REQUEST, "자기소개는 70자 이하로 입력해주세요."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
