@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MyPageRequestDto {
     @NotBlank(message = "닉네임을 입력해 주세요.")
-    @Size(min = 2, max = 15, message = "닉네임은 2글자 이상 15글자 이하로 입력해주세요.")
+    @Size(max = 15, message = "닉네임은 2글자 이상 15글자 이하로 입력해주세요.")
     private String newNickname;
     @Size(max = 70, message = "자기소개는 70자 이하로 입력해주세요.")
     private String newIntroduction;
