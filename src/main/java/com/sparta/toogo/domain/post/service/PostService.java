@@ -59,9 +59,16 @@ public class PostService {
 
         Post post = new Post(category, requestDto, user);
 
+        MyPage myPage = myPageRepository.findByUserId(user.getId());
+        String newIntroduction = null; // 기본 값 설정
+
+        if (myPage != null) {
+            newIntroduction = myPage.getIntroduction();
+        }
+
         postRepository.save(post);
 
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, newIntroduction, false);
     }
 
     // 전체 조회

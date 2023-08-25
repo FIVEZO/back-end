@@ -1,7 +1,6 @@
 package com.sparta.toogo.domain.post.dto;
 
 import com.sparta.toogo.domain.comment.dto.CommentResponseDto;
-import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import lombok.Getter;
 
@@ -49,6 +48,7 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
+        this.newIntroduction = newIntroduction;
     }
 
     private String processTitle(String title, String country) {
@@ -78,9 +78,7 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
- //       this.newintroduction = myPage.getIntroduction();
         this.newIntroduction = newIntroduction;
     }
-
 }
 
