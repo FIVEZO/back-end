@@ -9,7 +9,6 @@ import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
-import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -90,7 +89,7 @@ public class MyPageService {
             String nickname = user.getNickname();
             return new MyPagePatchResponseDto(nickname, newIntroduction, newEmoticon);
         }
-        if (newNickname.length() > 10) {
+        if (newNickname.length() > 15 || newNickname.length() < 2) {
             throw new MyPageException(NICKNAME_LENGTH_INVALID);
         }
         User existUser = userRepository.findByNickname(newNickname);
@@ -108,6 +107,9 @@ public class MyPageService {
         String newPassword = requestDto.getNewPassword();
         if (password == null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우
             throw new MyPageException(PASSWORD_REQUIRED);
+        }
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,15}$")) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new MyPageException(PASSWORD_MISMATCH);

@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.user.service;
 
 import com.sparta.toogo.domain.mypage.entity.MyPage;
+import com.sparta.toogo.domain.mypage.exception.MyPageException;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
@@ -52,6 +53,10 @@ public class UserService {
             throw new UserException(DUPLICATE_RESOURCE);
         }
 
+        if (checkPassword(password)) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
+        }
+
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
         if (userRequestDto.isAdmin()) {
@@ -85,7 +90,7 @@ public class UserService {
     }
 
     public Boolean checkNickname(String nickname) {
-        if (nickname == null || nickname.equals("") || nickname.length() > 10) {
+        if (nickname == null || nickname.equals("") || nickname.length() > 15 || nickname.length() < 2) {
             throw new UserException(NICKNAME_LENGTH_INVALID);
         }
 
@@ -93,5 +98,12 @@ public class UserService {
             throw new UserException(NICKNAME_FORMAT_INVALID);
         }
         return userRepository.existsByNickname(nickname);
+    }
+
+    public Boolean checkPassword(String password) {
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,15}$")) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
+        }
+        return true;
     }
 }

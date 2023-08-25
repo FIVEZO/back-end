@@ -17,7 +17,8 @@ public enum ErrorCode {
     NEW_PASSWORD_SEND_FAILED(BAD_REQUEST, "새 비밀번호 전송이 실패하였습니다."),
     PASSWORD_REQUIRED(BAD_REQUEST, "비밀번호를 입력해주세요."),
     PASSWORD_MISMATCH(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
-    NICKNAME_LENGTH_INVALID(BAD_REQUEST, "닉네임은 2자 이상 10자 이하로 입력해주세요."),
+    INVALID_PASSWORD_FORMAT(BAD_REQUEST, "비밀번호는 대소문자 영문과 숫자 조합으로 8자 이상 15자 이하로 입력해주세요."),
+    NICKNAME_LENGTH_INVALID(BAD_REQUEST, "닉네임은 2자 이상 15자 이하로 입력해주세요."),
     NICKNAME_FORMAT_INVALID(BAD_REQUEST, "닉네임은 문자와 숫자만 포함되어야 합니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
