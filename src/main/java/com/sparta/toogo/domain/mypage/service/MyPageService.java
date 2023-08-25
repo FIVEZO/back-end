@@ -9,6 +9,7 @@ import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
 import com.sparta.toogo.domain.user.entity.User;
+import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -69,28 +70,36 @@ public class MyPageService {
 
     public MyPagePatchResponseDto myPageUpdate(MyPageRequestDto requestDto, User user) {
         // 이모티콘
-        MyPage myPage = user.getMyPage();
         String newEmoticon = requestDto.getNewEmoticon();
-        user.updateEmoticon(newEmoticon);
+        if (newEmoticon == null || newEmoticon.equals("")) {
+            newEmoticon = user.getEmoticon();
+        } else {
+            user.updateEmoticon(newEmoticon);
+        }
+        userRepository.save(user);
 
         // 소개
+        MyPage myPage = user.getMyPage();
         String newIntroduction = requestDto.getNewIntroduction();
         myPage.update(newIntroduction);
         myPageRepository.save(myPage);
 
         // 닉네임 수정
         String newNickname = requestDto.getNewNickname();
-        if (newNickname != null) {
-            User existUser = userRepository.findByNickname(newNickname);
-            if (existUser != null && newNickname.equals(existUser.getNickname())) {
-                throw new MyPageException(DUPLICATE_NICKNAME);
-            }
-            user.updateNickname(newNickname);
-            userRepository.save(user);
-            return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmoticon);
+        if (newNickname == null || newNickname.equals("")) {
+            String nickname = user.getNickname();
+            return new MyPagePatchResponseDto(nickname, newIntroduction, newEmoticon);
         }
-        String userNickname = user.getNickname();
-        return new MyPagePatchResponseDto(userNickname, newIntroduction, newEmoticon);
+        if (newNickname.length() > 10) {
+            throw new MyPageException(NICKNAME_LENGTH_INVALID);
+        }
+        User existUser = userRepository.findByNickname(newNickname);
+        if (existUser != null && newNickname.equals(existUser.getNickname())) {
+            throw new MyPageException(DUPLICATE_NICKNAME);
+        }
+        user.updateNickname(newNickname);
+        userRepository.save(user);
+        return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmoticon);
     }
 
     public MyPageResponseDto passwordUpdate(MyPageRequestDto requestDto, User user) {

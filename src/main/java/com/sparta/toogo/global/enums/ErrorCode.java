@@ -11,11 +11,14 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     INCORRECT_CODE(BAD_REQUEST, "잘못된 인증번호입니다."),
+    EMAIL_REQUIRED(BAD_REQUEST, "이메일을 입력해 주세요."),
     EMAIL_CODE_INCOMPLETE(BAD_REQUEST, "올바른 이메일 또는 인증 코드를 입력해 주세요."),
     CODE_SEND_FAILED(BAD_REQUEST, "인증 코드 전송이 실패하였습니다."),
     NEW_PASSWORD_SEND_FAILED(BAD_REQUEST, "새 비밀번호 전송이 실패하였습니다."),
     PASSWORD_REQUIRED(BAD_REQUEST, "비밀번호를 입력해주세요."),
     PASSWORD_MISMATCH(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    NICKNAME_LENGTH_INVALID(BAD_REQUEST, "닉네임은 2자 이상 10자 이하로 입력해주세요."),
+    NICKNAME_FORMAT_INVALID(BAD_REQUEST, "닉네임은 문자와 숫자만 포함되어야 합니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),

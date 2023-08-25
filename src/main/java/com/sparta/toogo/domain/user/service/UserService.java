@@ -78,10 +78,20 @@ public class UserService {
     }
 
     public Boolean checkEmail(String email) {
+        if (email == null || email.equals("")) {
+            throw new UserException(EMAIL_REQUIRED);
+        }
         return userRepository.existsByEmail(email);
     }
 
     public Boolean checkNickname(String nickname) {
+        if (nickname == null || nickname.equals("") || nickname.length() > 10) {
+            throw new UserException(NICKNAME_LENGTH_INVALID);
+        }
+
+        if (!nickname.matches("^[a-zA-Z0-9가-힣]*$")) {
+            throw new UserException(NICKNAME_FORMAT_INVALID);
+        }
         return userRepository.existsByNickname(nickname);
     }
 }
