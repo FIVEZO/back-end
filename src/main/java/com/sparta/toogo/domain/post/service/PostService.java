@@ -60,7 +60,7 @@ public class PostService {
         Post post = new Post(category, requestDto, user);
 
         MyPage myPage = myPageRepository.findByUserId(user.getId());
-        String newIntroduction = null; // 기본 값 설정
+        String newIntroduction = null; // 기본 값
 
         if (myPage != null) {
             newIntroduction = myPage.getIntroduction();
@@ -118,7 +118,7 @@ public class PostService {
         Post post = findPost(categoryEnum, postId);
 
         MyPage myPage = myPageRepository.findByUserId(post.getUser().getId());
-        String newIntroduction = null; // 기본 값 설정
+        String newIntroduction = null; // 기본 값
 
         if (myPage != null) {
             newIntroduction = myPage.getIntroduction();
