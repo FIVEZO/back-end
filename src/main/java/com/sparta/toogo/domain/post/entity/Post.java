@@ -59,16 +59,10 @@ public class Post extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToOne(fetch = LAZY)
-//    @JoinColumn(name = "myPage_introduction")
-//    private MyPage myPage;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> commentList = new ArrayList<>();
-
-//    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private MyPage myPage;
 
     @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
