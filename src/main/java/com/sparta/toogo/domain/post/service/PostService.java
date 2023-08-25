@@ -110,11 +110,17 @@ public class PostService {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         Post post = findPost(categoryEnum, postId);
 
-        MyPage myPage = myPageRepository.findByUserId(userId);
+        MyPage myPage = myPageRepository.findByUserId(post.getUser().getId());
+        String newIntroduction = null; // 기본 값 설정
+
+        if (myPage != null) {
+            newIntroduction = myPage.getIntroduction();
+        }
 
         boolean isScrap = scrapRepository.findByPostIdAndUserId(postId, userId).isPresent();
-        return new PostResponseDto(post, myPage, isScrap);
+        return new PostResponseDto(post, newIntroduction, isScrap);
     }
+
 
     public PostResponseDto updatePost(Long category, Long postId, User user, PostRequestDto requestDto) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
