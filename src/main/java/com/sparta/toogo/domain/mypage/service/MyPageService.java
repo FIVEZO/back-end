@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.mypage.service;
 
+import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.domain.mypage.dto.*;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
 import com.sparta.toogo.domain.post.entity.Post;
@@ -32,6 +33,7 @@ public class MyPageService {
     private final UserRepository userRepository;
     private final ScrapRepository scrapRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MessageRoomService messageRoomService;
 
     // 마이페이지 조회
     public ApiResponse<?> getMyPage(User user) {
@@ -71,6 +73,7 @@ public class MyPageService {
             String newNickname = requestDto.getNickname();
             user.updateNickname(newNickname);
             userRepository.save(user);
+            messageRoomService.updateMessageRoomNickname(user);
         }
         // 비밀번호 수정
         String newPassword = user.getPassword();

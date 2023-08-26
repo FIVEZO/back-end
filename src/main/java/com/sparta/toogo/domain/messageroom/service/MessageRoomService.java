@@ -80,8 +80,8 @@ public class MessageRoomService {
         }
     }
 
-    // 사용자 관련 쪽지방 전체 조회
-    public List<MessageResponseDto> findAllRoomByUser(User user) {
+    // 쪽지방 nickname 업데이트
+    public void updateMessageRoomNickname(User user) {
         List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverUserId(user.getId(), user.getId());
 
         for (MessageRoom messageRoom : messageRooms) {
@@ -93,6 +93,12 @@ public class MessageRoomService {
 
             messageRoomRepository.save(messageRoom);
         }
+    }
+
+
+    // 사용자 관련 쪽지방 전체 조회
+    public List<MessageResponseDto> findAllRoomByUser(User user) {
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverUserId(user.getId(), user.getId());
 
         List<MessageResponseDto> messageRoomDtos = new ArrayList<>();
 
