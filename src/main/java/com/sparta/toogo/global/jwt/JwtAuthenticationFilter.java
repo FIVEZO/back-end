@@ -87,9 +87,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         data.put("statusCode", HttpServletResponse.SC_BAD_REQUEST);
 
         if (failed instanceof UsernameNotFoundException) {
-            data.put("msg", "등록되지 않은 이메일입니다");
+            data.put("msg", "등록되지 않은 이메일입니다.");
         } else if (failed instanceof BadCredentialsException) {
-            data.put("msg", "비밀번호가 틀렸습니다");
+            data.put("msg", "이메일 또는 비밀번호를 확인해 주세요.");
         } else {
             data.put("msg", "로그인 실패");
         }

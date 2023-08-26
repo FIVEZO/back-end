@@ -69,36 +69,54 @@ public class MyPageService {
 
     public MyPagePatchResponseDto myPageUpdate(MyPageRequestDto requestDto, User user) {
         // 이모티콘
-        MyPage myPage = user.getMyPage();
         String newEmoticon = requestDto.getNewEmoticon();
-        user.updateEmoticon(newEmoticon);
+        if (newEmoticon == null || newEmoticon.equals("")) {
+            newEmoticon = user.getEmoticon();
+        } else {
+            user.updateEmoticon(newEmoticon);
+        }
+        userRepository.save(user);
 
         // 소개
+        MyPage myPage = user.getMyPage();
         String newIntroduction = requestDto.getNewIntroduction();
+        if (newIntroduction.length() > 70) {
+            throw new MyPageException(TOO_LONG_INTRODUCTION);
+        }
         myPage.update(newIntroduction);
         myPageRepository.save(myPage);
 
         // 닉네임 수정
         String newNickname = requestDto.getNewNickname();
-        if (newNickname != null) {
-            User existUser = userRepository.findByNickname(newNickname);
-            if (existUser != null && newNickname.equals(existUser.getNickname())) {
-                throw new MyPageException(DUPLICATE_NICKNAME);
-            }
-            user.updateNickname(newNickname);
-            userRepository.save(user);
-            return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmoticon);
+        if (newNickname == null || newNickname.equals("")) {
+            String nickname = user.getNickname();
+            return new MyPagePatchResponseDto(nickname, newIntroduction, newEmoticon);
         }
-        String userNickname = user.getNickname();
-        return new MyPagePatchResponseDto(userNickname, newIntroduction, newEmoticon);
+        if (newNickname.length() > 15 || newNickname.length() < 2) {
+            throw new MyPageException(NICKNAME_LENGTH_INVALID);
+        }
+        User existUser = userRepository.findByNickname(newNickname);
+        if (existUser != null && newNickname.equals(existUser.getNickname())) {
+            throw new MyPageException(DUPLICATE_NICKNAME);
+        }
+        user.updateNickname(newNickname);
+        userRepository.save(user);
+        return new MyPagePatchResponseDto(newNickname, newIntroduction, newEmoticon);
     }
 
     public MyPageResponseDto passwordUpdate(MyPageRequestDto requestDto, User user) {
+        // 카카오
+        if (user.getKakaoId() != null) {
+            throw new MyPageException(EXCEPTED_KAKAO_USER);
+        }
         // 비밀번호 수정
         String password = requestDto.getPassword();
         String newPassword = requestDto.getNewPassword();
         if (password == null) { // 비밀번호를 변경하기 위해 기존의 비밀번호의 값을 입력했을 경우
             throw new MyPageException(PASSWORD_REQUIRED);
+        }
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,15}$")) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new MyPageException(PASSWORD_MISMATCH);

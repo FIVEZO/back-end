@@ -1,6 +1,7 @@
 package com.sparta.toogo.domain.user.service;
 
 import com.sparta.toogo.domain.mypage.entity.MyPage;
+import com.sparta.toogo.domain.mypage.exception.MyPageException;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
@@ -40,7 +41,7 @@ public class UserService {
     @Transactional
     public UserResponseDto signUp(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
-        String password = passwordEncoder.encode(userRequestDto.getPassword());
+        String password = userRequestDto.getPassword();
         String nickname = userRequestDto.getNickname();
         String code = userRequestDto.getCode();
 
@@ -52,6 +53,11 @@ public class UserService {
             throw new UserException(DUPLICATE_RESOURCE);
         }
 
+        if (!checkPassword(password)) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
+        }
+        String encodingPassword = passwordEncoder.encode(password);
+
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
         if (userRequestDto.isAdmin()) {
@@ -62,7 +68,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(email, password, nickname, role, EmoticonEnum.HAPPY.getEmoticon());
+        User user = new User(email, encodingPassword, nickname, role, EmoticonEnum.HAPPY.getEmoticon());
         userRepository.save(user);
         MyPage myPage = new MyPage();
         myPage.setUser(user);
@@ -78,10 +84,27 @@ public class UserService {
     }
 
     public Boolean checkEmail(String email) {
+        if (email == null || email.equals("")) {
+            throw new UserException(EMAIL_REQUIRED);
+        }
         return userRepository.existsByEmail(email);
     }
 
     public Boolean checkNickname(String nickname) {
+        if (nickname == null || nickname.equals("") || nickname.length() > 15 || nickname.length() < 2) {
+            throw new UserException(NICKNAME_LENGTH_INVALID);
+        }
+
+        if (!nickname.matches("^[a-zA-Z0-9가-힣]*$")) {
+            throw new UserException(NICKNAME_FORMAT_INVALID);
+        }
         return userRepository.existsByNickname(nickname);
+    }
+
+    public Boolean checkPassword(String password) {
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,15}$")) {
+            throw new MyPageException(INVALID_PASSWORD_FORMAT);
+        }
+        return true;
     }
 }
