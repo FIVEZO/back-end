@@ -27,6 +27,7 @@ public class PostResponseDto {
     private Long people;
     private Long category;
     private String newIntroduction;
+    private String emoticon;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -48,7 +49,8 @@ public class PostResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
-        this.newIntroduction = newIntroduction;
+//        this.newIntroduction = post.getUser().getMyPage().getIntroduction();
+        this.emoticon = post.getUser().getEmoticon();
     }
 
     private String processTitle(String title, String country) {
@@ -79,6 +81,7 @@ public class PostResponseDto {
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
         this.newIntroduction = newIntroduction;
+        this.emoticon = post.getUser().getEmoticon();
     }
 }
 

@@ -24,6 +24,7 @@ public class PostResponseGetDto {
     private Long scrapPostSum;
     private Long category;
     private Long people;
+    private String emoticon;
 
     public PostResponseGetDto(Post post) {
         this.id = post.getId();
@@ -41,6 +42,7 @@ public class PostResponseGetDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
+        this.emoticon = post.getUser().getEmoticon();
     }
 
 
