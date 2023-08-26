@@ -22,13 +22,22 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public static final QMessageRoom messageRoom = new QMessageRoom("messageRoom");
 
+    public final com.sparta.toogo.global.util.QTimestamped _super = new com.sparta.toogo.global.util.QTimestamped(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ListPath<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage> messageList = this.<com.sparta.toogo.domain.message.entity.Message, com.sparta.toogo.domain.message.entity.QMessage>createList("messageList", com.sparta.toogo.domain.message.entity.Message.class, com.sparta.toogo.domain.message.entity.QMessage.class, PathInits.DIRECT2);
 
+    public final com.sparta.toogo.domain.post.entity.QPost post;
+
     public final StringPath receiver = createString("receiver");
 
     public final StringPath roomId = createString("roomId");
+
+    public final StringPath roomName = createString("roomName");
 
     public final StringPath sender = createString("sender");
 
@@ -52,6 +61,7 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public QMessageRoom(Class<? extends MessageRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.post = inits.isInitialized("post") ? new com.sparta.toogo.domain.post.entity.QPost(forProperty("post"), inits.get("post")) : null;
         this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

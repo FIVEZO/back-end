@@ -20,6 +20,10 @@ public class Category {
         PostCategory(int value) {
             this.value = value;
         }
+
+        public Long getValue() {
+            return (long) value;
+        }
     }
 
     public static PostCategory findByNumber(Long num) {

@@ -39,7 +39,7 @@ public class QMessage extends EntityPathBase<Message> {
 
     public final StringPath sender = createString("sender");
 
-    public final com.sparta.toogo.domain.user.entity.QUser user;
+    public final StringPath sentTime = createString("sentTime");
 
     public QMessage(String variable) {
         this(Message.class, forVariable(variable), INITS);
@@ -60,7 +60,6 @@ public class QMessage extends EntityPathBase<Message> {
     public QMessage(Class<? extends Message> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.messageRoom = inits.isInitialized("messageRoom") ? new com.sparta.toogo.domain.messageroom.entity.QMessageRoom(forProperty("messageRoom"), inits.get("messageRoom")) : null;
-        this.user = inits.isInitialized("user") ? new com.sparta.toogo.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

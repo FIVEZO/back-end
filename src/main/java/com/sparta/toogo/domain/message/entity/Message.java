@@ -1,17 +1,22 @@
 package com.sparta.toogo.domain.message.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
+import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Table(name = "message")
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,17 +30,12 @@ public class Message extends Timestamped {
     @Column(name = "message")
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "messageRoom", nullable = false)
-    private MessageRoom messageRoom;
-
-//    @ManyToOne
-//    @JoinColumn(name = "mypageId", nullable = false)
-//    private Mypage mypage;
+    @Column(name = "sentTime")
+    private String sentTime;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+    @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
+    private MessageRoom messageRoom;
 
     // 대화 저장
     public Message(MessageDto messageDto) {
@@ -44,15 +44,5 @@ public class Message extends Timestamped {
         this.roomId = messageDto.getRoomId();
         this.receiver = messageDto.getReceiver();
         this.message = messageDto.getMessage();
-    }
-
-    // 대화 저장 - 테스트용
-    public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom, User user) {
-        this.sender = sender;
-        this.roomId = roomId;
-        this.receiver = receiver;
-        this.message = message;
-        this.messageRoom = messageRoom;
-        this.user = user;
     }
 }
