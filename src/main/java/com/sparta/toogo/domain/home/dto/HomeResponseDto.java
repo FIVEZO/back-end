@@ -21,6 +21,7 @@ public class HomeResponseDto {
     private String meetDate;
     private Long category;
     private Long people;
+    private String emoticon;
 
 
     public HomeResponseDto(Post post){
@@ -39,6 +40,7 @@ public class HomeResponseDto {
 
         this.createdAt = koreaTime.toLocalDateTime();
         this.people = post.getPeople();
+        this.emoticon = post.getUser().getEmoticon();
     }
 
 

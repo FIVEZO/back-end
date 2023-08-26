@@ -16,7 +16,7 @@ public class CommentResponseDto {
     private String comment;
     private String nickname;
     private LocalDateTime createdAt;
-//    private String status;
+    private String emoticon;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
@@ -26,8 +26,8 @@ public class CommentResponseDto {
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime utcTime = comment.getCreatedAt().atZone(utcZone);
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
-
         this.createdAt = koreaTime.toLocalDateTime();
+        this.emoticon = comment.getUser().getEmoticon();
     }
 
 //    public CommentResponseDto(String status, Comment comment) {
