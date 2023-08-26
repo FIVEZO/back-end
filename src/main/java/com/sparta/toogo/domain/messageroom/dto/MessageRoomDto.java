@@ -52,6 +52,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     public void setMessageRoomPostId(Long postId) {
         this.postId = postId;
     }
+
     public void setMessageRoomCategory(Long category) {
         this.category = category;
     }

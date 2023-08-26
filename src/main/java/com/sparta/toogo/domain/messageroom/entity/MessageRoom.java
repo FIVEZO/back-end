@@ -5,7 +5,6 @@ import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

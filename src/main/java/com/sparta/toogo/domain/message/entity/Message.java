@@ -3,8 +3,6 @@ package com.sparta.toogo.domain.message.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
-import com.sparta.toogo.domain.post.entity.Post;
-import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,54 +29,16 @@ public class Message extends Timestamped {
     @Column(name = "sentTime")
     private String sentTime;
 
-// @ManyToOne(fetch = FetchType.LAZY)
-// @JoinColumn(name = "messageRoom", nullable = false)
-// private MessageRoom messageRoom;
-
     @ManyToOne
     @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
     private MessageRoom messageRoom;
 
-//    @ManyToOne
-//    @JoinColumn(name = "post_id", nullable = false)
-//    private Post post;
-// @ManyToOne
-// @JoinColumn(name = "mypageId", nullable = false)
-// private Mypage mypage;
-
-// @ManyToOne
-// @JoinColumn(name = "userId")
-// private User user;
-
     // 대화 저장
-//    public Message(MessageDto messageDto) {
-//        super();
-//        this.sender = messageDto.getSender();
-//        this.roomId = messageDto.getRoomId();
-//        this.receiver = messageDto.getReceiver();
-//        this.message = messageDto.getMessage();
-//    }
-    public Message(String sender, String roomId, String message) {
+    public Message(MessageDto messageDto) {
         super();
-        this.sender = sender;
-        this.roomId = roomId;
-        this.message = message;
-    }
-    public Message(String sender, String roomId, String message, String sentTime) {
-        super();
-        this.sender = sender;
-        this.roomId = roomId;
-        this.message = message;
-        this.sentTime = sentTime;
-    }
-
-    // 대화 저장 - 테스트용
-    public Message(String sender, String roomId, String receiver, String message, MessageRoom messageRoom) {
-        this.sender = sender;
-        this.roomId = roomId;
-        this.receiver = receiver;
-        this.message = message;
-        this.messageRoom = messageRoom;
-// this.user = user;
+        this.sender = messageDto.getSender();
+        this.roomId = messageDto.getRoomId();
+        this.receiver = messageDto.getReceiver();
+        this.message = messageDto.getMessage();
     }
 }

@@ -73,7 +73,7 @@ public class MessageRoomService {
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user, post));
 
             return new MessageResponseDto(messageRoom);
-        // 이미 생성된 쪽지방인 경우
+            // 이미 생성된 쪽지방인 경우
         } else {
             return new MessageResponseDto(messageRoom.getRoomId());
         }

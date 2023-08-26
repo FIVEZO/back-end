@@ -34,13 +34,6 @@ public class MessageResponseDto {
     }
 
     // 사용자 관련 쪽지방 전체 조회
-//    public MessageResponseDto(Long id, String roomName, String roomId, String sender, String receiver) {
-//        this.id = id;
-//        this.roomName = roomName;
-//        this.roomId = roomId;
-//        this.sender = sender;
-//        this.receiver = receiver;
-//    }
     public MessageResponseDto(Long id, String roomName, String roomId, String sender, String receiver, LocalDateTime createdAt) {
         this.id = id;
         this.roomName = roomName;
@@ -53,17 +46,16 @@ public class MessageResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-//        this.createdAt = createdAt;
     }
 
-//    // 대화 저장 - 테스트용
-//    public MessageResponseDto(Message saveMessage) {
-//        this.id = saveMessage.getId();
-//        this.sender = saveMessage.getSender();
-//        this.roomId = saveMessage.getRoomId();
-//        this.receiver = saveMessage.getReceiver();
-//        this.createdAt = saveMessage.getCreatedAt();
-//    }
+    // 대화 저장 - 테스트용
+    public MessageResponseDto(Message saveMessage) {
+        this.id = saveMessage.getId();
+        this.sender = saveMessage.getSender();
+        this.roomId = saveMessage.getRoomId();
+        this.receiver = saveMessage.getReceiver();
+        this.createdAt = saveMessage.getCreatedAt();
+    }
 
     public MessageResponseDto(String roomId) {
         this.roomId = roomId;
@@ -80,7 +72,5 @@ public class MessageResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-
-//        this.createdAt = createdAt;
     }
 }
