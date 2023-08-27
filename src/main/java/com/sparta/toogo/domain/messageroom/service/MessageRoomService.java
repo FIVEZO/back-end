@@ -70,7 +70,8 @@ public class MessageRoomService {
         if ((messageRoom == null) || !(messageRoom.getPost().getId().equals(messageRequestDto.getPostId()))) {
             MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user, post));
+            User receiverUser = userRepository.findByNickname(messageRequestDto.getReceiver());
+            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), receiverUser.getId(), user, post));
 
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우
@@ -79,9 +80,25 @@ public class MessageRoomService {
         }
     }
 
+    // 쪽지방 nickname 업데이트
+    public void updateMessageRoomNickname(User user) {
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverUserId(user.getId(), user.getId());
+
+        for (MessageRoom messageRoom : messageRooms) {
+            if ((messageRoom.getUser().getId().equals(user.getId()))) {
+                messageRoom.setSender(user.getNickname());
+            } else if (messageRoom.getReceiverUserId().equals(user.getId())) {
+                messageRoom.setReceiver(user.getNickname());
+            }
+
+            messageRoomRepository.save(messageRoom);
+        }
+    }
+
+
     // 사용자 관련 쪽지방 전체 조회
     public List<MessageResponseDto> findAllRoomByUser(User user) {
-        List<MessageRoom> messageRooms = messageRoomRepository.findByUserOrReceiver(user, user.getNickname());      // sender & receiver 모두 해당 쪽지방 조회 가능 (1:1 대화)
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverUserId(user.getId(), user.getId());
 
         List<MessageResponseDto> messageRoomDtos = new ArrayList<>();
 

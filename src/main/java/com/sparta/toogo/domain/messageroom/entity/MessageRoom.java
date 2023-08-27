@@ -26,6 +26,7 @@ public class MessageRoom extends Timestamped {
     @Column(unique = true)
     private String roomId;
     private String receiver;        // 메시지 수신자
+    private Long receiverUserId;        // 수신자의 userId
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "mypageId", nullable = false)
@@ -43,12 +44,13 @@ public class MessageRoom extends Timestamped {
     private Post post;
 
     // 쪽지방 생성
-    public MessageRoom(Long id, String roomName, String sender, String roomId, String receiver, User user, Post post) {
+    public MessageRoom(Long id, String roomName, String sender, String roomId, String receiver, Long receiverUserId, User user, Post post) {
         this.id = id;
         this.roomName = roomName;
         this.sender = sender;
         this.roomId = roomId;
         this.receiver = receiver;
+        this.receiverUserId = receiverUserId;
         this.user = user;
         this.post = post;
     }
