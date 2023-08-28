@@ -18,7 +18,7 @@ public class MessageDto {
     private String receiver;
     private String message;
     private String sentTime;
-    private LocalDateTime createdAt;        // 최신 메시지 전송 시간
+//    private LocalDateTime createdAt;        // 최신 메시지 전송 시간
 
     public MessageDto(Message message) {
         this.sender = message.getSender();
@@ -26,11 +26,11 @@ public class MessageDto {
         this.receiver = message.getReceiver();
         this.message = message.getMessage();
         this.sentTime = message.getSentTime();
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
-        ZonedDateTime utcTime = message.getCreatedAt().atZone(utcZone);
-        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
-
-        this.createdAt = koreaTime.toLocalDateTime();
+//        ZoneId utcZone = ZoneId.of("UTC");
+//        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+//        ZonedDateTime utcTime = message.getCreatedAt().atZone(utcZone);
+//        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
+//
+//        this.createdAt = koreaTime.toLocalDateTime();
     }
 }

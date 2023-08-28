@@ -8,12 +8,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Table(name = "message")
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Message extends Timestamped {
+public class Message extends Timestamped implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
