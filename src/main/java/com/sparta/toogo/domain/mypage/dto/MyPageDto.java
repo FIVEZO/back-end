@@ -22,7 +22,7 @@ public class MyPageDto {
     private String meetDate;
     private Long scrapPostSum;
     private Long category;
-    private Long people;
+    private String people;
     private String emoticon;
 
     public MyPageDto(Post post) {
@@ -40,7 +40,7 @@ public class MyPageDto {
         this.meetDate = post.getMeetDate();
         this.scrapPostSum  = post.getScrapPostSum();
         this.category = post.getCategory().getValue();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
         this.emoticon = post.getUser().getEmoticon();
     }
 
@@ -58,7 +58,7 @@ public class MyPageDto {
         this.meetDate = post.getMeetDate();
         this.scrapPostSum  = post.getScrapPostSum();
         this.category = post.getCategory().getValue();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
         this.emoticon = post.getUser().getEmoticon();
     }
 

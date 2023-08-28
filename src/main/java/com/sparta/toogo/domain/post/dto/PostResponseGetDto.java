@@ -23,7 +23,7 @@ public class PostResponseGetDto {
     private String meetDate;
     private Long scrapPostSum;
     private Long category;
-    private Long people;
+    private String people;
     private String emoticon;
 
     public PostResponseGetDto(Post post) {
@@ -41,7 +41,7 @@ public class PostResponseGetDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
         this.emoticon = post.getUser().getEmoticon();
     }
 
