@@ -13,7 +13,6 @@ import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
 import com.sparta.toogo.domain.post.entity.Category;
 import com.sparta.toogo.domain.post.entity.Post;
-import com.sparta.toogo.domain.post.entity.QPost;
 import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.scrap.repository.ScrapRepository;
@@ -22,7 +21,10 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,7 @@ public class PostService {
         String title = requestDto.getTitle();
         String contents = requestDto.getContents();
 
-        if(title.isEmpty() || contents.isEmpty()) {
+        if (title.isEmpty() || contents.isEmpty()) {
             throw new PostException(ErrorCode.EMPTY_TITLE_OR_CONTENTS);
         }
 
