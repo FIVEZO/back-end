@@ -60,7 +60,7 @@ public class CommentService {
     private Comment checkComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(ErrorCode.NOT_FOUND_COMMENT));
-        if(!(comment.getUser().getId().equals(user.getId()))) {
+        if (!(comment.getUser().getId().equals(user.getId()))) {
             throw new UnauthorizedException(ErrorCode.NO_AUTHORITY_TO_DATA);
         }
         return comment;
