@@ -42,6 +42,7 @@
         </rollingPolicy>
     </appender>
 
+    <!--인포 레벨-->
     <root level="INFO">
         <appender-ref ref="FILE"/>
     </root>
