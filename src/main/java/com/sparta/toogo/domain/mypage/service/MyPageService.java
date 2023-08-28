@@ -73,7 +73,6 @@ public class MyPageService {
             String newNickname = requestDto.getNickname();
             user.updateNickname(newNickname);
             userRepository.save(user);
-            messageRoomService.updateMessageRoomNickname(user);
         }
         // 비밀번호 수정
         String newPassword = user.getPassword();

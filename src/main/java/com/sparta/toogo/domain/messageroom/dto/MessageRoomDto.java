@@ -28,6 +28,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     private int category;      // 게시글 카테고리
     private String title;       // 게시글 제목
     private String country;     // 게시글 나라
+    private String emoticon;
 
     // 쪽지방 생성
     public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user) {
@@ -40,13 +41,17 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         return messageRoomDto;
     }
 
-    // 사용자 관련 쪽지방 선택 조회
-    public MessageRoomDto(Long id, String roomName, String roomId, String sender, String receiver) {
+    // 사용자 관련 쪽지방 선택 조회 - user 가 sender 인 경우
+    public MessageRoomDto(Long id, String roomId, String nickname) {
         this.id = id;
-        this.roomName = roomName;
         this.roomId = roomId;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.roomName = nickname;
+    }
+
+    // 사용자 관련 쪽지방 선택 조회 - user 가 receiver 인 경우
+    public MessageRoomDto(Long id, String roomId) {
+        this.id = id;
+        this.roomId = roomId;
     }
 
     public void setMessageRoomPostId(Long postId) {
@@ -64,5 +69,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
         this.country = country;
     }
 
-
+    public void setEmoticon(String emoticon) {
+        this.emoticon = emoticon;
+    }
 }

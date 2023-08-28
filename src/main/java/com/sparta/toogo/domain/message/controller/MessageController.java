@@ -40,14 +40,14 @@ public class MessageController {
     }
 
     // 대화 내역 조회
-    @GetMapping("/api/room/{roomId}/message")
+    @GetMapping("/api/room/message/{roomId}")
     public ResponseEntity<List<MessageDto>> loadMessage(@PathVariable String roomId) {
         return ResponseEntity.ok(messageService.loadMessage(roomId));
     }
 
     // 메시지 작성 - 테스트용
-//    @PostMapping("/room/{roomId}/message")
-//    public MessageResponseDto createMessage(@PathVariable String roomId, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return messageService.createMessage(roomId, messageDto, userDetails.getUser());
-//    }
+    @PostMapping("/room/message/{roomId}")
+    public MessageResponseDto createMessage(@PathVariable String roomId, @RequestBody MessageDto messageDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return messageService.createMessage(roomId, messageDto, userDetails.getUser());
+    }
 }
