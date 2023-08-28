@@ -24,7 +24,7 @@ public class PostResponseDto {
     private double latitude;
     private double longitude;
     private String meetDate;
-    private Long people;
+    private String people;
     private Long category;
     private String newIntroduction;
     private String emoticon;
@@ -48,7 +48,7 @@ public class PostResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
 //        this.newIntroduction = post.getUser().getMyPage().getIntroduction();
         this.emoticon = post.getUser().getEmoticon();
     }
@@ -79,7 +79,7 @@ public class PostResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
         this.newIntroduction = newIntroduction;
         this.emoticon = post.getUser().getEmoticon();
     }

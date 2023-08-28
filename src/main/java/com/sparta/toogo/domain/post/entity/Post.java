@@ -50,7 +50,7 @@ public class Post extends Timestamped {
     private String meetDate;
 
     @Column
-    private Long people;
+    private String people;
 
     @Enumerated(EnumType.STRING)
     private Category.PostCategory category;

@@ -20,7 +20,7 @@ public class HomeResponseDto {
     private LocalDateTime createdAt;
     private String meetDate;
     private Long category;
-    private Long people;
+    private String people;
     private String emoticon;
 
 
@@ -39,7 +39,7 @@ public class HomeResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
-        this.people = post.getPeople();
+        this.people = String.valueOf(post.getPeople());
         this.emoticon = post.getUser().getEmoticon();
     }
 
