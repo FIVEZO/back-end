@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j(topic = "Scheduler")
@@ -15,13 +16,14 @@ import java.util.List;
 public class NotificationScheduler {
     private final NotificationRepository notificationRepository;
 
-    // 알림 삭제 (2일 마다)
-    @Scheduled(cron = "0 0 0 */2 * *")
-//    @Scheduled(cron = "0 */1 * * * *")
+    // 6시간 마다 생성일 기준 2일 지난 알림 삭제
+    @Scheduled(cron = "0 0 */6 * * *")
     public void deleteNotification() {
-        List<Notification> notifications = notificationRepository.findAll();
+        LocalDate twoDaysAgo = LocalDate.now().minusDays(2);
+        List<Notification> notifications = notificationRepository.findByCreatedAtBefore(twoDaysAgo);
+
         notificationRepository.deleteAll(notifications);
 
-        log.info("알림 삭제 완료");
+        log.info(notifications.size() + "개 알림 삭제 완료");
     }
 }
