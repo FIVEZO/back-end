@@ -28,6 +28,7 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     private Long category;      // 게시글 카테고리
     private String title;       // 게시글 제목
     private String country;     // 게시글 나라
+    private String emoticon;
 
     // 쪽지방 생성
     public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user) {

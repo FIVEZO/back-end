@@ -22,6 +22,7 @@ public class MessageResponseDto {
     private Long postId;
     private String message;
     private LocalDateTime createdAt;
+    private String emoticon;
 
     // 쪽지방 생성
     public MessageResponseDto(MessageRoom messageRoom) {
@@ -72,5 +73,9 @@ public class MessageResponseDto {
         ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
 
         this.createdAt = koreaTime.toLocalDateTime();
+    }
+
+    public void setEmoticon(String emoticon) {
+        this.emoticon = emoticon;
     }
 }

@@ -113,6 +113,9 @@ public class MessageRoomService {
                         messageRoom.getReceiver(),
                         messageRoom.getCreatedAt());
 
+                User receiverUser = userRepository.findByNickname(messageRoom.getReceiver());
+                messageRoomDto.setEmoticon(receiverUser.getEmoticon());
+
                 // 가장 최신 메시지 & 생성 시간 조회
                 Message latestMessage = messageRepository.findTopByRoomIdOrderByCreatedAtDesc(messageRoom.getRoomId());
                 if (latestMessage != null) {
@@ -130,6 +133,9 @@ public class MessageRoomService {
                         messageRoom.getSender(),
                         messageRoom.getReceiver(),
                         messageRoom.getCreatedAt());
+
+                User senderUser = userRepository.findByNickname(messageRoom.getSender());
+                messageRoomDto.setEmoticon(senderUser.getEmoticon());
 
                 // 가장 최신 메시지 & 생성 시간 조회
                 Message latestMessage = messageRepository.findTopByRoomIdOrderByCreatedAtDesc(messageRoom.getRoomId());
@@ -176,6 +182,14 @@ public class MessageRoomService {
         messageRoomDto.setMessageRoomCategory(post.getCategory().getValue());
         messageRoomDto.setMessageRoomCountry(post.getCountry());
         messageRoomDto.setMessageRoomTitle(post.getTitle());
+
+        if (user.getNickname().equals(messageRoom.getSender())) {
+            User receiverUser = userRepository.findByNickname(messageRoom.getReceiver());
+            messageRoomDto.setEmoticon(receiverUser.getEmoticon());
+        } else {
+            User senderUser = userRepository.findByNickname(messageRoom.getSender());
+            messageRoomDto.setEmoticon(senderUser.getEmoticon());
+        }
 
         return messageRoomDto;
     }
