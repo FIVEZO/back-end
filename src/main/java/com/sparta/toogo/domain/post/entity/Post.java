@@ -2,7 +2,6 @@ package com.sparta.toogo.domain.post.entity;
 
 import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
-import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.scrap.entity.Scrap;
 import com.sparta.toogo.domain.user.entity.User;
@@ -91,10 +90,11 @@ public class Post extends Timestamped {
     }
 
     // 포스트 스크랩 수
-    public void plusScrapPostSum(){
+    public void plusScrapPostSum() {
         this.scrapPostSum += 1;
     }
-    public void minusScrapPostSum(){
+
+    public void minusScrapPostSum() {
         this.scrapPostSum -= 1;
     }
 }
