@@ -12,25 +12,20 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MessageDto {
+public class MessageDto extends Message {
+    private Long senderId;
     private String sender;
     private String roomId;
-//    private String receiver;
     private String message;
     private String sentTime;
     private LocalDateTime createdAt;        // 최신 메시지 전송 시간
 
-    public MessageDto(Message message) {
-        this.sender = message.getSender();
-        this.roomId = message.getRoomId();
-//        this.receiver = message.getReceiver();
-        this.message = message.getMessage();
-        this.sentTime = message.getSentTime();
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
-        ZonedDateTime utcTime = message.getCreatedAt().atZone(utcZone);
-        ZonedDateTime koreaTime = utcTime.withZoneSameInstant(koreaZone);
-
-        this.createdAt = koreaTime.toLocalDateTime();
+    // 대화 조회
+    public MessageDto(Long senderId, String sender, String roomId, String message, String sentTime) {
+        this.senderId = senderId;
+        this.sender = sender;
+        this.roomId = roomId;
+        this.message = message;
+        this.sentTime = sentTime;
     }
 }

@@ -162,6 +162,7 @@ public class MessageRoomService {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
                     messageRoom.getRoomId(),
+                    user.getId(),
                     receiver.getNickname());        // roomName
 
             // emoticon
@@ -181,6 +182,7 @@ public class MessageRoomService {
         } else {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
+                    user.getId(),
                     messageRoom.getRoomId());
 
             // roomName & emoticon

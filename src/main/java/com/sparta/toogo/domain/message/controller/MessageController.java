@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.message.controller;
 
 import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
+import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.redis.service.RedisPublisher;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
@@ -41,7 +42,7 @@ public class MessageController {
 
     // 대화 내역 조회
     @GetMapping("/api/room/message/{roomId}")
-    public ResponseEntity<List<MessageDto>> loadMessage(@PathVariable String roomId) {
+    public ResponseEntity<List<Message>> loadMessage(@PathVariable String roomId) {
         return ResponseEntity.ok(messageService.loadMessage(roomId));
     }
 
