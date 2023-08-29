@@ -30,6 +30,8 @@ public class Notification {
 
     private Long userId;
 
+    private String emoticon;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
