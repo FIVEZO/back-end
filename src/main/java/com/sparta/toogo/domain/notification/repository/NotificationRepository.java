@@ -12,4 +12,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     List<Notification> findByUserId(Long id);
     List<Notification> findByCreatedAtBefore(LocalDate twoDaysAgo);
+    List<Notification> findByPostId(Long postId);
 }

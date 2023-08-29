@@ -3,6 +3,10 @@ package com.sparta.toogo.domain.post.service;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
+import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.notification.entity.Notification;
+import com.sparta.toogo.domain.notification.repository.NotificationRepository;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
@@ -37,6 +41,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final JPAQueryFactory queryFactory;
     private final ScrapRepository scrapRepository;
+    private final MessageRoomRepository messageRoomRepository;
+    private final NotificationRepository notificationRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
         Post post = new Post(category, requestDto, user);
@@ -78,11 +84,27 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
+//    public SuccessCode deletePost(Long category, Long postId, User user) {
+//        Category.PostCategory categoryEnum = Category.findByNumber(category);
+//        confirmPost(categoryEnum, postId, user);
+//
+//        queryFactory.delete(post).where(post.id.eq(postId)).execute();
+//
+//        return SuccessCode.POST_DELETE_SUCCESS;
+//    }
     public SuccessCode deletePost(Long category, Long postId, User user) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         confirmPost(categoryEnum, postId, user);
 
-        queryFactory.delete(post).where(post.id.eq(postId)).execute();
+        List<Notification> notifications = notificationRepository.findByPostId(postId);
+        notificationRepository.deleteAll(notifications);
+
+        List<MessageRoom> messageRooms = messageRoomRepository.findByPostId(postId);
+        messageRoomRepository.deleteAll(messageRooms);
+
+        postRepository.deleteById(postId);
+
+        //queryFactory.delete(post).where(post.id.eq(postId)).execute();
 
         return SuccessCode.POST_DELETE_SUCCESS;
     }
