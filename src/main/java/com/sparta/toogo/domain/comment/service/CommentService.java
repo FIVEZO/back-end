@@ -14,9 +14,11 @@ import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.enums.SuccessCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CommentService {
 
@@ -58,9 +60,16 @@ public class CommentService {
     }
 
     private Comment checkComment(Long commentId, User user) {
+        System.out.println("commentId = " + commentId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(ErrorCode.NOT_FOUND_COMMENT));
-        if (!(comment.getUser().getId().equals(user.getId()))) {
+
+        log.info("comment = " + comment.getUser().getId().equals(user.getId()));
+        log.info("comment2 = " + comment.getPost().getUser().getId().equals(user.getId()));
+
+        if (comment.getUser().getId().equals(user.getId()) || comment.getPost().getUser().getId().equals(user.getId())) {
+
+        } else {
             throw new UnauthorizedException(ErrorCode.NO_AUTHORITY_TO_DATA);
         }
         return comment;
