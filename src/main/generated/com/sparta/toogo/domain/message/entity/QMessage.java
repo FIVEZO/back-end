@@ -39,6 +39,8 @@ public class QMessage extends EntityPathBase<Message> {
 
     public final StringPath sender = createString("sender");
 
+    public final NumberPath<Long> senderId = createNumber("senderId", Long.class);
+
     public final StringPath sentTime = createString("sentTime");
 
     public QMessage(String variable) {

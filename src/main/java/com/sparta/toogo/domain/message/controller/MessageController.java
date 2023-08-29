@@ -4,7 +4,6 @@ import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
-import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.redis.service.RedisPublisher;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;

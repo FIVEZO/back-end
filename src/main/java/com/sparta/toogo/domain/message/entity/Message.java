@@ -1,7 +1,6 @@
 package com.sparta.toogo.domain.message.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
@@ -35,12 +34,31 @@ public class Message extends Timestamped implements Serializable {
     @JoinColumn(name = "roomId", referencedColumnName = "roomId", insertable = false, updatable = false)
     private MessageRoom messageRoom;
 
+    @Column(name = "senderId")
+    private Long senderId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "post_id", nullable = false)
+//    private Post post;
+// @ManyToOne
+// @JoinColumn(name = "mypageId", nullable = false)
+// private Mypage mypage;
+
     // 대화 저장
-    public Message(MessageDto messageDto) {
+    public Message(Long id, String sender, String roomId, String message, String sentTime) {
         super();
-        this.sender = messageDto.getSender();
-        this.roomId = messageDto.getRoomId();
-        this.receiver = messageDto.getReceiver();
-        this.message = messageDto.getMessage();
+        this.senderId = id;
+        this.sender = sender;
+        this.roomId = roomId;
+        this.message = message;
+        this.sentTime = sentTime;
+    }
+
+    public Message(String sender, String roomId, String message, String sentTime) {
+        super();
+        this.sender = sender;
+        this.roomId = roomId;
+        this.message = message;
+        this.sentTime = sentTime;
     }
 }
