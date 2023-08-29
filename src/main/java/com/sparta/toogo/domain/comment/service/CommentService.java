@@ -48,6 +48,10 @@ public class CommentService {
 
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
         Comment comment = checkComment(commentId, user);
+
+        if(!(comment.getUser().getId().equals(user.getId()))) {
+            throw new UnauthorizedException(ErrorCode.NO_AUTHORITY_TO_DATA);
+        }
         comment.update(requestDto);
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
