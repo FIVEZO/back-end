@@ -26,6 +26,8 @@ public class QNotification extends EntityPathBase<Notification> {
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
+    public final StringPath emoticon = createString("emoticon");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.sparta.toogo.domain.post.entity.QPost post;

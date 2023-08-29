@@ -31,6 +31,7 @@ public class NotificationService {
     private final CommentRepository commentRepository;
     private final MessageRepository messageRepository;
     private final MessageRoomRepository messageRoomRepository;
+    private final UserRepository userRepository;
 
     // 메시지 알림
     public SseEmitter subscribe(Long userId) {
@@ -65,6 +66,10 @@ public class NotificationService {
                 () -> new IllegalArgumentException("메시지를 찾을 수 없습니다.")
         );
 
+        User userSender = userRepository.findById(senderId).orElseThrow(
+                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        );
+
         Long userId = receiverId;
 
         if (NotificationController.sseEmitters.containsKey(userId)) {
@@ -75,6 +80,7 @@ public class NotificationService {
                 eventData.put("sender", receiveMessage.getSender());                    // 메시지 보낸자
                 eventData.put("createdAt", receiveMessage.getCreatedAt().toString());   // 메시지를 보낸 시간
                 eventData.put("contents", receiveMessage.getMessage());                 // 메시지 내용
+                eventData.put("emoticon", userSender.getEmoticon());                    // 메시지 보낸자의 이모티콘
 
                 boolean isNotificationRead = false;
                 eventData.put("readStatus", isNotificationRead);
@@ -88,6 +94,7 @@ public class NotificationService {
                 notification.setContents(receiveMessage.getMessage());
                 notification.setRoomId(messageRoom.getRoomId());
                 notification.setPost(post);         // post 필드 설정
+                notification.setEmoticon(userSender.getEmoticon());
                 notification.setReadStatus(isNotificationRead);
                 notification.setUserId(userId);
                 notificationRepository.save(notification);
@@ -108,6 +115,10 @@ public class NotificationService {
                 () -> new IllegalArgumentException("댓글을 찾을 수 없습니다.")
         );
 
+        User userSender = userRepository.findById(receiveComment.getUser().getId()).orElseThrow(
+                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        );
+
         Long userId = post.getUser().getId();
 
         if (NotificationController.sseEmitters.containsKey(userId)) {
@@ -118,6 +129,7 @@ public class NotificationService {
                 eventData.put("sender", receiveComment.getUser().getNickname());        // 댓글 작성자
                 eventData.put("createdAt", receiveComment.getCreatedAt().toString());   // 댓글이 달린 시간
                 eventData.put("contents", receiveComment.getComment());                 // 댓글 내용
+                eventData.put("emoticon", userSender.getEmoticon());                    // 댓글 작성자의 이모티콘
 
                 boolean isNotificationRead = false;
                 eventData.put("readStatus", isNotificationRead);
@@ -130,6 +142,7 @@ public class NotificationService {
                 notification.setCreatedAt(receiveComment.getCreatedAt());
                 notification.setContents(receiveComment.getComment());
                 notification.setPost(post);         // post 필드 설정
+                notification.setEmoticon(userSender.getEmoticon());
                 notification.setReadStatus(isNotificationRead);
                 notification.setUserId(userId);
                 notificationRepository.save(notification);

@@ -38,6 +38,8 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private String emoticon;
+
     @Column
     private Long kakaoId;
 
