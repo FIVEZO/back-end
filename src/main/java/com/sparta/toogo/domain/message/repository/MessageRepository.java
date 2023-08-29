@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findTop100ByRoomIdOrderByCreatedAtAsc(String roomId);
+
     Message findTopByRoomIdOrderByCreatedAtDesc(String roomId);
-    Optional<Message> findFirstBySenderOrderByCreatedAtDesc(String nickname);
+
+    Optional<Message> findFirstBySenderIdOrderByCreatedAtDesc(Long senderId);
 }

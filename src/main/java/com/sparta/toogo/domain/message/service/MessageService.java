@@ -29,21 +29,31 @@ public class MessageService {
     // 대화 저장
     public void saveMessage(MessageDto messageDto) {
         // DB 저장
-        User user = userRepository.findByNickname(messageDto.getSender());
-        Message message = new Message(user.getId(), messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage(), messageDto.getSentTime());
+        User userSender = userRepository.findByNickname(messageDto.getSender());
+        User userReceiver = userRepository.findByNickname(messageDto.getReceiver());
+
+        Message message = new Message(
+                userSender.getId(),
+                messageDto.getSender(),
+                messageDto.getRoomId(),
+                userReceiver.getId(),
+                messageDto.getMessage(),
+                messageDto.getSentTime());
+
         messageRepository.save(message);
 
-        // Redis에 message 객체를 저장하기 위해 직렬화 설정
+        // Redis 에 message 객체를 저장하기 위해 직렬화 설정
         redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));
 
-        // Redis에 message 저장
-        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(), new Message(message.getSenderId(), messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage(), messageDto.getSentTime()));
+        // Redis 에 message 저장
+        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(),
+                new Message(message.getSenderId(), messageDto.getSender(), messageDto.getRoomId(), message.getReceiverId(), messageDto.getMessage(), messageDto.getSentTime()));
 
         // 스케줄링 기능 (1시간 마다)
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
 
         // 알림 기능
-        notificationService.notifyMessage(messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getSender());
+        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
     }
 
     // 대화 조회 - Redis & DB
@@ -74,20 +84,30 @@ public class MessageService {
     public MessageResponseDto createMessage(String roomId, MessageDto messageDto, User user) {
         // DB 저장
         User userSender = userRepository.findByNickname(messageDto.getSender());
-        Message message = new Message(userSender.getId(), messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage(), messageDto.getSentTime());
+        User userReceiver = userRepository.findByNickname(messageDto.getReceiver());
+
+        Message message = new Message(
+                userSender.getId(),
+                messageDto.getSender(),
+                messageDto.getRoomId(),
+                userReceiver.getId(),
+                messageDto.getMessage(),
+                messageDto.getSentTime());
+
         Message saveMessage = messageRepository.save(message);
 
         // 직렬화
         redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(Message.class));
 
         // redis 저장
-        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(), new Message(message.getSenderId(), messageDto.getSender(), messageDto.getRoomId(), messageDto.getMessage(), messageDto.getSentTime()));
+        redisTemplateMessage.opsForList().rightPush(messageDto.getRoomId(),
+                new Message(message.getSenderId(), messageDto.getSender(), messageDto.getRoomId(), message.getReceiverId(), messageDto.getMessage(), messageDto.getSentTime()));
 
         // 스케줄링 기능 (1시간 마다)
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
 
         // 알림 기능
-        notificationService.notifyMessage(messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getSender());
+        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
 
         return new MessageResponseDto(saveMessage);
     }

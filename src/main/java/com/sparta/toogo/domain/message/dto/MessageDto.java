@@ -14,6 +14,7 @@ public class MessageDto extends Message {
     private Long senderId;
     private String sender;
     private String roomId;
+    private String receiver;
     private String message;
     private String sentTime;
     private LocalDateTime createdAt;        // 최신 메시지 전송 시간

@@ -39,6 +39,7 @@ public class RedisConfig {
         redisTemplateMessage.setConnectionFactory(connectionFactory);
         redisTemplateMessage.setKeySerializer(new StringRedisSerializer());        // Key Serializer
         redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));      // Value Serializer
+//        redisTemplateMessage.setValueSerializer(new StringRedisSerializer());      // Value Serializer
 
         return redisTemplateMessage;
     }
