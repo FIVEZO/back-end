@@ -4,6 +4,7 @@ import com.sparta.toogo.domain.message.dto.MessageDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
+import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class MessageService {
     private final UserRepository userRepository;
     private final RedisTemplate<String, Message> redisTemplateMessage;
     private final MessageRepository messageRepository;
+    private final NotificationService notificationService;
 
     // 대화 저장
     public void saveMessage(MessageDto messageDto) {
@@ -39,6 +41,9 @@ public class MessageService {
 
         // 스케줄링 기능 (1시간 마다)
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
+
+        // 알림 기능
+        notificationService.notifyMessage(messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getSender());
     }
 
     // 대화 조회 - Redis & DB
@@ -80,6 +85,9 @@ public class MessageService {
 
         // 스케줄링 기능 (1시간 마다)
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
+
+        // 알림 기능
+        notificationService.notifyMessage(messageDto.getRoomId(), messageDto.getReceiver(), messageDto.getSender());
 
         return new MessageResponseDto(saveMessage);
     }

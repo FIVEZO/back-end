@@ -3,7 +3,6 @@ package com.sparta.toogo.domain.messageroom.service;
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.entity.Message;
-import com.sparta.toogo.domain.message.redis.service.RedisSubscriber;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
@@ -13,6 +12,7 @@ import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
+import com.sparta.toogo.global.redis.service.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +74,7 @@ public class MessageRoomService {
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), receiverUserId.getNickname(), messageRoomDto.getRoomId(), receiverUserId.getId(), user, post));
 
             return new MessageResponseDto(messageRoom);
-        // 이미 생성된 쪽지방인 경우
+            // 이미 생성된 쪽지방인 경우
         } else {
             return new MessageResponseDto(messageRoom.getRoomId());
         }
@@ -111,7 +111,7 @@ public class MessageRoomService {
                 }
 
                 messageRoomDtos.add(messageRoomDto);
-            // user 가 receiver 인 경우
+                // user 가 receiver 인 경우
             } else {
                 MessageResponseDto messageRoomDto = new MessageResponseDto(
                         messageRoom.getId(),
@@ -178,7 +178,7 @@ public class MessageRoomService {
             messageRoomDto.setMessageRoomTitle(post.getTitle());
 
             return messageRoomDto;
-        // user 가 receiver 인 경우
+            // user 가 receiver 인 경우
         } else {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
@@ -208,7 +208,7 @@ public class MessageRoomService {
         // sender 가 삭제할 경우
         if (user.getId().equals(messageRoom.getUser().getId())) {
             messageRoomRepository.delete(messageRoom);
-        // receiver 가 삭제할 경우
+            // receiver 가 삭제할 경우
         } else if (user.getId().equals(messageRoom.getReceiverUserId())) {
             messageRoom.setReceiver("Not_Exist_Receiver");
             messageRoomRepository.save(messageRoom);
