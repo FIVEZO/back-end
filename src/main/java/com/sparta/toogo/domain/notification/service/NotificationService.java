@@ -7,6 +7,7 @@ import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.notification.controller.NotificationController;
+import com.sparta.toogo.domain.notification.dto.NotificationResponseDto;
 import com.sparta.toogo.domain.notification.entity.Notification;
 import com.sparta.toogo.domain.notification.repository.NotificationRepository;
 import com.sparta.toogo.domain.post.entity.Post;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -51,6 +54,52 @@ public class NotificationService {
 
         return sseEmitter;
     }
+
+    // 쪽지방 생성 알림 - receiver 에게
+// public void notifyCreateMessageRoom(MessageRequestDto messageRequestDto, String roomId) {
+// User userReceiver = userRepository.findByNickname(messageRequestDto.getReceiver());
+//
+// MessageRoom messageRoom = messageRoomRepository.findByRoomId(roomId);
+//
+// User userSender = userRepository.findById(messageRoom.getUser().getId()).orElseThrow(
+// () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+// );
+//
+// Long userId = userReceiver.getId();
+//
+// if (NotificationController.sseEmitters.containsKey(userId)) {
+// SseEmitter sseEmitter = NotificationController.sseEmitters.get(userId);
+// try {
+// Map<String, Object> eventData = new HashMap<>();
+// eventData.put("message", "메시지가 왔습니다.");
+// eventData.put("sender", messageRoom.getSender()); // 메시지 보낸자
+// eventData.put("createdAt", messageRoom.getCreatedAt().toString()); // 메시지를 보낸 시간
+//// eventData.put("contents", receiveMessage.getMessage()); // 메시지 내용
+// eventData.put("emoticon", userSender.getEmoticon()); // 메시지 보낸자의 이모티콘
+//
+// boolean isNotificationRead = false;
+// eventData.put("readStatus", isNotificationRead);
+//
+// sseEmitter.send(SseEmitter.event().name("addMessageRoom").data(eventData));
+//
+// // DB 저장
+// Notification notification = new Notification();
+// notification.setMessage("메시지가 왔습니다.");
+// notification.setSender(messageRoom.getSender());
+// notification.setCreatedAt(messageRoom.getCreatedAt());
+//// notification.setContents(receiveMessage.getMessage());
+// notification.setRoomId(messageRoom.getRoomId());
+// notification.setPost(messageRoom.getPost()); // post 필드 설정
+// notification.setEmoticon(userSender.getEmoticon());
+// notification.setReadStatus(isNotificationRead);
+// notification.setUserId(userId);
+// notificationRepository.save(notification);
+//
+// } catch (Exception e) {
+// NotificationController.sseEmitters.remove(userId);
+// }
+// }
+// }
 
     // 메시지 알림 - receiver 에게
     public void notifyMessage(String roomId, Long receiverId, Long senderId) {
@@ -87,11 +136,12 @@ public class NotificationService {
 
                 // DB 저장
                 Notification notification = new Notification();
+                notification.setMessage("메시지가 왔습니다.");
                 notification.setSender(receiveMessage.getSender());
                 notification.setCreatedAt(receiveMessage.getCreatedAt());
                 notification.setContents(receiveMessage.getMessage());
                 notification.setRoomId(messageRoom.getRoomId());
-                notification.setPost(post);         // post 필드 설정
+                notification.setPost(post); // post 필드 설정
                 notification.setEmoticon(userSender.getEmoticon());
                 notification.setReadStatus(isNotificationRead);
                 notification.setUserId(userId);
@@ -136,10 +186,11 @@ public class NotificationService {
 
                 // DB 저장
                 Notification notification = new Notification();
+                notification.setMessage("댓글이 달렸습니다.");
                 notification.setSender(receiveComment.getUser().getNickname());
                 notification.setCreatedAt(receiveComment.getCreatedAt());
                 notification.setContents(receiveComment.getComment());
-                notification.setPost(post);         // post 필드 설정
+                notification.setPost(post); // post 필드 설정
                 notification.setEmoticon(userSender.getEmoticon());
                 notification.setReadStatus(isNotificationRead);
                 notification.setUserId(userId);
@@ -150,5 +201,36 @@ public class NotificationService {
                 NotificationController.sseEmitters.remove(userId);
             }
         }
+    }
+
+    // 알림 목록 조회
+    public List<NotificationResponseDto> getNotificationList(User user) {
+        List<Notification> notificationList = notificationRepository.findByUserId(user.getId());
+
+        List<NotificationResponseDto> notificationResponseDtoList = new ArrayList<>();
+
+        for (Notification notification : notificationList) {
+// 댓글 알림일 경우
+            if (notification.getRoomId() == null) {
+                notificationResponseDtoList.add(new NotificationResponseDto(
+                        notification.getId(),
+                        notification.getSender(),
+                        notification.getCreatedAt(),
+                        notification.getContents(),
+                        notification.getEmoticon(),
+                        notification.getMessage()));
+// 메시지 알림일 경우
+            } else {
+                notificationResponseDtoList.add(new NotificationResponseDto(
+                        notification.getId(),
+                        notification.getSender(),
+                        notification.getCreatedAt(),
+                        notification.getContents(),
+                        notification.getEmoticon(),
+                        notification.getMessage()));
+            }
+        }
+
+        return notificationResponseDtoList;
     }
 }
