@@ -8,6 +8,8 @@ import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
+import com.sparta.toogo.domain.notification.entity.Notification;
+import com.sparta.toogo.domain.notification.repository.NotificationRepository;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
 import com.sparta.toogo.domain.post.dto.PostResponseGetDto;
@@ -49,6 +51,7 @@ public class PostService {
     private final ScrapRepository scrapRepository;
     private final MessageRoomService messageRoomService;
     private final MyPageRepository myPageRepository;
+    private final NotificationRepository notificationRepository;
 
     public PostResponseDto createPost(Long category, PostRequestDto requestDto, User user) {
 
@@ -155,6 +158,9 @@ public class PostService {
     public SuccessCode deletePost(Long category, Long postId, User user) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
         confirmPost(categoryEnum, postId, user);
+
+        List<Notification> notifications = notificationRepository.findByPostId(postId);
+        notificationRepository.deleteAll(notifications);
 
         List<MessageRoom> messageRooms = messageRoomRepository.findByPostId(postId);
         messageRoomRepository.deleteAll(messageRooms);
