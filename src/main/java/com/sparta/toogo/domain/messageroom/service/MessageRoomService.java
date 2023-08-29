@@ -9,6 +9,7 @@ import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
@@ -35,6 +36,7 @@ public class MessageRoomService {
     private final UserRepository userRepository;
     private final MessageRoomRepository messageRoomRepository;
     private final MessageRepository messageRepository;
+    private final NotificationService notificationService;
 
     // 쪽지방(topic)에 발행되는 메시지 처리하는 리스너
     private final RedisMessageListenerContainer redisMessageListener;
@@ -70,6 +72,9 @@ public class MessageRoomService {
             MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiver(), user, post));
+
+            // 쪽지방 생성 알림
+//            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
 
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우

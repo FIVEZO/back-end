@@ -1,7 +1,6 @@
 package com.sparta.toogo.domain.notification.entity;
 
 import com.sparta.toogo.domain.post.entity.Post;
-import com.sparta.toogo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +30,11 @@ public class Notification {
 
     private Long userId;
 
+    private String message;
+
     private String emoticon;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
 }
