@@ -4,6 +4,7 @@ import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.comment.repository.CommentRepository;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
+import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.notification.controller.NotificationController;
@@ -15,6 +16,7 @@ import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -232,5 +234,20 @@ public class NotificationService {
         }
 
         return notificationResponseDtoList;
+    }
+
+    // 알림 삭제
+    public MsgResponseDto deleteNotification(Long id, User user) {
+        Notification notification = notificationRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("알림을 찾을 수 없습니다.")
+        );
+
+        if (!user.getId().equals(notification.getUserId())) {
+            throw new IllegalArgumentException("알림 삭제 권한이 없습니다.");
+        }
+
+        notificationRepository.delete(notification);
+
+        return new MsgResponseDto("알림이 삭제되었습니다.", HttpStatus.OK.value());
     }
 }

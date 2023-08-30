@@ -1,12 +1,15 @@
 package com.sparta.toogo.domain.notification.controller;
 
+import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.notification.dto.NotificationResponseDto;
 import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -33,5 +36,11 @@ public class NotificationController {
     @GetMapping("/api/notifications")
     private ResponseEntity<List<NotificationResponseDto>> getNotificationList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(notificationService.getNotificationList(userDetails.getUser()));
+    }
+
+    // 알림 삭제
+    @DeleteMapping("/api/notification/{id}")
+    public MsgResponseDto deleteNotification(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return notificationService.deleteNotification(id, userDetails.getUser());
     }
 }
