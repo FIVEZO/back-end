@@ -2,6 +2,7 @@ package com.sparta.toogo.domain.notification.service;
 
 import com.sparta.toogo.domain.comment.entity.Comment;
 import com.sparta.toogo.domain.comment.repository.CommentRepository;
+import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;

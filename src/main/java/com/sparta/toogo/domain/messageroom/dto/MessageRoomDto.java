@@ -33,12 +33,13 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     private Long myId;
 
     // 쪽지방 생성
-    public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user) {
+    public static MessageRoomDto create(MessageRequestDto messageRequestDto, User user, User userReceiver) {
         MessageRoomDto messageRoomDto = new MessageRoomDto();
         messageRoomDto.roomName = messageRequestDto.getReceiver();
         messageRoomDto.roomId = UUID.randomUUID().toString();
         messageRoomDto.sender = user.getNickname();
         messageRoomDto.receiver = messageRequestDto.getReceiver();
+        messageRoomDto.receiverUserId = userReceiver.getId();
 
         return messageRoomDto;
     }
@@ -61,15 +62,19 @@ public class MessageRoomDto implements Serializable {       // Redis 에 저장�
     public void setMessageRoomPostId(Long postId) {
         this.postId = postId;
     }
+
     public void setMessageRoomCategory(Long category) {
         this.category = category;
     }
+
     public void setMessageRoomTitle(String title) {
         this.title = title;
     }
+
     public void setMessageRoomCountry(String country) {
         this.country = country;
     }
+
     public void setEmoticon(String emoticon) {
         this.emoticon = emoticon;
     }

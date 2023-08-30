@@ -41,6 +41,8 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public final StringPath roomName = createString("roomName");
 
+    public final StringPath sender = createString("sender");
+
     public final com.sparta.toogo.domain.user.entity.QUser user;
 
     public QMessageRoom(String variable) {

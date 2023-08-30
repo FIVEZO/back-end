@@ -28,10 +28,6 @@ public class MessageRoom extends Timestamped {
     private String receiver;        // 메시지 수신자
     private Long receiverUserId;        // 수신자의 userId
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "mypageId", nullable = false)
-//    private Mypage mypage;
-
     @OneToMany(mappedBy = "messageRoom", cascade = CascadeType.REMOVE)
     private List<Message> messageList = new ArrayList<>();
 
