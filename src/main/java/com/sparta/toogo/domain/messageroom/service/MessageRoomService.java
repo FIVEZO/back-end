@@ -73,6 +73,9 @@ public class MessageRoomService {
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), receiverUserId.getNickname(), messageRoomDto.getRoomId(), receiverUserId.getId(), user, post));
 
+            // 쪽지방 생성 알림
+// notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
+
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우
         } else {

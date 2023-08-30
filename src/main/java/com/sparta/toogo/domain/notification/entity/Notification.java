@@ -30,6 +30,8 @@ public class Notification {
 
     private Long userId;
 
+    private String message;
+
     private String emoticon;
 
     @ManyToOne(fetch = FetchType.LAZY)

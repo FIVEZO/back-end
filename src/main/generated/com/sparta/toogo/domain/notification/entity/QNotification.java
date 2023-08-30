@@ -30,6 +30,8 @@ public class QNotification extends EntityPathBase<Notification> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath message = createString("message");
+
     public final com.sparta.toogo.domain.post.entity.QPost post;
 
     public final BooleanPath readStatus = createBoolean("readStatus");
