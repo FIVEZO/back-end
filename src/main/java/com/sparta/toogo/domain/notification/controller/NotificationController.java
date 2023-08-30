@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.notification.controller;
 
+import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.notification.dto.NotificationResponseDto;
 import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
@@ -32,5 +33,11 @@ public class NotificationController {
     @GetMapping("/api/notifications")
     private ResponseEntity<List<NotificationResponseDto>> getNotificationList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(notificationService.getNotificationList(userDetails.getUser()));
+    }
+
+    // 알림 삭제
+    @DeleteMapping("/api/notification/{id}")
+    public MsgResponseDto deleteNotification(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return notificationService.deleteNotification(id, userDetails.getUser());
     }
 }
