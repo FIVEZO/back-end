@@ -35,6 +35,8 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public final StringPath receiver = createString("receiver");
 
+    public final NumberPath<Long> receiverId = createNumber("receiverId", Long.class);
+
     public final StringPath roomId = createString("roomId");
 
     public final StringPath roomName = createString("roomName");
