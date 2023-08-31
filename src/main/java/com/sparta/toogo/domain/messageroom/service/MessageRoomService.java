@@ -181,7 +181,7 @@ public class MessageRoomService {
             messageRoomDto.setMessageRoomTitle(post.getTitle());
 
             return messageRoomDto;
-        // user 가 receiver 인 경우
+            // user 가 receiver 인 경우
         } else if (user.getId().equals(messageRoom.getReceiverId())) {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
