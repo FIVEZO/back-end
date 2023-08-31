@@ -77,7 +77,6 @@ public class NotificationService {
                 eventData.put("message", "채팅방이 생성되었습니다.");
                 eventData.put("sender", messageRoom.getSender());                    // 메시지 보낸자
                 eventData.put("createdAt", messageRoom.getCreatedAt().toString());   // 메시지를 보낸 시간
-//                eventData.put("contents", receiveMessage.getMessage());                 // 메시지 내용
                 eventData.put("emoticon", userSender.getEmoticon());                    // 메시지 보낸자의 이모티콘
 
                 boolean isNotificationRead = false;
@@ -90,7 +89,6 @@ public class NotificationService {
                 notification.setMessage("채팅방이 생성되었습니다.");
                 notification.setSender(messageRoom.getSender());
                 notification.setCreatedAt(messageRoom.getCreatedAt());
-//                notification.setContents(receiveMessage.getMessage());
                 notification.setRoomId(messageRoom.getRoomId());
                 notification.setPost(messageRoom.getPost());         // post 필드 설정
                 notification.setEmoticon(userSender.getEmoticon());
@@ -209,15 +207,14 @@ public class NotificationService {
     public List<NotificationResponseDto> getNotificationList(User user) {
         List<Notification> notificationList = notificationRepository.findByUserId(user.getId());
 
-        Post post = postRepository.findByUserId(user.getId()).orElseThrow(
-                () -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
-        );
-
-        MessageRoom messageRoom = messageRoomRepository.findByReceiverId(user.getId());
-
         List<NotificationResponseDto> notificationResponseDtoList = new ArrayList<>();
 
         for (Notification notification : notificationList) {
+            Post post = postRepository.findById(notification.getPost().getId()).orElseThrow(
+                    () -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
+            );
+            MessageRoom messageRoom = messageRoomRepository.findByPostIdAndUserIdOrPostIdAndReceiverId(post.getId(), user.getId(), post.getId(), user.getId());
+
             // 댓글 알림일 경우
             if (notification.getRoomId() == null) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
@@ -229,7 +226,8 @@ public class NotificationService {
                         notification.getMessage(),
                         post.getId(),
                         post.getCategory().getValue()));
-                // 메시지 수신 또는 쪽지방 생성 알림일 경우
+
+            // 메시지 수신 또는 쪽지방 생성 알림일 경우
             } else {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
