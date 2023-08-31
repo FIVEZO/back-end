@@ -77,6 +77,8 @@ public class WebSecurityConfig {
 
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()        // swagger
 
+                                .requestMatchers(HttpMethod.GET, "/health").permitAll()
+
                                 .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
 
