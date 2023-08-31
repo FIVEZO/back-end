@@ -8,6 +8,7 @@ import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
+import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
@@ -36,6 +37,7 @@ public class MessageRoomService {
     private final UserRepository userRepository;
     private final MessageRoomRepository messageRoomRepository;
     private final MessageRepository messageRepository;
+    private final NotificationService notificationService;
 
     // 쪽지방(topic)에 발행되는 메시지 처리하는 리스너
     private final RedisMessageListenerContainer redisMessageListener;
@@ -64,17 +66,17 @@ public class MessageRoomService {
                 () -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
         );
 
-        User receiverUserId = userRepository.findByNickname(messageRequestDto.getReceiver());
-        MessageRoom messageRoom = messageRoomRepository.findByUserIdAndReceiverUserIdAndPostId(user.getId(), receiverUserId.getId(), messageRequestDto.getPostId());
+        User receiverId = userRepository.findByNickname(messageRequestDto.getReceiver());
+        MessageRoom messageRoom = messageRoomRepository.findByUserIdAndReceiverIdAndPostId(user.getId(), receiverId.getId(), messageRequestDto.getPostId());
 
         // 처음 쪽지방 생성 또는 이미 생성된 쪽지방이 아닌 경우
         if ((messageRoom == null) || !(messageRoom.getPost().getId().equals(messageRequestDto.getPostId()))) {
-            MessageRoomDto messageRoomDto = MessageRoomDto.create(messageRequestDto, user);
+            MessageRoomDto messageRoomDto = MessageRoomDto.create(user, receiverId);
             opsHashMessageRoom.put(Message_Rooms, messageRoomDto.getRoomId(), messageRoomDto);      // redis hash 에 쪽지방 저장해서, 서버간 채팅방 공유
-            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), receiverUserId.getNickname(), messageRoomDto.getRoomId(), receiverUserId.getId(), user, post));
+            messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiverId(), user, post));
 
             // 쪽지방 생성 알림
-// notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
+            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
 
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우
@@ -85,22 +87,21 @@ public class MessageRoomService {
 
     // 사용자 관련 쪽지방 전체 조회
     public List<MessageResponseDto> findAllRoomByUser(User user) {
-        List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverUserId(user.getId(), user.getId());
+        List<MessageRoom> messageRooms = messageRoomRepository.findByUserIdOrReceiverId(user.getId(), user.getId());
 
         List<MessageResponseDto> messageRoomDtos = new ArrayList<>();
 
         for (MessageRoom messageRoom : messageRooms) {
-            //  user 가 sender 인 경우
+            // user 가 sender 인 경우
             if (user.getId().equals(messageRoom.getUser().getId())) {
                 MessageResponseDto messageRoomDto = new MessageResponseDto(
                         messageRoom.getId(),
                         messageRoom.getRoomId(),
-                        messageRoom.getReceiver(),
                         messageRoom.getCreatedAt());
 
                 // roomName & emoticon
                 MessageRoom messageRoomReceiver = messageRoomRepository.findByRoomId(messageRoom.getRoomId());
-                User receiverUser = userRepository.findById(messageRoomReceiver.getReceiverUserId()).orElseThrow(
+                User receiverUser = userRepository.findById(messageRoomReceiver.getReceiverId()).orElseThrow(
                         () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
                 );
                 messageRoomDto.setRoomName(receiverUser.getNickname());
@@ -115,11 +116,10 @@ public class MessageRoomService {
 
                 messageRoomDtos.add(messageRoomDto);
                 // user 가 receiver 인 경우
-            } else {
+            } else if (user.getId().equals(messageRoom.getReceiverId())) {
                 MessageResponseDto messageRoomDto = new MessageResponseDto(
                         messageRoom.getId(),
                         messageRoom.getRoomId(),
-                        messageRoom.getReceiver(),
                         messageRoom.getCreatedAt());
 
                 // roomName & emoticon
@@ -160,7 +160,7 @@ public class MessageRoomService {
             throw new IllegalArgumentException("쪽지방이 존재하지 않습니다.");
         }
 
-        //  user 가 sender 인 경우
+        // user 가 sender 인 경우
         if (user.getId().equals(messageRoom.getUser().getId())) {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
@@ -170,7 +170,7 @@ public class MessageRoomService {
 
             // emoticon
             MessageRoom messageRoomReceiver = messageRoomRepository.findByRoomId(roomId);
-            User receiverUser = userRepository.findById(messageRoomReceiver.getReceiverUserId()).orElseThrow(
+            User receiverUser = userRepository.findById(messageRoomReceiver.getReceiverId()).orElseThrow(
                     () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
             );
             messageRoomDto.setEmoticon(receiverUser.getEmoticon());
@@ -181,8 +181,8 @@ public class MessageRoomService {
             messageRoomDto.setMessageRoomTitle(post.getTitle());
 
             return messageRoomDto;
-            // user 가 receiver 인 경우
-        } else {
+        // user 가 receiver 인 경우
+        } else if (user.getId().equals(messageRoom.getReceiverId())) {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
                     user.getId(),
@@ -200,6 +200,8 @@ public class MessageRoomService {
 
             return messageRoomDto;
         }
+
+        return null;
     }
 
     // 쪽지방 삭제
@@ -208,15 +210,10 @@ public class MessageRoomService {
                 () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
         );
 
-        // sender 가 삭제할 경우
-        if (user.getId().equals(messageRoom.getUser().getId())) {
+        if ((user.getId().equals(messageRoom.getUser().getId())) || (user.getId().equals(messageRoom.getReceiverId()))) {
+            opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
             messageRoomRepository.delete(messageRoom);
-            // receiver 가 삭제할 경우
-        } else if (user.getId().equals(messageRoom.getReceiverUserId())) {
-            messageRoom.setReceiver("Not_Exist_Receiver");
-            messageRoomRepository.save(messageRoom);
         }
-        opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
 
         return new MsgResponseDto("쪽지방을 삭제했습니다.", HttpStatus.OK.value());
     }

@@ -33,13 +33,13 @@ public class QMessageRoom extends EntityPathBase<MessageRoom> {
 
     public final com.sparta.toogo.domain.post.entity.QPost post;
 
-    public final StringPath receiver = createString("receiver");
-
-    public final NumberPath<Long> receiverUserId = createNumber("receiverUserId", Long.class);
+    public final NumberPath<Long> receiverId = createNumber("receiverId", Long.class);
 
     public final StringPath roomId = createString("roomId");
 
     public final StringPath roomName = createString("roomName");
+
+    public final StringPath sender = createString("sender");
 
     public final com.sparta.toogo.domain.user.entity.QUser user;
 

@@ -20,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByCategoryAndCountry(Category.PostCategory categoryEnum, String country, Pageable pageable);
 
     List<Post> findByUser(User user);
+
+    Optional<Post> findByUserId(Long id);
 }
