@@ -36,11 +36,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(accessToken)) {
             log.info(accessToken);
+
             if (!jwtUtil.validateAccessToken(accessToken)) {
                 log.error("AccessToken 검증 실패");
                 String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
+
                 if (StringUtils.hasText(refreshToken)) {
                     // 유효한 refreshToken인지 검증
+
                     if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
                         throw new IllegalArgumentException("RefreshToken 인증 실패");
                     }
