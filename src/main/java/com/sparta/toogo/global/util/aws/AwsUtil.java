@@ -10,6 +10,6 @@ public class AwsUtil {
 
     @GetMapping("/health")
     public ResponseEntity<Void> checkHealth() {
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
