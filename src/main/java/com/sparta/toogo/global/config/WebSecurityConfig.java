@@ -85,10 +85,9 @@ public class WebSecurityConfig {
 
         // 필터 관리
 
-        http.addFilterBefore(corsConfig.corsFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(corsConfig.corsFilter());
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
