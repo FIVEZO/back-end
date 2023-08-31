@@ -41,8 +41,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // spring web
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // health
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // lombok
