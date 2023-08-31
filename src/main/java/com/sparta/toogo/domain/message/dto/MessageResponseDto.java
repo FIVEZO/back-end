@@ -32,7 +32,7 @@ public class MessageResponseDto {
         this.roomName = messageRoom.getRoomName();
         this.senderId = messageRoom.getUser().getId();
         this.roomId = messageRoom.getRoomId();
-        this.receiverId = messageRoom.getReceiverUserId();
+        this.receiverId = messageRoom.getReceiverId();
         this.postId = messageRoom.getPost().getId();
     }
 
@@ -51,10 +51,9 @@ public class MessageResponseDto {
     }
 
     // 사용자 관련 쪽지방 전체 조회
-    public MessageResponseDto(Long id, String roomId, String receiver, LocalDateTime createdAt) {
+    public MessageResponseDto(Long id, String roomId, LocalDateTime createdAt) {
         this.id = id;
         this.roomId = roomId;
-        this.receiver = receiver;
 
         ZoneId utcZone = ZoneId.of("UTC");
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");

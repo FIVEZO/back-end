@@ -213,7 +213,7 @@ public class NotificationService {
                 () -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
         );
 
-        MessageRoom messageRoom = messageRoomRepository.findByReceiverUserId(user.getId());
+        MessageRoom messageRoom = messageRoomRepository.findByReceiverId(user.getId());
 
         List<NotificationResponseDto> notificationResponseDtoList = new ArrayList<>();
 

@@ -25,8 +25,7 @@ public class MessageRoom extends Timestamped {
     private String sender;
     @Column(unique = true)
     private String roomId;
-    private String receiver;        // 메시지 수신자
-    private Long receiverUserId;        // 수신자의 userId
+    private Long receiverId;        // 수신자의 userId
 
     @OneToMany(mappedBy = "messageRoom", cascade = CascadeType.REMOVE)
     private List<Message> messageList = new ArrayList<>();
@@ -40,14 +39,13 @@ public class MessageRoom extends Timestamped {
     private Post post;
 
     // 쪽지방 생성
-    public MessageRoom(Long id, String roomName, String sender, String roomId, String receiver, Long receiverId, User user, Post post) {
+    public MessageRoom(Long id, String roomName, String sender, String roomId, Long receiverId, User user, Post post) {
         super();
         this.id = id;
         this.roomName = roomName;
         this.sender = sender;
         this.roomId = roomId;
-        this.receiver = receiver;
-        this.receiverUserId = receiverId;
+        this.receiverId = receiverId;
         this.user = user;
         this.post = post;
     }
