@@ -56,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     } catch (Exception e) {
                         log.error("토큰 재발급");
                         res.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
-                        return;
+//                        return;
                     }
                 }
             }
