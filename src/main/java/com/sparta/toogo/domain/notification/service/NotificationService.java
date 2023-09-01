@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,16 +44,29 @@ public class NotificationService {
             e.printStackTrace();
         }
 
-        if (NotificationController.sseEmitters.containsKey(userId)) {
-            return sseEmitter;
-        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sseEmitter.complete();
+            }
+        }, 1 * 60 * 1000L);
 
         // user 의 pk 값을 key 값으로 해서 sseEmitter 를 저장
         NotificationController.sseEmitters.put(userId, sseEmitter);
 
-        sseEmitter.onCompletion(() -> NotificationController.sseEmitters.remove(userId));
-        sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
-        sseEmitter.onError((e) -> NotificationController.sseEmitters.remove(userId));
+        sseEmitter.onCompletion(() -> {
+            NotificationController.sseEmitters.remove(userId);
+            timer.cancel();
+        });
+        sseEmitter.onTimeout(() -> {
+            NotificationController.sseEmitters.remove(userId);
+            timer.cancel();
+        });
+        sseEmitter.onError((e) -> {
+            NotificationController.sseEmitters.remove(userId);
+            timer.cancel();
+        });
 
         return sseEmitter;
     }
