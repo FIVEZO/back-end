@@ -47,6 +47,10 @@ public class NotificationService {
             e.printStackTrace();
         }
 
+        if (NotificationController.sseEmitters.containsKey(userId)) {
+            return sseEmitter;
+        }
+
         // user 의 pk 값을 key 값으로 해서 sseEmitter 를 저장
         NotificationController.sseEmitters.put(userId, sseEmitter);
 
