@@ -1,5 +1,6 @@
 package com.sparta.toogo.global.jwt;
 
+import com.sparta.toogo.domain.notification.controller.NotificationController;
 import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
 import com.sparta.toogo.global.security.UserDetailsServiceImpl;
