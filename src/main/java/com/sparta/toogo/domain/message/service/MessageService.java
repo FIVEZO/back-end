@@ -80,6 +80,11 @@ public class MessageService {
         return messageList;
     }
 
+    // 대화 삭제
+    public void deleteMessageList(String roomId) {
+        redisTemplateMessage.delete(roomId);
+    }
+
     // 대화 저장 - 테스트용
     public MessageResponseDto createMessage(String roomId, MessageDto messageDto, User user) {
         // DB 저장
