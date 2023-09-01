@@ -2,7 +2,9 @@ package com.sparta.toogo.global.jwt;
 
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
+import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
+import com.sparta.toogo.global.jwt.exception.JwtCustomException;
 import com.sparta.toogo.global.redis.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -20,6 +22,8 @@ import org.springframework.util.StringUtils;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+
+import static com.sparta.toogo.global.enums.ErrorCode.*;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -137,11 +141,11 @@ public class JwtUtil {
         // token이 없을 경우
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             log.error("AccessToken 또는 RefreshToken이 존재하지 않습니다.");
-            throw new NullPointerException("AccessToken 또는 RefreshToken이 존재하지 않습니다.");
+            throw new JwtCustomException(TOKEN_MISSING);
         }
 
         if (!validateAccessToken(refreshToken)) {
-            throw new IllegalArgumentException("유효하지 않는 JWT 서명 입니다.");
+            throw new JwtCustomException(INVALID_TOKEN);
         }
 
         // redis에서 기존에 저장된 RefreshToken 조회
@@ -150,17 +154,17 @@ public class JwtUtil {
         // 사용자가 보낸 Refresh Token과 최초 발급된 Refresh Token이 일치하지 않을 경우
         if (!substringToken(refreshToken).equals(refreshTokenFromRedis)) {
             log.error("RefreshToken이 위조되었습니다.");
-            throw new IllegalArgumentException("RefreshToken이 위조되었습니다.");
+            throw new JwtCustomException(REFRESH_TOKEN_FORGERY);
         }
         return true;
     }
 
     // AccessToken, RefreshToken 재발급 메서드
-    public String regenerateToken(String accessToken, String refreshToken, HttpServletResponse res) {
+    public void regenerateToken(String accessToken, String refreshToken, HttpServletResponse res) {
         Long userId = Long.parseLong(getUserInfo(refreshToken).getSubject());
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NullPointerException("해당 유저는 존재하지 않습니다."));
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
         String nickname = user.getNickname();
         String email = user.getEmail();
@@ -173,7 +177,6 @@ public class JwtUtil {
         redisService.deleteToken(accessToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
-        return newAccessToken;
     }
 
     // Redis에 저장된 RefreshToken 반환 (key : access / value : refresh)

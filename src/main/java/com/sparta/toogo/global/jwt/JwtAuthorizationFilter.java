@@ -2,6 +2,7 @@ package com.sparta.toogo.global.jwt;
 
 import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
+import com.sparta.toogo.global.jwt.exception.JwtCustomException;
 import com.sparta.toogo.global.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -19,6 +20,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static com.sparta.toogo.global.enums.ErrorCode.INVALID_TOKEN;
+import static com.sparta.toogo.global.enums.ErrorCode.MISMATCH_TOKEN;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -46,7 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     // 유효한 refreshToken인지 검증
 
                     if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
-                        throw new IllegalArgumentException("RefreshToken 인증 실패");
+                        throw new JwtCustomException(INVALID_TOKEN);
                     }
                     try {
                         jwtUtil.regenerateToken(accessToken, refreshToken, res);
@@ -63,7 +67,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {
-                log.error("인증 오류");
+                throw new JwtCustomException(MISMATCH_TOKEN);
             }
         }
         filterChain.doFilter(req, res);
