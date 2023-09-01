@@ -38,7 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(accessToken)) {
             log.info(accessToken);
-            Claims info = jwtUtil.getUserInfo(accessToken);
+
             if (!jwtUtil.validateAccessToken(accessToken)) {
                 log.error("AccessToken 검증 실패");
                 String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
@@ -50,6 +50,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         throw new IllegalArgumentException("RefreshToken 인증 실패");
                     }
                     try {
+                        Claims refInfo = jwtUtil.getUserInfo(refreshToken);
+                        NotificationController.sseEmitters.remove(refInfo.getId());
                         jwtUtil.regenerateToken(accessToken, refreshToken, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
                         throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
@@ -60,6 +62,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     }
                 }
             }
+            Claims info = jwtUtil.getUserInfo(accessToken);
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {
