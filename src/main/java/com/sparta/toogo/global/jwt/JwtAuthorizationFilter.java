@@ -37,7 +37,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(accessToken)) {
             log.info(accessToken);
-
+            Claims info = jwtUtil.getUserInfo(accessToken);
             if (!jwtUtil.validateAccessToken(accessToken)) {
                 log.error("AccessToken 검증 실패");
                 String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
@@ -59,7 +59,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     }
                 }
             }
-            Claims info = jwtUtil.getUserInfo(accessToken);
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {
