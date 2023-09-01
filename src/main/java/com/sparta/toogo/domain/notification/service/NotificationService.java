@@ -37,15 +37,18 @@ public class NotificationService {
     private final UserRepository userRepository;
 
     // 메시지 알림
-    public SseEmitter subscribe(Long userId) {
+    public SseEmitter subscribe(Long userId) throws IOException {
         // 현재 클라이언트를 위한 sseEmitter 생성
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
-        try {
-            // 연결
-            sseEmitter.send(SseEmitter.event().name("connect"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // 연결
+//            sseEmitter.send(SseEmitter.event().name("connect"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        // 연결
+        sseEmitter.send(SseEmitter.event().name("connect"));
 
         // user 의 pk 값을 key 값으로 해서 sseEmitter 를 저장
         NotificationController.sseEmitters.put(userId, sseEmitter);
@@ -227,7 +230,7 @@ public class NotificationService {
                         notification.getPost().getId(),
                         post.getCategory().getValue()));
 
-            // 메시지 수신 또는 쪽지방 생성 알림일 경우
+                // 메시지 수신 또는 쪽지방 생성 알림일 경우
             } else {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),

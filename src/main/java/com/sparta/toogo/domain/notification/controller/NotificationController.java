@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +26,7 @@ public class NotificationController {
 
     // 메시지 알림
     @GetMapping("/api/notification/subscribe")
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         Long userId = userDetails.getUser().getId();
         SseEmitter sseEmitter = notificationService.subscribe(userId);
 
