@@ -4,6 +4,7 @@ import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
 import com.sparta.toogo.domain.message.entity.Message;
 import com.sparta.toogo.domain.message.repository.MessageRepository;
+import com.sparta.toogo.domain.message.service.MessageService;
 import com.sparta.toogo.domain.messageroom.dto.MessageRoomDto;
 import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
@@ -38,6 +39,7 @@ public class MessageRoomService {
     private final MessageRoomRepository messageRoomRepository;
     private final MessageRepository messageRepository;
     private final NotificationService notificationService;
+    private final MessageService messageService;
 
     // 쪽지방(topic)에 발행되는 메시지 처리하는 리스너
     private final RedisMessageListenerContainer redisMessageListener;
@@ -76,7 +78,7 @@ public class MessageRoomService {
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiverId(), user, post));
 
             // 쪽지방 생성 알림
-            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
+//            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
 
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우
@@ -181,7 +183,7 @@ public class MessageRoomService {
             messageRoomDto.setMessageRoomTitle(post.getTitle());
 
             return messageRoomDto;
-        // user 가 receiver 인 경우
+            // user 가 receiver 인 경우
         } else if (user.getId().equals(messageRoom.getReceiverId())) {
             MessageRoomDto messageRoomDto = new MessageRoomDto(
                     messageRoom.getId(),
@@ -210,6 +212,10 @@ public class MessageRoomService {
                 () -> new IllegalArgumentException("쪽지방이 존재하지 않습니다.")
         );
 
+        // 대화 기록 삭제 - redis
+        messageService.deleteMessageList(messageRoom.getRoomId());
+        
+        // 쪽지방 삭제 - redis & DB
         if ((user.getId().equals(messageRoom.getUser().getId())) || (user.getId().equals(messageRoom.getReceiverId()))) {
             opsHashMessageRoom.delete(Message_Rooms, messageRoom.getRoomId());
             messageRoomRepository.delete(messageRoom);
