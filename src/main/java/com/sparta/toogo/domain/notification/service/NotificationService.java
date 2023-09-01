@@ -39,10 +39,10 @@ public class NotificationService {
     // 메시지 알림
     public SseEmitter subscribe(Long userId) {
         // 현재 클라이언트를 위한 sseEmitter 생성
-        SseEmitter sseEmitter = new SseEmitter(2L * 60 * 1000);
+        SseEmitter sseEmitter = new SseEmitter(1L * 60 * 1000);
         try {
             // 연결
-            sseEmitter.send(SseEmitter.event().name("connect").data("connected"));
+            sseEmitter.send(SseEmitter.event().name("connect"));
         } catch (IOException e) {
             e.printStackTrace();
         }
