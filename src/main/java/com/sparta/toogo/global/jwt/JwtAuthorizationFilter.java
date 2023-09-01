@@ -1,6 +1,5 @@
 package com.sparta.toogo.global.jwt;
 
-import com.sparta.toogo.domain.notification.controller.NotificationController;
 import com.sparta.toogo.global.enums.ErrorCode;
 import com.sparta.toogo.global.exception.UnauthorizedException;
 import com.sparta.toogo.global.security.UserDetailsServiceImpl;
@@ -52,7 +51,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     try {
                         jwtUtil.regenerateToken(accessToken, refreshToken, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
-//                        throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
+                        throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
                     } catch (Exception e) {
                         log.error("토큰 재발급");
                         res.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
