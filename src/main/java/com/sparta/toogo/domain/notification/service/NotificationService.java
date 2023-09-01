@@ -51,7 +51,7 @@ public class NotificationService {
         NotificationController.sseEmitters.put(userId, sseEmitter);
 
         sseEmitter.onCompletion(() -> NotificationController.sseEmitters.remove(userId));
-        sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
+//        sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
         sseEmitter.onError((e) -> NotificationController.sseEmitters.remove(userId));
 
         return sseEmitter;
