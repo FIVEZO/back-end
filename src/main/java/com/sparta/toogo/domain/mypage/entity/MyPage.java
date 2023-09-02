@@ -1,6 +1,5 @@
 package com.sparta.toogo.domain.mypage.entity;
 
-import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,11 +25,11 @@ public class MyPage {
         this.introduction = introduction;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getIntroduction() {
         return introduction;
+    }
+
+    public void setUser(User testUser) {
+        this.user = testUser;
     }
 }
