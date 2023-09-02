@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.sparta.toogo.domain.post.entity.QPost.post;
+import static com.sparta.toogo.domain.user.entity.QUser.user;
 import static com.sparta.toogo.global.enums.ErrorCode.NO_AUTHORITY_TO_DATA;
 
 @Service
@@ -68,26 +69,7 @@ public class PostService {
 
         return new PostResponseDto(post);
     }
-//        String title = requestDto.getTitle();
-//        String contents = requestDto.getContents();
-//
-//        if(title.isEmpty() || contents.isEmpty()) {
-//            throw new PostException(ErrorCode.EMPTY_TITLE_OR_CONTENTS);
-//        }
-//
-//        Post post = new Post(category, requestDto, user);
-//
-//        MyPage myPage = myPageRepository.findByUserId(user.getId());
-//        String newIntroduction = null; // 기본 값
-//
-//        if (myPage != null) {
-//            newIntroduction = myPage.getIntroduction();
-//        }
-//
-//        postRepository.save(post);
-//
-//        return new PostResponseDto(post, newIntroduction, false);
-//    }
+
 
     // 전체 조회
     public Map<String, Object> getPostsByCategory(Long category, int pageNum) {
@@ -203,7 +185,13 @@ public class PostService {
             BooleanExpression titleOrContentsOrDateContain = titleOrContentsContain
                     .or(post.meetDate.containsIgnoreCase(key));
 
-            expressions.add(titleOrContentsContain.or(titleContainsCountry).or(titleOrContentsOrDateContain));
+            BooleanExpression titleOrContentsOrDateNicknameContain = titleOrContentsContain
+                    .or(user.nickname.containsIgnoreCase(key));
+
+            expressions.add(titleOrContentsContain
+                    .or(titleContainsCountry)
+                    .or(titleOrContentsOrDateContain)
+                    .or(titleOrContentsOrDateNicknameContain));
         }
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
