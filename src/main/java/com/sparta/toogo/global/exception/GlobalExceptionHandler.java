@@ -9,6 +9,7 @@ import com.sparta.toogo.domain.post.exception.PostException;
 import com.sparta.toogo.domain.scrap.exception.ScrapException;
 import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.global.email.exception.EmailException;
+import com.sparta.toogo.global.jwt.exception.JwtCustomException;
 import com.sparta.toogo.global.responsedto.ApiResponse;
 import com.sparta.toogo.global.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailException.class)
     public ApiResponse<?> handleEmailException(EmailException e) {
+        return ResponseUtil.error(e.getErrorCode());
+    }
+
+    @ExceptionHandler(JwtCustomException.class)
+    public ApiResponse<?> handleJwtException(JwtCustomException e) {
         return ResponseUtil.error(e.getErrorCode());
     }
 

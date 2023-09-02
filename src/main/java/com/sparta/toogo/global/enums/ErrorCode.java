@@ -8,8 +8,6 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum ErrorCode {
     /* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
-    INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
-    MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     INCORRECT_CODE(BAD_REQUEST, "잘못된 인증번호입니다."),
     EMAIL_REQUIRED(BAD_REQUEST, "이메일을 입력해 주세요."),
     EMAIL_CODE_INCOMPLETE(BAD_REQUEST, "올바른 이메일 또는 인증 코드를 입력해 주세요."),
@@ -32,6 +30,10 @@ public enum ErrorCode {
 
     /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
     NO_AUTHORITY_TO_DATA(FORBIDDEN, "작성자만 수정, 삭제할 수 있습니다."),
+    INVALID_TOKEN(FORBIDDEN, "토큰이 유효하지 않습니다."),
+    MISMATCH_TOKEN(FORBIDDEN, "토큰의 유저 정보가 일치하지 않습니다."),
+    TOKEN_MISSING(FORBIDDEN, "엑세스 토큰 또는 리프레시 토큰이 존재하지 않습니다."),
+    REFRESH_TOKEN_FORGERY(FORBIDDEN, "리프레시 토큰이 위조되었습니다."),
 
     /* 404 NOT_FOUND : 서버는 요청 받은 리소스를 찾을 수 없다는 의미입니다. */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다."),

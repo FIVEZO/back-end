@@ -39,7 +39,7 @@ public class NotificationService {
     // 메시지 알림
     public SseEmitter subscribe(Long userId) {
         // 현재 클라이언트를 위한 sseEmitter 생성
-        SseEmitter sseEmitter = new SseEmitter(1 * 1 * 60 * 1000L);
+        SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
         try {
             // 연결
             sseEmitter.send(SseEmitter.event().name("connect"));
@@ -51,7 +51,7 @@ public class NotificationService {
         NotificationController.sseEmitters.put(userId, sseEmitter);
 
         sseEmitter.onCompletion(() -> NotificationController.sseEmitters.remove(userId));
-        sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
+//        sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
         sseEmitter.onError((e) -> NotificationController.sseEmitters.remove(userId));
 
         return sseEmitter;

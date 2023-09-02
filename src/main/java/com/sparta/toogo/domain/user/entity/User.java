@@ -5,7 +5,6 @@ import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.global.util.Timestamped;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +14,8 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
 public class User extends Timestamped {
 
@@ -86,5 +85,13 @@ public class User extends Timestamped {
 
     public void updateEmoticon(String newEmoticon) {
         this.emoticon = newEmoticon;
+    }
+
+    public void setId(long testId) {
+        this.id = testId;
+    }
+
+    public void setMyPage(MyPage testMyPage) {
+        this.myPage = testMyPage;
     }
 }
