@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.sparta.toogo.domain.post.entity.QPost.post;
+import static com.sparta.toogo.domain.user.entity.QUser.user;
 import static com.sparta.toogo.global.enums.ErrorCode.NO_AUTHORITY_TO_DATA;
 
 @Service
@@ -184,7 +185,13 @@ public class PostService {
             BooleanExpression titleOrContentsOrDateContain = titleOrContentsContain
                     .or(post.meetDate.containsIgnoreCase(key));
 
-            expressions.add(titleOrContentsContain.or(titleContainsCountry).or(titleOrContentsOrDateContain));
+            BooleanExpression titleOrContentsOrDateNicknameContain = titleOrContentsContain
+                    .or(user.nickname.containsIgnoreCase(key));
+
+            expressions.add(titleOrContentsContain
+                    .or(titleContainsCountry)
+                    .or(titleOrContentsOrDateContain)
+                    .or(titleOrContentsOrDateNicknameContain));
         }
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
