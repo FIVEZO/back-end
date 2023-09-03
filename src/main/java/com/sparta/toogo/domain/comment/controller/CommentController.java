@@ -32,14 +32,6 @@ public class CommentController {
         return ResponseUtil.ok(response);
     }
 
-//    @GetMapping("/comment")
-//    public List<CommentResponseDto> getComment(@PathVariable Long postId,
-//                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//
-//
-//        return commentService.getComment(postId, userDetails.getUser());
-//    }
-
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     @PatchMapping("/comment/{commentId}")
     public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long commentId,
