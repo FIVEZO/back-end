@@ -85,6 +85,10 @@ public class UserService {
         return new UserResponseDto(LOGOUT_SUCCESS);
     }
 
+    public void regenerateToken(String accessToken, String refreshToken, HttpServletResponse res) {
+        jwtUtil.regenerateToken(accessToken, refreshToken, res);
+    }
+
     public Boolean checkEmail(String email) {
         if (email == null || email.equals("")) {
             throw new UserException(EMAIL_REQUIRED);

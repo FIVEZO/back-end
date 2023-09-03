@@ -158,6 +158,6 @@ public class KakaoService {
     }
 
     public String kakaoRefreshToken(User user) {
-        return jwtUtil.createRefreshToken(user.getId());
+        return jwtUtil.createRefreshToken(user.getId(), user.getEmail());
     }
 }

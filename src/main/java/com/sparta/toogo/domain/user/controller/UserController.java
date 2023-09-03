@@ -5,6 +5,7 @@ import com.sparta.toogo.domain.kakao.service.KakaoService;
 import com.sparta.toogo.domain.user.dto.LogInResponseDto;
 import com.sparta.toogo.domain.user.dto.UserRequestDto;
 import com.sparta.toogo.domain.user.dto.UserResponseDto;
+import com.sparta.toogo.domain.user.dto.UserTokenRequestDto;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.service.UserService;
 import com.sparta.toogo.global.jwt.JwtUtil;
@@ -16,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import static com.sparta.toogo.global.enums.SuccessCode.REGENERATED_TOKEN;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,5 +61,12 @@ public class UserController {
     @PostMapping("/logout")
     public UserResponseDto logOut(HttpServletRequest request) {
         return userService.logOut(request);
+    }
+
+    @Operation(summary = "토큰 재발급")
+    @PostMapping("/token")
+    public UserResponseDto regenerateToken(@RequestBody UserTokenRequestDto userTokenRequestDto, HttpServletRequest req, HttpServletResponse res) {
+        userService.regenerateToken(userTokenRequestDto.getAccessToken(), jwtUtil.getRefreshTokenFromHeader(req), res);
+        return new UserResponseDto(REGENERATED_TOKEN);
     }
 }
