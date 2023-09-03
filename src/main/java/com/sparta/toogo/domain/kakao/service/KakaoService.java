@@ -9,6 +9,7 @@ import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.user.entity.EmoticonEnum;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
+import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
 import com.sparta.toogo.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.UUID;
+
+import static com.sparta.toogo.global.enums.ErrorCode.DUPLICATE_EMAIL;
 
 @Slf4j(topic = "KAKAO Login")
 @Service
@@ -143,6 +146,9 @@ public class KakaoService {
                 myPage.setUser(kakaoUser);
                 myPageRepository.save(myPage);
                 return kakaoUser;
+            }
+            if (userRepository.existsByEmail(email)) {
+                throw new UserException(DUPLICATE_EMAIL);
             }
             kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmoticonEnum.HAPPY.getEmoticon());
             userRepository.save(kakaoUser);
