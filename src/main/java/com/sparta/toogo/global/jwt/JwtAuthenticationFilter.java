@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id, email);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
-        jwtUtil.addTokenToHeaders(accessToken, refreshToken, response);
+        jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
 
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("statusCode", HttpServletResponse.SC_OK);
@@ -77,6 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonString);
     }
+
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {

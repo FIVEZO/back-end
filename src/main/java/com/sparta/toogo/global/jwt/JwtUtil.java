@@ -79,7 +79,7 @@ public class JwtUtil {
     }
 
     // Header에 Token 추가
-    public void addTokenToHeaders(String accessToken, String refreshToken, HttpServletResponse response) {
+    public void addTokenToHeader(String accessToken, String refreshToken, HttpServletResponse response) {
         response.setHeader(HEADER_ACCESS_TOKEN, accessToken);
         response.setHeader(HEADER_REFRESH_TOKEN, refreshToken);
     }
@@ -121,16 +121,16 @@ public class JwtUtil {
     }
 
     // JWT accessToken 검증 메서드
-    public boolean validateToken(String token) {
+    public boolean validateAccessToken(String accessToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(token)); // key로 accessToken 검증
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(accessToken)); // key로 accessToken 검증
             return true;
         } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
-            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명입니다.");
+            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token, 만료된 JWT 토큰입니다.");
+            log.error("Expired JWT accessToken, 만료된 JWT accessToken 입니다.");
         } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰입니다.");
+            log.error("Unsupported JWT accessToken, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰입니다.");
         }
@@ -145,7 +145,7 @@ public class JwtUtil {
             throw new JwtCustomException(TOKEN_MISSING);
         }
 
-        if (!validateToken(refreshToken)) {
+        if (!validateAccessToken(refreshToken)) {
             throw new JwtCustomException(INVALID_TOKEN);
         }
 
@@ -176,7 +176,7 @@ public class JwtUtil {
 
         saveTokenToRedis(newAccessToken, newRefreshToken);
         redisService.deleteToken(accessToken);
-        addTokenToHeaders(newAccessToken, newRefreshToken, res);
+        addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
         log.info("access : " + newAccessToken);
         log.info("refresh : " + newRefreshToken);
