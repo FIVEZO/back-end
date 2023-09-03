@@ -53,7 +53,7 @@ public class MessageService {
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
 
         // 알림 기능
-        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
+//        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
     }
 
     // 대화 조회 - Redis & DB
@@ -112,7 +112,7 @@ public class MessageService {
         redisTemplateMessage.expire(messageDto.getRoomId(), 1, TimeUnit.HOURS);
 
         // 알림 기능
-        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
+//        notificationService.notifyMessage(messageDto.getRoomId(), userReceiver.getId(), userSender.getId());
 
         return new MessageResponseDto(saveMessage);
     }

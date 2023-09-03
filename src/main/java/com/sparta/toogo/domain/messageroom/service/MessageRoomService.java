@@ -78,7 +78,7 @@ public class MessageRoomService {
             messageRoom = messageRoomRepository.save(new MessageRoom(messageRoomDto.getId(), messageRoomDto.getRoomName(), messageRoomDto.getSender(), messageRoomDto.getRoomId(), messageRoomDto.getReceiverId(), user, post));
 
             // 쪽지방 생성 알림
-//            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
+            notificationService.notifyCreateMessageRoom(messageRequestDto, messageRoom.getRoomId());
 
             return new MessageResponseDto(messageRoom);
             // 이미 생성된 쪽지방인 경우
