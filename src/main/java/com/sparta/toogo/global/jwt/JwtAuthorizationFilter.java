@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.sparta.toogo.global.enums.ErrorCode.*;
+import static com.sparta.toogo.global.enums.ErrorCode.MISMATCH_TOKEN;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -34,31 +34,29 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtUtil.getAccessTokenFromHeader(req);
+        String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
 
         if (StringUtils.hasText(accessToken)) {
             log.info(accessToken);
 
-            if (!jwtUtil.validateAccessToken(accessToken)) {
-                log.error("AccessToken 검증 실패");
-                String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
-
-                if (StringUtils.hasText(refreshToken)) {
-                    log.info(refreshToken);
-
-                    if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
-                        throw new JwtCustomException(INVALID_TOKEN);
-                    }
-                    try {
-                        jwtUtil.regenerateToken(accessToken, refreshToken, res);
-                        log.info("새로운 AccessToken, RefreshToken 발급 완료");
-                        throw new JwtCustomException(REGENERATED_TOKEN);
-                    } catch (JwtCustomException e) {
-                        res.setStatus(418);
-                        return;
-                    }
-                }
+            if (!jwtUtil.validateAccessToken(accessToken, res)) {
+                log.error("엑세스 토큰 검증 실패");
+                return;
             }
             Claims info = jwtUtil.getUserInfo(accessToken);
+            try {
+                setAuthentication(info.get("email", String.class));
+            } catch (Exception e) {
+                throw new JwtCustomException(MISMATCH_TOKEN);
+            }
+        } else if (StringUtils.hasText(refreshToken)) {
+            log.info(refreshToken);
+
+            if (!jwtUtil.validateRefreshToken(refreshToken)) {
+                log.error("리프레시 토큰 검증 실패");
+                return;
+            }
+            Claims info = jwtUtil.getUserInfo(refreshToken);
             try {
                 setAuthentication(info.get("email", String.class));
             } catch (Exception e) {

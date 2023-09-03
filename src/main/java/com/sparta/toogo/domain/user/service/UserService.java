@@ -80,12 +80,13 @@ public class UserService {
     }
 
     public UserResponseDto logOut(HttpServletRequest req) {
-        String accessToken = req.getHeader("AccessToken");
+        String accessToken = req.getHeader("accessToken");
         redisService.deleteToken(accessToken);
         return new UserResponseDto(LOGOUT_SUCCESS);
     }
 
     public void regenerateToken(String accessToken, String refreshToken, HttpServletResponse res) {
+        jwtUtil.validateRegenerate(accessToken,refreshToken);
         jwtUtil.regenerateToken(accessToken, refreshToken, res);
     }
 

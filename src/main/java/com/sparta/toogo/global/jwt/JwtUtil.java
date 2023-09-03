@@ -121,16 +121,33 @@ public class JwtUtil {
     }
 
     // JWT accessToken 검증 메서드
-    public boolean validateAccessToken(String accessToken) {
+    public boolean validateAccessToken(String accessToken, HttpServletResponse res) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(accessToken)); // key로 accessToken 검증
             return true;
         } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
-            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            log.error("Expired JWT accessToken, 만료된 JWT accessToken 입니다.");
+            log.error("Expired JWT accessToken, 만료된 JWT 토큰입니다.");
+            res.setStatus(418);
         } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT accessToken, 지원되지 않는 JWT 토큰 입니다.");
+            log.error("Unsupported JWT accessToken, 지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims is empty, 잘못된 JWT 토큰입니다.");
+        }
+        return false;
+    }
+
+    public boolean validateRefreshToken(String accessToken) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(accessToken)); // key로 accessToken 검증
+            return true;
+        } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
+            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.error("Expired JWT accessToken, 만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.error("Unsupported JWT accessToken, 지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰입니다.");
         }
@@ -141,11 +158,11 @@ public class JwtUtil {
     public boolean validateRegenerate(String accessToken, String refreshToken) {
         // token이 없을 경우
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
-            log.error("AccessToken 또는 RefreshToken이 존재하지 않습니다.");
+            log.error("엑세스 토큰 또는 리프레시 토큰이 존재하지 않습니다.");
             throw new JwtCustomException(TOKEN_MISSING);
         }
 
-        if (!validateAccessToken(refreshToken)) {
+        if (!validateRefreshToken(refreshToken)) {
             throw new JwtCustomException(INVALID_TOKEN);
         }
 
