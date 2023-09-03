@@ -78,7 +78,7 @@ public class JwtUtil {
     }
 
     // Header에 Token 추가
-    public void addTokenToHeader(String accessToken, String refreshToken, HttpServletResponse response) {
+    public void addTokenToHeaders(String accessToken, String refreshToken, HttpServletResponse response) {
         response.setHeader(HEADER_ACCESS_TOKEN, accessToken);
         response.setHeader(HEADER_REFRESH_TOKEN, refreshToken);
     }
@@ -175,7 +175,7 @@ public class JwtUtil {
 
         saveTokenToRedis(newAccessToken, newRefreshToken);
         redisService.deleteToken(accessToken);
-        addTokenToHeader(newAccessToken, newRefreshToken, res);
+        addTokenToHeaders(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
         log.info("access : " + newAccessToken);
         log.info("refresh : " + newRefreshToken);

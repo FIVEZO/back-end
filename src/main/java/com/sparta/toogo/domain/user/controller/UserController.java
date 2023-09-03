@@ -50,7 +50,7 @@ public class UserController {
         String createAccessToken = kakaoService.kakaoAccessToken(user);
         String createRefreshToken = kakaoService.kakaoRefreshToken(user);
         jwtUtil.saveTokenToRedis(createRefreshToken, createAccessToken);
-        jwtUtil.addTokenToHeader(createAccessToken, createRefreshToken, response);
+        jwtUtil.addTokenToHeaders(createAccessToken, createRefreshToken, response);
         return new LogInResponseDto(user);
     }
 

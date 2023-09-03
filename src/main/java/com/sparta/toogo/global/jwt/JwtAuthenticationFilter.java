@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
-        jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
+        jwtUtil.addTokenToHeaders(accessToken, refreshToken, response);
 
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("statusCode", HttpServletResponse.SC_OK);
