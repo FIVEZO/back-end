@@ -49,6 +49,8 @@ public enum ErrorCode {
     DUPLICATE_RESOURCE(CONFLICT, "중복된 이메일 또는 닉네임입니다."),
     DUPLICATE_NICKNAME(CONFLICT, "중복된 닉네임입니다."),
     DUPLICATE_EMAIL(CONFLICT, "중복된 이메일입니다."),
+
+    REGENERATED_TOKEN(I_AM_A_TEAPOT, "토큰 재발급 완료")
     ;
 
     private final HttpStatus httpStatus;

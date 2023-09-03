@@ -109,11 +109,4 @@ public class UserService {
         }
         return true;
     }
-
-    public UserResponseDto regenerateToken(HttpServletRequest req, HttpServletResponse res) {
-        String accessToken = jwtUtil.getAccessTokenFromHeader(req);
-        String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
-        jwtUtil.regenerateToken(accessToken, refreshToken, res);
-        return new UserResponseDto(REGENERATED_TOKEN);
-    }
 }

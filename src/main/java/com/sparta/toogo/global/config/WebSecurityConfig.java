@@ -77,7 +77,6 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
 
-
         // 필터 관리
         http.addFilter(corsConfig.corsFilter());
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
