@@ -8,15 +8,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.sparta.toogo.global.enums.ErrorCode.*;
 
@@ -25,6 +29,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    public final String HEADER_ACCESS_TOKEN = "AccessToken";
+    public final String HEADER_REFRESH_TOKEN = "RefreshToken";
 
     public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
@@ -54,6 +60,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         throw new JwtCustomException(REGENERATED_TOKEN);
                     } catch (JwtCustomException e) {
                         res.setStatus(418);
+                        String access = res.getHeader(HEADER_ACCESS_TOKEN);
+                        String refresh = res.getHeader(HEADER_REFRESH_TOKEN);
+                        res.setContentType("application/json");
+                        res.setCharacterEncoding("UTF-8");
+                        res.getWriter().write(access + " " + refresh);
                         return;
                     }
                 }
