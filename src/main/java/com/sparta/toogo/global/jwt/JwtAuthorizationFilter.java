@@ -52,14 +52,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
                         throw new JwtCustomException(INVALID_TOKEN);
                     }
-                    try {
-                        jwtUtil.regenerateToken(accessToken, refreshToken, res);
-                        log.info("새로운 AccessToken, RefreshToken 발급 완료");
-                        throw new JwtCustomException(REGENERATED_TOKEN);
-                    } catch (JwtCustomException e) {
-                        res.setStatus(418);
-                        return;
-                    }
+                    res.setStatus(418);
+                    return;
                 }
             }
             Claims info = jwtUtil.getUserInfo(accessToken);
