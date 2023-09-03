@@ -26,7 +26,6 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     UNAUTHORIZED_USER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
     INCORRECT_PASSWORD(UNAUTHORIZED, "잘못된 비밀번호입니다."),
-    REGENERATED_TOKEN(UNAUTHORIZED, "토큰 재발급"),
 
     /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
     NO_AUTHORITY_TO_DATA(FORBIDDEN, "작성자만 수정, 삭제할 수 있습니다."),
@@ -51,6 +50,7 @@ public enum ErrorCode {
     DUPLICATE_NICKNAME(CONFLICT, "중복된 닉네임입니다."),
     DUPLICATE_EMAIL(CONFLICT, "중복된 이메일입니다."),
 
+    REGENERATED_TOKEN(I_AM_A_TEAPOT, "토큰 재발급")
     ;
 
     private final HttpStatus httpStatus;

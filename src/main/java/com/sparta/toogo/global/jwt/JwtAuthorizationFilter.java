@@ -1,7 +1,5 @@
 package com.sparta.toogo.global.jwt;
 
-import com.sparta.toogo.global.enums.ErrorCode;
-import com.sparta.toogo.global.exception.UnauthorizedException;
 import com.sparta.toogo.global.jwt.exception.JwtCustomException;
 import com.sparta.toogo.global.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -10,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,8 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.sparta.toogo.global.enums.ErrorCode.INVALID_TOKEN;
-import static com.sparta.toogo.global.enums.ErrorCode.MISMATCH_TOKEN;
+import static com.sparta.toogo.global.enums.ErrorCode.*;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -47,7 +43,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
 
                 if (StringUtils.hasText(refreshToken)) {
-                    // 유효한 refreshToken인지 검증
+                    log.info(refreshToken);
 
                     if (!jwtUtil.validateRegenerate(accessToken, refreshToken)) {
                         throw new JwtCustomException(INVALID_TOKEN);
@@ -55,10 +51,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     try {
                         jwtUtil.regenerateToken(accessToken, refreshToken, res);
                         log.info("새로운 AccessToken, RefreshToken 발급 완료");
-                        throw new UnauthorizedException(ErrorCode.REGENERATED_TOKEN);
-                    } catch (Exception e) {
-                        log.error("토큰 재발급");
-                        res.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
+                        throw new JwtCustomException(REGENERATED_TOKEN);
+                    } catch (JwtCustomException e) {
+                        res.setStatus(418);
                         return;
                     }
                 }
