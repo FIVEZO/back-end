@@ -4,6 +4,7 @@ import com.sparta.toogo.domain.notification.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     List<Notification> findByUserId(Long id);
 
-    List<Notification> findByCreatedAtBefore(LocalDate twoDaysAgo);
 
     List<Notification> findByPostId(Long postId);
+
+    List<Notification> findByCreatedAtBefore(LocalDateTime twoDaysAgo);
 }
