@@ -224,7 +224,7 @@ public class NotificationService {
             );
 
             // 댓글 알림일 경우
-            if (notification.getRoomId() == null && !comment.getUser().getId().equals(user.getId())) {
+            if (notification.getMessage().equals("댓글이 달렸습니다.") && !comment.getUser().getId().equals(user.getId())) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
                         notification.getSender(),
@@ -236,7 +236,7 @@ public class NotificationService {
                         post.getCategory().getValue()));
 
                 // 메시지 수신 또는 쪽지방 생성 알림일 경우
-            } else if (messageRoom.getRoomId() != null) {
+            } else if (notification.getMessage().equals("채팅방이 생성되었습니다.")) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
                         notification.getSender(),
