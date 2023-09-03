@@ -177,6 +177,8 @@ public class JwtUtil {
         redisService.deleteToken(accessToken);
         addTokenToHeader(newAccessToken, newRefreshToken, res);
         log.info("토큰 재발급 성공");
+        log.info("access : " + newAccessToken);
+        log.info("refresh : " + newRefreshToken);
     }
 
     // Redis에 저장된 RefreshToken 반환 (key : access / value : refresh)

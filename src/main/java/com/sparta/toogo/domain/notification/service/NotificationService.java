@@ -15,7 +15,6 @@ import com.sparta.toogo.domain.post.entity.Post;
 import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.repository.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class NotificationService {
     private final UserRepository userRepository;
 
     // 메시지 알림
-    public SseEmitter subscribe(Long userId, HttpServletResponse res) {
+    public SseEmitter subscribe(Long userId) {
         // 현재 클라이언트를 위한 sseEmitter 생성
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
         try {
@@ -53,10 +52,7 @@ public class NotificationService {
 
         sseEmitter.onCompletion(() -> NotificationController.sseEmitters.remove(userId));
         sseEmitter.onTimeout(() -> NotificationController.sseEmitters.remove(userId));
-        sseEmitter.onError((e) -> {
-            res.setStatus(418);
-            NotificationController.sseEmitters.remove(userId);
-        });
+        sseEmitter.onError((e) -> NotificationController.sseEmitters.remove(userId));
 
         return sseEmitter;
     }

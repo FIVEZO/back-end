@@ -27,9 +27,9 @@ public class NotificationController {
 
     // 메시지 알림
     @GetMapping("/api/notification/subscribe")
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) {
+    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
-        SseEmitter sseEmitter = notificationService.subscribe(userId, res);
+        SseEmitter sseEmitter = notificationService.subscribe(userId);
 
         return sseEmitter;
     }
