@@ -4,6 +4,8 @@ import com.sparta.toogo.domain.messageroom.dto.MsgResponseDto;
 import com.sparta.toogo.domain.notification.dto.NotificationResponseDto;
 import com.sparta.toogo.domain.notification.service.NotificationService;
 import com.sparta.toogo.global.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,9 +27,9 @@ public class NotificationController {
 
     // 메시지 알림
     @GetMapping("/api/notification/subscribe")
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) {
         Long userId = userDetails.getUser().getId();
-        SseEmitter sseEmitter = notificationService.subscribe(userId);
+        SseEmitter sseEmitter = notificationService.subscribe(userId, res);
 
         return sseEmitter;
     }

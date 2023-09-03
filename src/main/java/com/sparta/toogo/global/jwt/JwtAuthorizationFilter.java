@@ -60,11 +60,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         throw new JwtCustomException(REGENERATED_TOKEN);
                     } catch (JwtCustomException e) {
                         res.setStatus(418);
-                        String access = res.getHeader(HEADER_ACCESS_TOKEN);
-                        String refresh = res.getHeader(HEADER_REFRESH_TOKEN);
-                        res.setContentType("application/json");
-                        res.setCharacterEncoding("UTF-8");
-                        res.getWriter().write(access + " " + refresh);
                         return;
                     }
                 }
