@@ -17,8 +17,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.sparta.toogo.global.enums.SuccessCode.USER_LOGIN_SUCCESS;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
