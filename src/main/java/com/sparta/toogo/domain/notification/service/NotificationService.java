@@ -218,13 +218,8 @@ public class NotificationService {
 
             MessageRoom messageRoom = messageRoomRepository.findByPostIdAndRoomId(post.getId(), notification.getRoomId());
 
-            Comment comment = commentRepository.findById(user.getId()).orElseThrow(
-                    () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
-
-            );
-
             // 댓글 알림일 경우
-            if (notification.getMessage().equals("댓글이 달렸습니다.") && !comment.getUser().getId().equals(user.getId())) {
+            if (notification.getMessage().equals("댓글이 달렸습니다.") && !post.getUser().getId().equals(user.getId())) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
                         notification.getSender(),
