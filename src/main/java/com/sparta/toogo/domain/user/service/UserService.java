@@ -10,8 +10,10 @@ import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
 import com.sparta.toogo.domain.user.exception.UserException;
 import com.sparta.toogo.domain.user.repository.UserRepository;
+import com.sparta.toogo.global.jwt.JwtUtil;
 import com.sparta.toogo.global.redis.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 import static com.sparta.toogo.global.enums.ErrorCode.*;
-import static com.sparta.toogo.global.enums.SuccessCode.LOGOUT_SUCCESS;
-import static com.sparta.toogo.global.enums.SuccessCode.USER_SIGNUP_SUCCESS;
+import static com.sparta.toogo.global.enums.SuccessCode.*;
 
 @Slf4j(topic = "UserService")
 @Service
@@ -34,6 +35,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
     private final MyPageRepository myPageRepository;
+    private final JwtUtil jwtUtil;
 
     @Value("${admin.token}")
     private String ADMIN_TOKEN;
@@ -106,5 +108,12 @@ public class UserService {
             throw new MyPageException(INVALID_PASSWORD_FORMAT);
         }
         return true;
+    }
+
+    public UserResponseDto regenerateToken(HttpServletRequest req, HttpServletResponse res) {
+        String accessToken = jwtUtil.getAccessTokenFromHeader(req);
+        String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
+        jwtUtil.regenerateToken(accessToken, refreshToken, res);
+        return new UserResponseDto(REGENERATED_TOKEN);
     }
 }

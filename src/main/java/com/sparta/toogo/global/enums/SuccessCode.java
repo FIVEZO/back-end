@@ -26,7 +26,9 @@ public enum SuccessCode {
     POST_CREATE_SUCCESS(CREATED, "게시글이 등록되었습니다."),
     COMMENT_CREATE_SUCCESS(CREATED, "댓글이 등록되었습니다."),
     LIKE_SUCCESS(CREATED, "좋아요 성공"),
-    DISLIKE_SUCCESS(CREATED, "싫어요 성공");
+    DISLIKE_SUCCESS(CREATED, "싫어요 성공"),
+    REGENERATED_TOKEN(CREATED, "토큰 재발급 성공"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String detail;

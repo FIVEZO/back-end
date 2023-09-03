@@ -61,4 +61,10 @@ public class UserController {
     public UserResponseDto logOut(HttpServletRequest request) {
         return userService.logOut(request);
     }
+
+    @Operation(summary = "토큰 재발급")
+    @PostMapping("/token")
+    public UserResponseDto reToken(HttpServletRequest req, HttpServletResponse res) {
+        return userService.regenerateToken(req, res);
+    }
 }
