@@ -102,7 +102,7 @@ public class UserService {
             throw new UserException(NICKNAME_LENGTH_INVALID);
         }
 
-        if (!nickname.matches("^[a-zA-Z0-9가-힣]*$")) {
+        if (!nickname.matches("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$")) {
             throw new UserException(NICKNAME_FORMAT_INVALID);
         }
         return userRepository.existsByNickname(nickname);
