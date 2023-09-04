@@ -1,5 +1,6 @@
 package com.sparta.toogo.domain.mypage.service;
 
+import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.mypage.dto.*;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.exception.MyPageException;
@@ -36,6 +37,7 @@ public class MyPageService {
     private final PasswordEncoder passwordEncoder;
     private final PostRepository postRepository;
     private final MyPageRepository myPageRepository;
+    private final MessageRoomRepository messageRoomRepository;
 
     // 내가 작성한 게시글 조회
     public List<MyPageDto> getMyPagePost(User user) {
@@ -47,6 +49,7 @@ public class MyPageService {
     }
 
     public MsgResponseDto deleteUser(User user) {
+        messageRoomRepository.deleteByUserId(user.getId());
         userRepository.delete(user);
         return MsgResponseDto.success("그동안 서비스를 이용해 주셔서 감사합니다.");
     }
