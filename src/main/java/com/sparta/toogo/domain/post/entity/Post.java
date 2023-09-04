@@ -64,7 +64,7 @@ public class Post extends Timestamped {
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Scrap> scrapList;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
