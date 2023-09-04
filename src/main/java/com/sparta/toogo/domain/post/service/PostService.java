@@ -74,7 +74,7 @@ public class PostService {
     // 전체 조회
     public Map<String, Object> getPostsByCategory(Long category, int pageNum) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
-        System.out.println("categoryEnum = " + categoryEnum);
+        log.info("categoryEnum = " + categoryEnum);
 
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Post> postsPage = postRepository.findAllByCategory(categoryEnum, pageable);
@@ -95,7 +95,7 @@ public class PostService {
 
     public Map<String, Object> getPostsByCategoryAndCountry(Long category, String country, int pageNum) {
         Category.PostCategory categoryEnum = Category.findByNumber(category);
-        System.out.println("여ㄱㅇ");
+
         Pageable pageable = PageRequest.of(pageNum, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Post> posts = postRepository.findAllByCategoryAndCountry(categoryEnum, country, pageable);
 
@@ -192,6 +192,8 @@ public class PostService {
                     .or(titleContainsCountry)
                     .or(titleOrContentsOrDateContain)
                     .or(titleOrContentsOrDateNicknameContain));
+
+            log.info("key = " + key);
         }
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
@@ -206,7 +208,6 @@ public class PostService {
                 .map(PostResponseDto::new)
                 .toList();
 
-        System.out.println("postList = " + postList);
         return postList;
     }
 }

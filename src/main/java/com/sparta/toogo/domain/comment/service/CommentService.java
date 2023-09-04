@@ -34,13 +34,6 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-//    public List<CommentResponseDto> getComment(Long postId, User user) {
-//        List<Comment> comments = commentRepository.findByPostIdAndUserOrderByCreatedAtDesc(postId, user);
-//        return comments.stream()
-//                .map(CommentResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
     private Post findPost(Category.PostCategory category, Long postId) {
         return postRepository.findByCategoryAndId(category, postId)
                 .orElseThrow(() -> new PostException(ErrorCode.NOT_FOUND_DATA));
@@ -64,7 +57,7 @@ public class CommentService {
     }
 
     private Comment checkComment(Long commentId, User user) {
-        System.out.println("commentId = " + commentId);
+        log.info("commentId = " + commentId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(ErrorCode.NOT_FOUND_COMMENT));
 
