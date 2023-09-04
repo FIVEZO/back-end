@@ -157,9 +157,6 @@ public class EmailService {
 
     // 코드 확인
     public Boolean checkCode(String key) {
-        if (redisService.getCode(key) == null) {
-            throw new EmailException(NOT_FOUND_EMAIL);
-        }
-        return true;
+        return redisService.getCode(key) != null;
     }
 }
