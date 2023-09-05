@@ -138,18 +138,7 @@ public class KakaoService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
             String email = kakaoUserInfo.getEmail();
-            if (email == null) {
-                email = "";
-                kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmoticonEnum.HAPPY.getEmoticon());
-                userRepository.save(kakaoUser);
-                MyPage myPage = new MyPage();
-                myPage.setUser(kakaoUser);
-                myPageRepository.save(myPage);
-                return kakaoUser;
-            }
-            if (userRepository.existsByEmail(email)) {
-                throw new UserException(DUPLICATE_EMAIL);
-            }
+
             kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserRoleEnum.USER, kakaoId, EmoticonEnum.HAPPY.getEmoticon());
             userRepository.save(kakaoUser);
             MyPage myPage = new MyPage();
