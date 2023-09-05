@@ -61,20 +61,20 @@ public class WebSecurityConfig {
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/ws-stomp", "/sub/**", "/pub/**").permitAll()
-                                .requestMatchers("/api/room/**").permitAll()
-                                .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/count").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/health").permitAll()
-                                .anyRequest().authenticated() // 그 외 요청은 인증 필요
+                authorizeHttpRequests
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/ws-stomp", "/sub/**", "/pub/**").permitAll()
+                        .requestMatchers("/api/room/**").permitAll()
+                        .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/homepost").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/{id}/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/health").permitAll()
+                        .anyRequest().authenticated() // 그 외 요청은 인증 필요
         );
 
         // 필터 관리
