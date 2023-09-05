@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.toogo.domain.messageroom.entity.MessageRoom;
 import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
-import com.sparta.toogo.domain.messageroom.service.MessageRoomService;
 import com.sparta.toogo.domain.mypage.entity.MyPage;
 import com.sparta.toogo.domain.mypage.repository.MyPageRepository;
 import com.sparta.toogo.domain.notification.entity.Notification;
@@ -50,7 +49,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final JPAQueryFactory queryFactory;
     private final ScrapRepository scrapRepository;
-    private final MessageRoomService messageRoomService;
     private final MyPageRepository myPageRepository;
     private final NotificationRepository notificationRepository;
 
