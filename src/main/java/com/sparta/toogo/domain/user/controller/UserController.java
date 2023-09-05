@@ -54,7 +54,14 @@ public class UserController {
         String createRefreshToken = kakaoService.kakaoRefreshToken(user);
         jwtUtil.saveTokenToRedis(createRefreshToken, createAccessToken);
         jwtUtil.addTokenToHeader(createAccessToken, createRefreshToken, response);
-        return new LogInResponseDto(user);
+
+        String email = user.getEmail();
+        String nickname = user.getNickname();
+        String emoticon = user.getEmoticon();
+        if (email == null) {
+            email = "";
+        }
+        return new LogInResponseDto(email, nickname, emoticon);
     }
 
     @Operation(summary = "로그아웃")

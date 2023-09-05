@@ -46,7 +46,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
                 Claims info = jwtUtil.getUserInfo(accessToken);
                 try {
-                    setAuthentication(info.get("id", Long.class));
+                    setAuthentication(Long.valueOf(info.get("id", String.class)));
                 } catch (Exception e) {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }
@@ -61,7 +61,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
                 Claims info = jwtUtil.getUserInfo(refreshToken);
                 try {
-                    setAuthentication(info.get("id", Long.class));
+                    setAuthentication(Long.valueOf(info.get("id", String.class)));
                 } catch (Exception e) {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }

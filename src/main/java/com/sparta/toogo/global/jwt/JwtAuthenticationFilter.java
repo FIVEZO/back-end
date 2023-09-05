@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -64,37 +63,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
         String emoticon = user.getEmoticon();
 
-        if (email != null) {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("statusCode", HttpServletResponse.SC_OK);
-            data.put("msg", "로그인 성공");
-            data.put("email", email);
-            data.put("nickname", nickname);
-            data.put("emoticon", emoticon);
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("statusCode", HttpServletResponse.SC_OK);
+        data.put("msg", "로그인 성공");
+        data.put("email", email);
+        data.put("nickname", nickname);
+        data.put("emoticon", emoticon);
 
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(data);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(data);
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(jsonString);
-        } else {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("statusCode", HttpServletResponse.SC_OK);
-            data.put("msg", "로그인 성공");
-            data.put("email", "");
-            data.put("nickname", nickname);
-            data.put("emoticon", emoticon);
-
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(data);
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(jsonString);
-        }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonString);
     }
-
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
