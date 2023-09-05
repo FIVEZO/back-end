@@ -45,10 +45,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     return;
                 }
                 Claims info = jwtUtil.getUserInfo(accessToken);
-                Object emailClaim = info.get("email");
-                if (emailClaim != null) {
-                    setAuthentication(info.get("email", String.class));
-                } else {
+                try {
+                    setAuthentication(info.get("id", Long.class));
+                } catch (Exception e) {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }
             }
@@ -62,7 +61,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
                 Claims info = jwtUtil.getUserInfo(refreshToken);
                 try {
-                    setAuthentication(info.get("email", String.class));
+                    setAuthentication(info.get("id", Long.class));
                 } catch (Exception e) {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }
@@ -72,16 +71,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // 인증 정보 설정
-    public void setAuthentication(String email) {
+    public void setAuthentication(Long id) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = createAuthentication(email);
+        Authentication authentication = createAuthentication(id);
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
     }
 
     // 인증 객체 생성
-    private Authentication createAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+    private Authentication createAuthentication(Long id) {
+        UserDetails userDetails = userDetailsService.loadUserById(id);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 }

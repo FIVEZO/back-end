@@ -21,4 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Not Found " + email));
         return new UserDetailsImpl(user);
     }
+
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Not Found " + id));
+        return new UserDetailsImpl(user);
+    }
 }
