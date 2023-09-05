@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -57,19 +58,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = user.getEmail();
         String nickname = user.getNickname();
         UserRoleEnum role = user.getRole();
-        String emoticon = user.getEmoticon();
-        if (email == null) {
-            email = "";
-        }
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id, email);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
         jwtUtil.addTokenToHeader(accessToken, refreshToken, response);
+        String emoticon = user.getEmoticon();
 
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("statusCode", HttpServletResponse.SC_OK);
         data.put("msg", "로그인 성공");
-        data.put("email", email);
+        data.put("email", Objects.requireNonNullElse(email, ""));
         data.put("nickname", nickname);
         data.put("emoticon", emoticon);
 
