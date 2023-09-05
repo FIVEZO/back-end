@@ -51,18 +51,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }
             }
-        } else if (StringUtils.hasText(refreshToken)) {
-            log.info(refreshToken);
+        } else if (refreshToken != null) {
+            if (StringUtils.hasText(refreshToken)) {
+                log.info(refreshToken);
 
-            if (!jwtUtil.validateRefreshToken(refreshToken)) {
-                log.error("리프레시 토큰 검증 실패");
-                return;
-            }
-            Claims info = jwtUtil.getUserInfo(refreshToken);
-            try {
-                setAuthentication(info.get("email", String.class));
-            } catch (Exception e) {
-                throw new JwtCustomException(MISMATCH_TOKEN);
+                if (!jwtUtil.validateRefreshToken(refreshToken)) {
+                    log.error("리프레시 토큰 검증 실패");
+                    return;
+                }
+                Claims info = jwtUtil.getUserInfo(refreshToken);
+                try {
+                    setAuthentication(info.get("email", String.class));
+                } catch (Exception e) {
+                    throw new JwtCustomException(MISMATCH_TOKEN);
+                }
             }
         }
         filterChain.doFilter(req, res);
