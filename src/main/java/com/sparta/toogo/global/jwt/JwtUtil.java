@@ -51,13 +51,11 @@ public class JwtUtil {
     }
 
     // JWT AccessToken 생성 메서드
-    public String createAccessToken(Long id, String nickname, String email, UserRoleEnum role) {
+    public String createAccessToken(Long id, UserRoleEnum role) {
         Date date = new Date();
         return BEARER +
                 Jwts.builder()
                         .setSubject(String.valueOf(id)) // 토큰(사용자) 식별자 값
-                        .claim("nickname", nickname)
-                        .claim("email", email)
                         .claim(AUTHORIZATION_KEY, role)
                         .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_EXPIRATION_TIME)) // 만료일
                         .setIssuedAt(date) // 발급일
@@ -66,12 +64,11 @@ public class JwtUtil {
     }
 
     // JWT RefreshToken 생성 메서드
-    public String createRefreshToken(Long id, String email) {
+    public String createRefreshToken(Long id) {
         Date date = new Date();
         return BEARER +
                 Jwts.builder()
                         .setSubject(String.valueOf(id)) // 사용자 식별자값(ID)
-                        .claim("email", email)
                         .setExpiration(new Date(date.getTime() + REFRESSH_TOKEN_EXPIRATION_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 시크릿 키, 암호화 알고리즘
@@ -184,12 +181,10 @@ public class JwtUtil {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
-        String nickname = user.getNickname();
-        String email = user.getEmail();
         UserRoleEnum userRole = user.getRole();
 
-        String newAccessToken = createAccessToken(userId, nickname, email, userRole);
-        String newRefreshToken = createRefreshToken(userId, email);
+        String newAccessToken = createAccessToken(userId, userRole);
+        String newRefreshToken = createRefreshToken(userId);
 
         saveTokenToRedis(newAccessToken, newRefreshToken);
         redisService.deleteToken(accessToken);

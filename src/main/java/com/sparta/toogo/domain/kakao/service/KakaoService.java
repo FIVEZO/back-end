@@ -149,10 +149,10 @@ public class KakaoService {
     }
 
     public String kakaoAccessToken(User user) {
-        return jwtUtil.createAccessToken(user.getId(), user.getNickname(), user.getEmail(), user.getRole());
+        return jwtUtil.createAccessToken(user.getId(), user.getRole());
     }
 
     public String kakaoRefreshToken(User user) {
-        return jwtUtil.createRefreshToken(user.getId(), user.getEmail());
+        return jwtUtil.createRefreshToken(user.getId());
     }
 }
