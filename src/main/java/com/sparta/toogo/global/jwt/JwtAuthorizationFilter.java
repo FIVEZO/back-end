@@ -45,9 +45,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     return;
                 }
                 Claims info = jwtUtil.getUserInfo(accessToken);
-                try {
+                Object emailClaim = info.get("email");
+                if (emailClaim != null) {
                     setAuthentication(info.get("email", String.class));
-                } catch (Exception e) {
+                } else {
                     throw new JwtCustomException(MISMATCH_TOKEN);
                 }
             }
