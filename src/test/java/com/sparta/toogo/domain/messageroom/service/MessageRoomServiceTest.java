@@ -2,8 +2,10 @@ package com.sparta.toogo.domain.messageroom.service;
 
 import com.sparta.toogo.domain.message.dto.MessageRequestDto;
 import com.sparta.toogo.domain.message.dto.MessageResponseDto;
+import com.sparta.toogo.domain.messageroom.repository.MessageRoomRepository;
 import com.sparta.toogo.domain.post.dto.PostRequestDto;
 import com.sparta.toogo.domain.post.dto.PostResponseDto;
+import com.sparta.toogo.domain.post.repository.PostRepository;
 import com.sparta.toogo.domain.post.service.PostService;
 import com.sparta.toogo.domain.user.entity.User;
 import com.sparta.toogo.domain.user.entity.UserRoleEnum;
@@ -19,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MessageRoomServiceTest {
     @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private MessageRoomRepository messageRoomRepository;
+    @Autowired
     MessageRoomService messageRoomService;
     @Autowired
     PostService postService;
@@ -28,6 +34,14 @@ class MessageRoomServiceTest {
     User user;
     User receiverUser;
     PostResponseDto createPost;
+
+    @BeforeAll
+    public void clearUp() {
+        messageRoomRepository.deleteAll();
+        postRepository.deleteAll();
+        userRepository.deleteAll();
+        System.out.println("데이터 삭제 및 테스트 시작");
+    }
 
     @Test
     @Order(1)
