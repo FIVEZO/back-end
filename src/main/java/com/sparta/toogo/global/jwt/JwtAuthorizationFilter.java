@@ -36,18 +36,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String accessToken = jwtUtil.getAccessTokenFromHeader(req);
         String refreshToken = jwtUtil.getRefreshTokenFromHeader(req);
 
-        if (StringUtils.hasText(accessToken)) {
-            log.info(accessToken);
+        if (accessToken != null) {
+            if (StringUtils.hasText(accessToken)) {
+                log.info(accessToken);
 
-            if (!jwtUtil.validateAccessToken(accessToken, res)) {
-                log.error("엑세스 토큰 검증 실패");
-                return;
-            }
-            Claims info = jwtUtil.getUserInfo(accessToken);
-            try {
-                setAuthentication(info.get("email", String.class));
-            } catch (Exception e) {
-                throw new JwtCustomException(MISMATCH_TOKEN);
+                if (!jwtUtil.validateAccessToken(accessToken, res)) {
+                    log.error("엑세스 토큰 검증 실패");
+                    return;
+                }
+                Claims info = jwtUtil.getUserInfo(accessToken);
+                try {
+                    setAuthentication(info.get("email", String.class));
+                } catch (Exception e) {
+                    throw new JwtCustomException(MISMATCH_TOKEN);
+                }
             }
         } else if (StringUtils.hasText(refreshToken)) {
             log.info(refreshToken);
