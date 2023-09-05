@@ -58,6 +58,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String nickname = user.getNickname();
         UserRoleEnum role = user.getRole();
         String emoticon = user.getEmoticon();
+        if (email == null) {
+            email = "";
+        }
         String accessToken = jwtUtil.createAccessToken(id, nickname, email, role);
         String refreshToken = jwtUtil.createRefreshToken(id, email);
         jwtUtil.saveTokenToRedis(accessToken, refreshToken);
