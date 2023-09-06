@@ -18,6 +18,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 import static com.sparta.toogo.global.enums.SuccessCode.REGENERATED_TOKEN;
 
 @RestController
@@ -58,10 +60,7 @@ public class UserController {
         String email = user.getEmail();
         String nickname = user.getNickname();
         String emoticon = user.getEmoticon();
-        if (email == null) {
-            email = "";
-        }
-        return new LogInResponseDto(email, nickname, emoticon);
+        return new LogInResponseDto(Objects.requireNonNullElse(email, ""), nickname, emoticon);
     }
 
     @Operation(summary = "로그아웃")
