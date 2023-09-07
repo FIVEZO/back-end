@@ -46,20 +46,20 @@
     </appender>
 
     <!-- AWS CloudWatch Logs 앱렌더 설정 -->
-<!--    <appender name="AWS_CLOUDWATCH_LOGS" class="ca.pjer.logback.AwsLogsAppender">-->
-<!--        <layout>-->
-<!--            <pattern>${FILE_LOG_PATTERN}</pattern>-->
-<!--        </layout>-->
-<!--        <logGroupName>oe</logGroupName>-->
-<!--        <logStreamUuidPrefix>oe</logStreamUuidPrefix>-->
-<!--        <logRegion>ap-northeast-2</logRegion>-->
-<!--        <maxBatchLogEvents>50</maxBatchLogEvents>-->
-<!--        <maxFlushTimeMillis>30000</maxFlushTimeMillis>-->
-<!--        <maxBlockTimeMillis>5000</maxBlockTimeMillis>-->
-<!--        <retentionTimeDays>0</retentionTimeDays>-->
-<!--        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>-->
-<!--        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>-->
-<!--    </appender>-->
+    <appender name="AWS_CLOUDWATCH_LOGS" class="ca.pjer.logback.AwsLogsAppender">
+        <layout>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+        <logGroupName>oe</logGroupName>
+        <logStreamUuidPrefix>oe</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
+    </appender>
 
     <!--인포 레벨-->
     <root level="INFO">
