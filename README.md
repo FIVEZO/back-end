@@ -66,3 +66,86 @@
 
 ## 💡 기술적 의사결정
 
+<details>
+<summary> STOMP </summary>
+
+- 메세지 전송을 효율적을 하기 위해 탄생한 프로토콜로 기본적으로 pub/sub 구조로 되어있어 메세지를 전송하고 메세지를 받아 처리하는 부분이 확실히 정해져 있기 때문에 개발자 입장에서 명확하게 인지하고 개발할 수 있는 이점이 있어 채택
+
+</details>
+
+<details>
+<summary> AWS EC2 </summary>
+
+- 여러 다른 AWS 서비스와의 유기적인 연동이 가능하기 때문에 채택
+  
+</details>
+
+<details>
+<summary> Redis</summary>
+
+- 임시 데이터 사용과 캐싱에 적합하여 사용자의 빈번한 엑세스가 발생하는 데이터를 Redis에 저장하여 데이터 엑세스 속도를 높이기 위해 채
+
+</details>
+
+<details>
+<summary> QueryDSL</summary>
+
+- 복잡한 동적 쿼리를 쉽게 다루기 위해 채택
+
+
+</details>
+
+<details>
+<summary> WebSocket</summary>
+
+- HTTP 통신으로 대화를 주고 받는 것을 고려했으나 대화를 전송할 때마다 요청이 가야만 하고 해당 페이지가 새로고침이 된 이후에야 전송된 내용을 조회할 수 있었다.
+
+- 따라서 하나의 HTTP 접속을 통해 클라이언트와 서버의 양방향 통신 및 그로 인한 서버 부하를 줄일 수 있는 Websocket 을 사용했다. 클라이언트에서의 요청이 없더라도 통신이 가능했다.
+
+</details>
+
+<details>
+<summary> SSE </summary>
+
+- WebSocket 과 SSE 모두 실시간 통신이나, 알림 기능의 경우 양방향 통신은 불필요하기 때문에 단방향 통신인 SSE 를 사용
+
+</details>
+
+<details>
+<summary> Swagger </summary>
+
+- Front-End와 Back-End의 효율적이고 직관적인 의사소통을 위해 API 기능을 문서화하기 위하여 적용
+  
+</details>
+
+<details>
+<summary> Refresh Token</summary>
+
+- 장기적으로 인증을 유지하고 accessToken을 갱신할 수 있음
+
+</details>
+
+<details>
+<summary> 소셜 로그인 </summary>
+
+- 카카오 소셜 로그인 기능을 추가하여 사용자가 더욱 편리하게 로그인 및 서비스를 이용할 수 있게 함
+  
+</details>
+
+<details>
+<summary> 이메일 인증 (SMTP)</summary>
+
+- 인증으로 무분별한 사용자 접근 보안 강화
+
+</details>
+
+<details>
+<summary> CI/CD</summary>
+
+- GitHub Actions과 Docker를 이용하여 개발과 배포를 자동화 함
+  
+</details>
+
+## [🗂️ API 명세서(Swagger)](http://localhost:8080/swagger-ui/index.html)
+
+
