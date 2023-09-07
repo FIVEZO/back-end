@@ -18,7 +18,7 @@
 
 <br>
 
-## [🗂️ API 명세서(Swagger)](http://localhost:8080/swagger-ui/index.html)
+## [🗂️ API 명세서(Swagger)](https://oetripdb.shop/swagger-ui/index.html)
 
 <br>
 
@@ -223,8 +223,8 @@
   
 ## 👨‍👩‍👧‍👦 팀원 소개 & 팀원 역할  <br>
 
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>**역할** | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> **이름** | **담당** | **Github** | 
-| :-: | :-: | :--- | :-: |
-| BE ⭐<br> `Vice Leader` | 장승연 | 서버 배포(AWS, EC2, CI/CD, Git Action) <br> 회원가입, 로그인, 로그아웃, 회원탈퇴 <br> 카카오로그인 <br> 마이페이지 내 정보 수정 및 비밀번호 재설정  <br> https  <br> 이메일 인증 <br> logging  | https://github.com/wkdtmddus |
-| BE | 박영준 | 채팅 (STOMP 웹소켓) <br> Swagger <br> 알림 기능 <br> Redis  | https://github.com/baekgomsuyeom |
-| BE | 김나영 | 게시글 CRUD <br> 스크랩 <br> 댓글 CUD <br> 메인페이지 <br> 검색 <br> 마이페이지 작성한 게시글, 스크랩한 게시글 조회 | https://github.com/NayoungKim1212 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>**역할** | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> **이름** | **담당**                                                                                                                                                            | **Github** | 
+| :-: | :-: |:------------------------------------------------------------------------------------------------------------------------------------------------------------------| :-: |
+| BE ⭐<br> `Vice Leader` | 장승연 | 서버 배포(AWS, RDS, EC2, CI/CD, Git Action, Docker) <br>회원가입, 로그인, 로그아웃, 회원탈퇴 <br> 카카오로그인 <br> JWT <br>마이페이지 내 정보 수정 및 비밀번호 재설정  <br> https  <br> 이메일 인증 <br> logging | https://github.com/wkdtmddus |
+| BE | 박영준 | 채팅 (STOMP 웹소켓) <br> Swagger <br> 알림 기능 <br> Redis                                                                                                                 | https://github.com/baekgomsuyeom |
+| BE | 김나영 | 게시글 CRUD <br> 스크랩 <br> 댓글 CUD <br> 메인페이지 <br> 검색 <br> 마이페이지 작성한 게시글, 스크랩한 게시글 조회                                                                                  | https://github.com/NayoungKim1212 |
