@@ -42,6 +42,23 @@
         </rollingPolicy>
     </appender>
 
+    <!-- AWS CloudWatch Logs 앱렌더 설정 -->
+    <appender name="AWS_CLOUDWATCH_LOGS" class="ca.pjer.logback.AwsLogsAppender">
+        <layout>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+        <logGroupName>oe</logGroupName>
+        <logStreamUuidPrefix>oe</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${aws.accessKeyId}</accessKeyId>
+        <secretAccessKey>${aws.secretKey}</secretAccessKey>
+    </appender>
+
+
     <!--인포 레벨-->
     <root level="INFO">
         <appender-ref ref="FILE"/>
@@ -50,5 +67,6 @@
     <!--에러 레벨-->
     <root level="ERROR">
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="AWS_CLOUDWATCH_LOGS"/>
     </root>
 </configuration>
