@@ -76,7 +76,7 @@ public class NotificationService {
                 eventData.put("message", "채팅방이 생성되었습니다.");
                 eventData.put("sender", messageRoom.getSender());                    // 메시지 보낸자
                 eventData.put("createdAt", messageRoom.getCreatedAt().toString());   // 메시지를 보낸 시간
-                eventData.put("emoticon", userSender.getEmoticon());                    // 메시지 보낸자의 이모티콘
+                eventData.put("emoticon", userSender.getEmoticon());                 // 메시지 보낸자의 이모티콘
 
                 boolean isNotificationRead = false;
                 eventData.put("readStatus", isNotificationRead);
