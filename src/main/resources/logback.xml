@@ -51,7 +51,7 @@
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </layout>
         <logGroupName>oe</logGroupName>
-        <logStreamUuidPrefix>oe</logStreamUuidPrefix>
+        <logStreamUuidPrefix>oe-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
