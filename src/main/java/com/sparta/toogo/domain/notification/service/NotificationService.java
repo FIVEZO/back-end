@@ -219,7 +219,8 @@ public class NotificationService {
             MessageRoom messageRoom = messageRoomRepository.findByPostIdAndRoomId(post.getId(), notification.getRoomId());
 
             // 댓글 알림일 경우
-            if (notification.getMessage().equals("댓글이 달렸습니다.") && !post.getUser().getId().equals(user.getId())) {
+//            if (notification.getMessage().equals("댓글이 달렸습니다.") && !post.getUser().getId().equals(user.getId())) {
+            if (notification.getRoomId() == null) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
                         notification.getSender(),
