@@ -219,7 +219,6 @@ public class NotificationService {
             MessageRoom messageRoom = messageRoomRepository.findByPostIdAndRoomId(post.getId(), notification.getRoomId());
 
             // 댓글 알림일 경우
-//            if (notification.getMessage().equals("댓글이 달렸습니다.") && !post.getUser().getId().equals(user.getId())) {
             if (notification.getRoomId() == null) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),
@@ -231,7 +230,7 @@ public class NotificationService {
                         notification.getPost().getId(),
                         post.getCategory().getValue()));
 
-                // 메시지 수신 또는 쪽지방 생성 알림일 경우
+                // 쪽지방 생성 알림일 경우
             } else if (notification.getMessage().equals("채팅방이 생성되었습니다.")) {
                 notificationResponseDtoList.add(new NotificationResponseDto(
                         notification.getId(),

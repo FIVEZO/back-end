@@ -30,7 +30,7 @@ public class NotificationResponseDto {
         this.category = value;
     }
 
-    // 알림 목록 조회 - 메시지 수신 또는 쪽지방 생성 알림일 경우
+    // 알림 목록 조회 - 쪽지방 생성 알림일 경우
     public NotificationResponseDto(Long id, String sender, LocalDateTime createdAt, String contents, String emoticon, String message, String roomId) {
         this.id = id;
         this.sender = sender;
