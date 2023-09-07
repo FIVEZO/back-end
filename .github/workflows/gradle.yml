@@ -66,4 +66,4 @@ jobs:
           sudo docker pull ${{ secrets.DOCKER_REPO }}/firstdocker
           sudo docker run -d -p 8080:8080 --network mynetwork --name app-container ${{ secrets.DOCKER_REPO }}/firstdocker
 #          sudo docker run -d -p 8080:8080 --network mynetwork --log-driver=awslogs --log-opt awslogs-group=oe --log-opt awslogs-stream=oe --name app-container ${{ secrets.DOCKER_REPO }}/firstdocker
-          sudo docker image prune -f
+#          sudo docker image prune -f
